@@ -18,24 +18,22 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
 import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import { Trash2 } from "lucide-react";
 import { X } from "lucide-react";
 
 const LayersContent = () => {
   const {
-    layersData,
-    setLayersData,
+    mapLayers,
+    setMapLayers,
     multiSelectedLayers,
     setMultiSelectedLayers,
+    toggleReorderLayer,
   } = useMapViewStore();
 
   const [enabled, setEnabled] = useState(false);
@@ -74,31 +72,39 @@ const LayersContent = () => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
 
+    if (multiSelectedLayers.length === 0) {
+      setIsCtrlPressed(false);
+    }
+
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
   }, [setIsCtrlPressed, setMultiSelectedLayers, multiSelectedLayers]);
 
-  if (!enabled) {
-    return null;
-  }
-
-  if (!layersData) {
-    return null;
-  }
-
   const onDragEnd = async (result) => {
     if (!result.destination) {
       return;
     }
 
-    const reorderedItems = Array.from(layersData);
+    const reorderedItems = Array.from(mapLayers);
     const [removed] = reorderedItems.splice(result.source.index, 1);
     reorderedItems.splice(result.destination.index, 0, removed);
 
-    setLayersData(reorderedItems);
+    console.log("MAP LAYERS: ", mapLayers);
+    console.log("REORDERED MAP: ", reorderedItems);
+
+    setMapLayers(reorderedItems);
+    toggleReorderLayer();
   };
+
+  if (!enabled) {
+    return null;
+  }
+
+  if (!mapLayers) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col w-full h-full pr-2 mt-2 overflow-y-auto text-xs bg-nileBlue-50">
@@ -109,10 +115,10 @@ const LayersContent = () => {
               {isCtrlPressed && multiSelectedLayers?.length > 0 && (
                 <MultiLayerSelection resetCtrlPressed={resetCtrlPressed} />
               )}
-              {layersData.map((item, index) => (
+              {mapLayers.map((layer, index) => (
                 <Draggable
-                  key={`${item.layerUid}`}
-                  draggableId={`${item.layerUid}`}
+                  key={`${layer.layerUid}`}
+                  draggableId={`${layer.layerUid}`}
                   index={index}
                 >
                   {(provided) => (
@@ -122,7 +128,7 @@ const LayersContent = () => {
                       {...provided.dragHandleProps}
                       className="px-2 mt-1 mb-4"
                     >
-                      <LayersCard data={item} isCtrlPressed={isCtrlPressed} />
+                      <LayersCard layer={layer} isCtrlPressed={isCtrlPressed} />
                     </div>
                   )}
                 </Draggable>
@@ -137,197 +143,67 @@ const LayersContent = () => {
 
 export default LayersContent;
 
-const MultiLayerSelection = ({ resetCtrlPressed }) => {
-  const { toast } = useToast();
+const LayersCard = ({ layer, isCtrlPressed }) => {
   const {
-    selectedLayers,
+    removeMultiSelectedLayers,
+    addMultiSelectedLayers,
     multiSelectedLayers,
-    setSelectedLayers,
-    setMultiSelectedLayers,
-    layersData,
-    setLayersData,
-    mapData,
+    toggleLayerVisibility,
   } = useMapViewStore();
-  const [isShowLayerElements, setIsShowLayerElements] = useState(false);
 
-  // Check
-  useEffect(() => {
-    const latest = multiSelectedLayers[multiSelectedLayers.length - 1];
-    if (latest?.isChecked) {
-      setIsShowLayerElements(true);
-    } else {
-      setIsShowLayerElements(false);
-    }
-  }, [multiSelectedLayers]);
-
-  const deleteLayers = async () => {
-    const layerUids = multiSelectedLayers.map((data) => ({
-      layer_uid: data.layerUid,
-    }));
-
-    try {
-      const body = {
-        layers: layerUids,
-        mapUid: mapData.mapUid,
-      };
-
-      const response = await fetch("/api/layers/remove-layer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      toast({ title: "Success deleting layers", variant: "success" });
-      debugger;
-      const filteredLayers = selectedLayers.filter(
-        (data) =>
-          !multiSelectedLayers.some((item) => item.layerUid === data.layerUid)
-      );
-      const filteredLayersData = layersData.filter(
-        (data) =>
-          !multiSelectedLayers.some((item) => item.layerUid === data.layerUid)
-      );
-      console.log(filteredLayers);
-      console.log(filteredLayersData);
-      debugger;
-      setSelectedLayers(filteredLayers);
-      setLayersData(filteredLayersData);
-      resetCtrlPressed();
-    } catch (error) {
-      console.error("Error during fetch:", error.message);
-    }
-  };
-
-  const hideShowAction = () => {
-    if (isShowLayerElements) {
-      // Exclude layers from selectedLayers that are checked in multiSelectedLayers
-      const filteredLayers = selectedLayers.filter(
-        (data) =>
-          !multiSelectedLayers.some((item) => item.layerUid === data.layerUid)
-      );
-      console.log(filteredLayers);
-      debugger;
-      setSelectedLayers(filteredLayers);
-
-      // Corrected mapping for tempMultiSelectedLayers
-      const tempMultiSelectedLayers = multiSelectedLayers.map((data) => ({
-        ...data,
-        isChecked: false,
-      }));
-      setMultiSelectedLayers(tempMultiSelectedLayers);
-    } else {
-      const additionalLayers = multiSelectedLayers
-        .filter(
-          (item) =>
-            !selectedLayers
-              .map((layer) => layer.layerUid)
-              .includes(item.layerUid)
-        )
-        .map((item) =>
-          layersData.find((layer) => layer.layerUid === item.layerUid)
-        )
-        .filter((layer) => layer !== undefined); // Ensure that we're not adding undefined to the selectedLayers
-
-      const newSelectedLayers = [...selectedLayers, ...additionalLayers];
-      console.log(newSelectedLayers);
-      setSelectedLayers(newSelectedLayers);
-
-      // Corrected mapping for tempMultiSelectedLayers
-      const tempMultiSelectedLayers = multiSelectedLayers.map((data) => ({
-        ...data,
-        isChecked: true,
-      }));
-      setMultiSelectedLayers(tempMultiSelectedLayers);
-    }
-  };
-
-  return (
-    <div className="flex items-center w-full gap-3 px-2 h-9 ">
-      <X
-        className="w-4 h-4 cursor-pointer"
-        onClick={() => setMultiSelectedLayers([])}
-      />{" "}
-      <div className="flex items-center gap-2">
-        <p>{multiSelectedLayers.length}</p>
-        <p> selected </p>
-      </div>
-      <DestructiveDialog
-        title="Are you sure you want to delete these layers?"
-        description="This action cannot be undone"
-        actionText="Yes, I'm sure"
-        action={() => deleteLayers()}
-      >
-        <Trash2 className="w-3 h-3 cursor-pointer" />
-      </DestructiveDialog>
-      <button
-        onClick={(e) => {
-          hideShowAction();
-          e.stopPropagation();
-        }}
-      >
-        {isShowLayerElements ? (
-          <Eye className="w-3 h-3" />
-        ) : (
-          <EyeOff className="w-3 h-3" />
-        )}
-      </button>
-    </div>
-  );
-};
-
-const LayersCard = ({ data, isCtrlPressed }) => {
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
   const [imageLoaded, setImageLoaded] = useState(false);
   const [multipleSelectedLayerChecked, setMultipleSelectedLayerChecked] =
     useState(false);
 
-  const {
-    selectedLayers,
-    removeSelectedLayers,
-    addSelectedLayers,
-    removeMultiSelectedLayers,
-    addMultiSelectedLayers,
-    multiSelectedLayers,
-  } = useMapViewStore();
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  useEffect(() => {
-    if (selectedLayers) {
-      setIsChecked(selectedLayers.some((layer) => layer === data));
-    }
-  }, [selectedLayers, data]);
-
   useEffect(() => {
     if (multiSelectedLayers) {
       setMultipleSelectedLayerChecked(
         multiSelectedLayers.find(
-          (layerData) => layerData.layerUid === data.layerUid
+          (layerData) => layerData.layerUid === layer.layerUid
         )
       );
     }
-  }, [data.layerUid, multiSelectedLayers]);
+  }, [layer.layerUid, multiSelectedLayers]);
 
   const handleHideShowChange = () => {
-    if (isChecked) {
-      removeSelectedLayers(data);
+    if (layer.isShown) {
+      toggleLayerVisibility(layer.layerUid, false);
     } else {
-      addSelectedLayers(data);
+      toggleLayerVisibility(layer.layerUid, true);
     }
-    setIsChecked(!isChecked);
   };
 
   const resetCollapsibleContent = () => {
     setCollapsibleContent("layer");
   };
 
+  // Handler to update multi-selected layers based on current state
+  const updateMultiSelection = (layer) => {
+    const isLayerSelected = multiSelectedLayers.some(
+      (layerData) => layerData.layerUid === layer.layerUid
+    );
+
+    const action = isLayerSelected
+      ? removeMultiSelectedLayers
+      : addMultiSelectedLayers;
+
+    action({
+      layerUid: layer.layerUid,
+      isShown: layer.isShown,
+    });
+  };
+
+  // Handler to toggle collapsible content
+  const toggleCollapsibleContent = () => {
+    const isLayerVisible = collapsibleContent === "layer";
+    setCollapsibleContent(isLayerVisible ? null : "layer");
+    setImageLoaded(!isLayerVisible);
+  };
+
   return (
     <div>
-      <TooltipText content={data.layerTitle} side="top" align="start">
+      <TooltipText content={layer.layerTitle} side="top" align="start">
         <div
           className={cn(
             "relative flex items-center h-10 gap-2 px-2 bg-white border rounded-md shadow-md cursor-pointer w-54",
@@ -336,31 +212,11 @@ const LayersCard = ({ data, isCtrlPressed }) => {
             }
           )}
           onClick={(e) => {
-            // Handle action if Ctrl is Pressed
             if (isCtrlPressed) {
               e.stopPropagation();
-              if (
-                multiSelectedLayers.find(
-                  (layerData) => layerData.layerUid === data.layerUid
-                )
-              ) {
-                removeMultiSelectedLayers({
-                  layerUid: data.layerUid,
-                  isChecked: isChecked,
-                });
-              } else {
-                addMultiSelectedLayers({
-                  layerUid: data.layerUid,
-                  isChecked: isChecked,
-                });
-              }
+              updateMultiSelection(layer);
             } else {
-              if (collapsibleContent === "layer") {
-                setCollapsibleContent(null);
-                setImageLoaded(false);
-              } else {
-                setCollapsibleContent("layer");
-              }
+              toggleCollapsibleContent();
             }
           }}
         >
@@ -374,7 +230,7 @@ const LayersCard = ({ data, isCtrlPressed }) => {
           />
 
           <p className="flex-grow w-20 px-2 pr-2 text-xs truncate">
-            {data.layerTitle}
+            {layer.layerTitle}
           </p>
           <button
             onClick={(e) => {
@@ -382,7 +238,7 @@ const LayersCard = ({ data, isCtrlPressed }) => {
               handleHideShowChange();
             }}
           >
-            {isChecked ? (
+            {layer.isShown ? (
               <Eye className="w-3 h-3" />
             ) : (
               <EyeOff className="w-3 h-3" />
@@ -407,8 +263,8 @@ const LayersCard = ({ data, isCtrlPressed }) => {
         <div className="flex items-center gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
           {!imageLoaded && <Skeleton className="w-5 h-5 rounded-full" />}
           <img
-            key={`${data}`}
-            src={data.legendUrl}
+            key={`${layer.layerUid}`}
+            src={layer.legendUrl}
             className="w-5 h-5"
             alt="legend logo"
             onLoad={() => setImageLoaded(true)}
@@ -418,7 +274,7 @@ const LayersCard = ({ data, isCtrlPressed }) => {
       )}
       {collapsibleContent === "options" && (
         <OptionsSection
-          data={data}
+          layer={layer}
           resetCollapsibleContent={resetCollapsibleContent}
         />
       )}
@@ -426,62 +282,125 @@ const LayersCard = ({ data, isCtrlPressed }) => {
   );
 };
 
-const OptionsSection = ({ data, resetCollapsibleContent }) => {
+const MultiLayerSelection = ({ resetCtrlPressed }) => {
   const {
-    setZoomedLayerBbox,
-    tableLoaded,
-    setTableLoaded,
-    layerInfo,
-    setLayerInfo,
-    mapData,
-    layersData,
-    removeSelectedLayers,
-    removeLayersData,
+    multiSelectedLayers,
+    mapLayers,
+    setMultiSelectedLayers,
+    setMapLayers,
+    addDeletedLayerUids,
+    toggleLayerVisibility,
   } = useMapViewStore();
-  const id = data.layerUid;
 
-  const [removeLayerLoading, setRemoveLayerLoading] = useState(false);
-  const [openAlertDialog, setOpenAlertDialog] = useState(false);
-  const { toast } = useToast();
-  const deleteLayerAction = () => {
-    async function removeLayerContent() {
-      setRemoveLayerLoading(true);
-      try {
-        const body = {
-          layers: [{ layer_uid: data.layerUid }],
-          mapUid: mapData.mapUid,
-        };
+  const [isShowLayerElements, setIsShowLayerElements] = useState(false);
 
-        const response = await fetch("/api/layers/remove-layer", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        removeSelectedLayers(data);
-        removeLayersData(data);
-        toast({ title: "Success Removing Layer", variant: "success" });
-        setTimeout(() => {
-          setOpenAlertDialog(false);
-        }, 500);
-        resetCollapsibleContent();
-      } catch (error) {
-        toast({
-          title: "Error removing layer",
-          description: "Please try again",
-          variant: "destructive",
-        });
-        console.error("Error during fetch:", error.message);
-      } finally {
-        setRemoveLayerLoading(false);
-      }
+  // Check
+  useEffect(() => {
+    const latest = multiSelectedLayers[multiSelectedLayers.length - 1];
+    if (latest?.isShown) {
+      setIsShowLayerElements(true);
+    } else {
+      setIsShowLayerElements(false);
     }
+  }, [multiSelectedLayers]);
 
-    removeLayerContent();
+  const deleteLayers = async () => {
+    // Filter deleted layers data. Exlude the one who get deleted
+    const filteredLayersData = mapLayers.filter(
+      (layer) =>
+        !multiSelectedLayers.some((item) => item.layerUid === layer.layerUid)
+    );
+
+    // Add deleted layer data
+    multiSelectedLayers.forEach((layer) => {
+      addDeletedLayerUids({ layer_uid: layer.layerUid });
+    });
+
+    setMapLayers(filteredLayersData);
+
+    resetCtrlPressed();
+  };
+
+  const hideShowAction = () => {
+    if (isShowLayerElements) {
+      // Hide the layers
+      multiSelectedLayers.forEach((layer) => {
+        // toggleLayerVisibility[layer.layerUid] = false; // Set visibility to false for each layer
+        toggleLayerVisibility(layer.layerUid, false);
+      });
+
+      // Corrected mapping for tempMultiSelectedLayers
+      const tempMultiSelectedLayers = multiSelectedLayers.map((layer) => ({
+        ...layer,
+        isShown: false,
+      }));
+      setMultiSelectedLayers(tempMultiSelectedLayers);
+    } else {
+      // Show the layers
+      multiSelectedLayers.forEach((layer) => {
+        toggleLayerVisibility(layer.layerUid, false);
+      });
+
+      const tempMultiSelectedLayers = multiSelectedLayers.map((layer) => ({
+        ...layer,
+        isShown: true,
+      }));
+      setMultiSelectedLayers(tempMultiSelectedLayers);
+    }
+  };
+
+  return (
+    <div className="flex items-center w-full gap-3 px-2 h-9 ">
+      <X
+        className="w-4 h-4 cursor-pointer"
+        onClick={() => setMultiSelectedLayers([])}
+      />{" "}
+      <div className="flex items-center gap-2">
+        <p>{multiSelectedLayers.length}</p>
+        <p> selected </p>
+      </div>
+      <DestructiveDialog
+        title="Are you sure you want to delete these layers?"
+        actionText="Yes, I'm sure"
+        action={() => deleteLayers()}
+      >
+        <Trash2 className="w-3 h-3 cursor-pointer" />
+      </DestructiveDialog>
+      <button
+        onClick={(e) => {
+          hideShowAction();
+          e.stopPropagation();
+        }}
+      >
+        {isShowLayerElements ? (
+          <Eye className="w-3 h-3" />
+        ) : (
+          <EyeOff className="w-3 h-3" />
+        )}
+      </button>
+    </div>
+  );
+};
+
+const OptionsSection = ({ layer, resetCollapsibleContent }) => {
+  const {
+    tableLoaded,
+    layerInfo,
+    mapData,
+    mapLayers,
+    setZoomedLayerBbox,
+    setTableLoaded,
+    setLayerInfo,
+    addDeletedLayerUids,
+    removeMapLayers,
+  } = useMapViewStore();
+
+  const id = layer.layerUid;
+
+  const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const deleteLayerAction = () => {
+    addDeletedLayerUids({ layer_uid: layer.layerUid });
+    removeMapLayers(layer);
   };
 
   const buttonLists = [
@@ -489,7 +408,7 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
       icon: <ZoomIn className="w-3 h-3 stroke-2" />,
       name: "Zoom to",
       onClick: () => {
-        setZoomedLayerBbox(data.layerBbox);
+        setZoomedLayerBbox(layer.layerBbox);
         resetCollapsibleContent();
       },
     },
@@ -497,8 +416,8 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
       icon: <Table className="w-3 h-3 stroke-2" />,
       name: "Show Table",
       onClick: (e) => {
-        resetCollapsibleContent();
         handleTableButtonClick(e.currentTarget.name);
+        resetCollapsibleContent();
       },
     },
     // { // TODO: Fix this rename if the functionality exists
@@ -517,7 +436,7 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
         setTableLoaded(false);
       }, 100);
     }
-    setLayerInfo(key, data.layerTitle);
+    setLayerInfo(key, layer.layerTitle);
   };
 
   return (
@@ -534,7 +453,7 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
         </button>
       ))}
 
-      {mapData.mapType === "map" && layersData.length > 0 && (
+      {mapData.mapType === "map" && mapLayers.length > 0 && (
         <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
           <AlertDialogTrigger asChild>
             <button className="flex items-center justify-start gap-2 p-1">
@@ -549,9 +468,6 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
               <AlertDialogTitle>
                 Are you sure want delete this layer?
               </AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone
-              </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="hover:bg-transparent hover:text-black">
@@ -561,11 +477,7 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
                 className="bg-red-500 hover:bg-red-400"
                 onClick={deleteLayerAction}
               >
-                {removeLayerLoading ? (
-                  <Loader2 className="w-4 h-4 stroke-blackHaze-500 animate-spin" />
-                ) : (
-                  <span> Continue </span>
-                )}
+                <span> Continue </span>
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

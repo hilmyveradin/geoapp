@@ -9,7 +9,7 @@ export async function GET(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/layer/info/${layerUid}`,
+      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/info`,
       {
         method: "GET",
         headers: {

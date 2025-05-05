@@ -12,7 +12,7 @@ const MapView = ({ params }) => {
   const mapType = params.slug[0];
   const mapUid = params.slug[1];
 
-  const { mapData, layersData, setMapData, setSelectedLayers, setLayersData } =
+  const { mapData, mapLayers, setMapData, setSelectedLayers, setMapLayers } =
     useMapViewStore();
 
   useEffect(() => {
@@ -30,8 +30,9 @@ const MapView = ({ params }) => {
       const modifiedDatas = datas.data.map((data) => {
         return {
           ...data,
-          imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
+          imageUrl: `http://dev3.webgis.co.id/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
+          isShown: true,
         };
       });
 
@@ -50,17 +51,16 @@ const MapView = ({ params }) => {
         const responseData = await response.json();
         const data = { ...responseData.data, mapType: mapType };
         // Create an array of promises
-        const layerDataPromises = data.mapLayerUid.map((layerUid) =>
+        const mapLayerPromomises = data.mapLayerUid.map((layerUid) =>
           getLayerUid(layerUid)
         );
         // Wait for all promises to resolve
-        const resolvedLayerDatas = await Promise.all(layerDataPromises);
+        const resolvedMapLayers = await Promise.all(mapLayerPromomises);
 
         // Flatten the array of arrays (if necessary) and set the state
-        const layerDatas = resolvedLayerDatas.flat(); // Use .flat() if each promise resolves to an array
+        const layerDatas = resolvedMapLayers.flat(); // Use .flat() if each promise resolves to an array
 
-        setSelectedLayers(layerDatas.reverse());
-        setLayersData(layerDatas);
+        setMapLayers(layerDatas);
         setMapData(data);
       } catch (error) {
         console.log(error);
@@ -90,8 +90,8 @@ const MapView = ({ params }) => {
             mapUid: mapUid,
           };
         });
-        setSelectedLayers(modifiedDatas.reverse());
-        setLayersData(modifiedDatas);
+        // setSelectedLayers(modifiedDatas.reverse());
+        setMapLayers(modifiedDatas);
         setMapData(modifiedDatas[0]);
       } catch (error) {
         console.log(error);
@@ -103,9 +103,9 @@ const MapView = ({ params }) => {
     } else {
       loadLayerData();
     }
-  }, [mapType, mapUid, setLayersData, setMapData, setSelectedLayers]);
+  }, [mapType, mapUid, setMapLayers, setMapData, setSelectedLayers]);
 
-  if (!mapData && !layersData)
+  if (!mapData && !mapLayers)
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />

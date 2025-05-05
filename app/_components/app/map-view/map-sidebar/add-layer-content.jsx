@@ -126,7 +126,7 @@ const AddLayersContent = () => {
   const [uploadProgress, setUploadProgress] = useState(false);
   const [refetchLayers, setRefetchLayers] = useState(false);
   const [searchedTitle, setSearchedTitle] = useState(""); // Added state for search term
-  const { layersData } = useMapViewStore();
+  const { mapLayers } = useMapViewStore();
   const [progressValue, setProgressValue] = useState(0);
 
   // Define for rendering thumbnails every time page is changed
@@ -152,7 +152,7 @@ const AddLayersContent = () => {
 
         const filtered = tempLayers.filter(
           (localLayer) =>
-            !layersData.some(
+            !mapLayers.some(
               (layerData) => layerData.layerUid === localLayer.layerUid
             )
         );
@@ -166,7 +166,7 @@ const AddLayersContent = () => {
     }
 
     getLayersData().catch(console.error);
-  }, [refetchLayers, layersData]);
+  }, [refetchLayers, mapLayers]);
 
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
@@ -238,7 +238,7 @@ const AddLayersContent = () => {
     layer.layerTitle.toLowerCase().includes(searchedTitle.toLowerCase())
   );
 
-  layersData;
+  mapLayers;
 
   if (contentLoading) {
     return (
