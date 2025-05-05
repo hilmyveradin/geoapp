@@ -51,7 +51,7 @@ const StyleContent = () => {
 
   const [lineColor, setLineColor] = useState("#fff");
   const [lineOpacity, setLineOpacity] = useState(1);
-  const [tabValue, setTabValue] = useState();
+  const [tabValue, setTabValue] = useState("basic");
 
   // POINT AND POLYGON STATES
   const [fillColor, setFillColor] = useState("#fff");
@@ -187,10 +187,6 @@ const StyleContent = () => {
 
   const saveStyleChanges = () => {
     setIsSavingChanges(true);
-
-    if (tabValue === "basic") {
-    } else {
-    }
 
     const saveSymbolStyle = async () => {
       if (pointStyle === "marker") {
