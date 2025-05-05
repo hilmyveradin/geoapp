@@ -1,7 +1,7 @@
 "use client";
 
 import UserAvatar from "./user-avatar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import { toast } from "@/components/ui/use-toast";
 
 const DesktopHeader = () => {
   const pathName = usePathname();
+  const router = useRouter()
 
   const { data: session, status } = useSession();
 
@@ -54,7 +55,9 @@ const DesktopHeader = () => {
         throw error;
       }
 
-      signOut({ callbackUrl: "/login" });
+      signOut({ redirect: false });
+
+      router.push("/login");
     } catch {
       const { title, description } = handleErrorMessage(error.status);
       toast({
