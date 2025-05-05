@@ -36,6 +36,7 @@ const useLayerManager = () => {
       refreshLayerReorderRef.current = refreshLayerOrder;
       addedLayerUidsRef.current = addedLayerUids;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, refreshLayerOrder, addedLayerUids]);
 
   useEffect(() => {
@@ -100,8 +101,8 @@ const useLayerManager = () => {
         updateLayers();
       }
 
-      if (firstRender && mapData.mapBbox) {
-        map.fitBounds(mapData.mapBbox, {
+      if (firstRender && mapData.viewBbox) {
+        map.fitBounds(mapData.viewBbox, {
           animate: false,
           padding: 40,
           maxZoom: 12,
@@ -112,7 +113,7 @@ const useLayerManager = () => {
   }, [
     firstRender,
     map,
-    mapData.mapBbox,
+    mapData.viewBbox,
     mapLoaded,
     mapLayers,
     refreshLayerOrder,
