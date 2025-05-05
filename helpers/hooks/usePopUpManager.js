@@ -6,6 +6,7 @@ const usePopUpManager = () => {
 
   const clickHandler = useCallback( 
     async function(e) {
+      setMapClicked(true);
       const { mapLayers } = useMapViewStore.getState(); 
 
       const body = {

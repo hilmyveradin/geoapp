@@ -143,12 +143,21 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
 }
 
 export default function GeojsonCard() {
-  const { objectInfoData, mapClicked, setMapClicked } = useMapViewStore();
+  const { objectInfoData, mapClicked, setMapClicked, mapLayers } = useMapViewStore();
   
-  const layerTitles = objectInfoData.data.map((layer) => ({
-    value: layer.layerTitle.toLowerCase(),
-    label: layer.layerTitle,
-  })).reverse();
+  const layerTitles = objectInfoData.data
+    .filter((layer) => {
+      const matchingLayer = mapLayers.find(
+        (mapLayer) => mapLayer.layerTitle === layer.layerTitle
+      );
+      return matchingLayer && matchingLayer.isShown;
+    })
+    .map((layer) => ({
+      value: layer.layerTitle.toLowerCase(),
+      label: layer.layerTitle,
+    }))
+    .reverse();
+
   const layerDataArray = objectInfoData.data.map(layer => [...layer.layerData]).reverse();
   const newObjects = layerDataArray.map(objArray => 
     objArray.map(obj => {
@@ -158,7 +167,7 @@ export default function GeojsonCard() {
         value: value === null ? "empty" : value.toString()}));
     })
   );
-  const [value, setValue] = useState(layerTitles[0].value);
+  const [value, setValue] = useState(layerTitles.length > 0 ? layerTitles[0].value : '');
   const [pageIdx, setPageIdx] = useState(0);
   const [isExpanded, setIsExpanded] = useState(true);
   
@@ -194,57 +203,70 @@ export default function GeojsonCard() {
   }
 
   return (
-    <Card className={`w-[35vw] bg-nileBlue-50 rounded-md ${
-        isExpanded ? 'h-[45vh]' : 'h-[20vh]'
-      }`}>
-      <div className="flex flex-col space-y-3 py-3">
-        <div className="flex flex-row justify-between px-6">
-          <Combobox 
-            layerTitles={layerTitles}
-            value={value} // Pass value prop
-            setValue={setValue} // Pass setValue prop
-            setPageIdx={setPageIdx}
-          />
-          <div className="flex flex-row items-center mt-1 text-nileBlue-950">
-            <button onClick={handleToggleExpand}>
-              <ChevronUp
-                className={`mr-2 transition-transform ${
-                  isExpanded ? '' : 'rotate-180'
-                }`}
+    <>
+      {layerTitles.length > 0 && (
+        <Card
+          className={`w-[35vw] bg-nileBlue-50 rounded-md ${
+            isExpanded ? 'h-[260px]' : 'h-[20vh]'
+          }`}
+        >
+          <div className="flex flex-col space-y-3 py-3">
+            <div className="flex flex-row justify-between px-6">
+              <Combobox
+                layerTitles={layerTitles}
+                value={value}
+                setValue={setValue}
+                setPageIdx={setPageIdx}
               />
-            </button>
-            <button onClick={handleTogglePopUp}>
-              <X/>
-            </button>
+              <div className="flex flex-row items-center mt-1 text-nileBlue-950">
+                <button onClick={handleToggleExpand}>
+                  <ChevronUp
+                    className={`mr-2 transition-transform ${
+                      isExpanded ? '' : 'rotate-180'
+                    }`}
+                  />
+                </button>
+                <button onClick={handleTogglePopUp}>
+                  <X />
+                </button>
+              </div>
+            </div>
+            <Separator />
+            <div className="flex flex-row justify-between px-6">
+              <div className="flex flex-row p-1">
+                <ZoomIn className="text-nileBlue-950" />
+                <Label className="ml-2 mt-1 inline-block text-nileBlue-800">
+                  Zoom to
+                </Label>
+              </div>
+              <div className="flex items-center bg-nileBlue-50 rounded-md shadow-md text-nileBlue-800 p-1">
+                <button onClick={handlePrevClick}>
+                  <ChevronLeft />
+                </button>
+                <Label>
+                  {pageIdx === null ? '' : pageIdx + 1} of{' '}
+                  {pageIdx === null || index === -1
+                    ? ''
+                    : newObjects[index].length}
+                </Label>
+                <button onClick={handleNextClick}>
+                  <ChevronRight />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <Separator/>
-        <div className="flex flex-row justify-between px-6">
-          <div className="flex flex-row p-1">
-            <ZoomIn className="text-nileBlue-950"/>
-            <Label className="ml-2 mt-1 inline-block text-nileBlue-800">Zoom to</Label>
-          </div>
-          <div className="flex items-center bg-nileBlue-50 rounded-md shadow-md text-nileBlue-800 p-1">
-            <button onClick={handlePrevClick}>
-              <ChevronLeft/>
-            </button>
-            <Label>{pageIdx === null ? "" : pageIdx+1} of {pageIdx === null || index === -1 ? "" : newObjects[index].length}</Label>
-            <button onClick={handleNextClick}>
-              <ChevronRight/>
-            </button>
-          </div>
-        </div>
-      </div>
-      {isExpanded && (
-        <CardContent className="flex flex-col">
-          <Table
-            inputLayerDataArray={newObjects}
-            value={value}
-            layerTitles={layerTitles}
-            pageIdx={pageIdx}
-          />
-        </CardContent>
+          {isExpanded && (
+            <CardContent className="flex flex-col">
+              <Table
+                inputLayerDataArray={newObjects}
+                value={value}
+                layerTitles={layerTitles}
+                pageIdx={pageIdx}
+              />
+            </CardContent>
+          )}
+        </Card>
       )}
-    </Card>
-  )
+    </>
+  );
 }

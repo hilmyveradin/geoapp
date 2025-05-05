@@ -146,6 +146,8 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     addMultiSelectedLayers,
     multiSelectedLayers,
     toggleLayerVisibility,
+    mapClicked,
+    setMapClicked,
   } = useMapViewStore();
 
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
@@ -168,6 +170,12 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
       toggleLayerVisibility(layer.layerUid, false);
     } else {
       toggleLayerVisibility(layer.layerUid, true);
+    }
+    if (!mapClicked) {
+      setMapClicked(true);
+      setTimeout(() => {
+        setMapClicked(false);
+      }, 100);
     }
   };
 
