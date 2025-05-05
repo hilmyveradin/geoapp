@@ -1,5 +1,5 @@
-import AppHeader from "@/app/_components/app/header";
-import { Toaster } from "@/components/ui/toaster"
+import AppHeader from "@/app/_components/app/shared/header";
+import { Toaster } from "@/components/ui/toaster";
 
 const AppLayout = ({ children }) => {
   return (

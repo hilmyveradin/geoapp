@@ -8,7 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { MoreVertical } from "lucide-react";
 import { useState } from "react";
-import UserAvatar from "./user-avatar";
+import UserAvatar from "./shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import MenuCardDropdown from "./menu-card-dropdown";
 
