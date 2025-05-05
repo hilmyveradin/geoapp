@@ -6,8 +6,10 @@ const ROWS_PER_PAGE = 10;
 
 export default function PaginationLayerTable() {
   const [rows, setRows] = useState([]);
+  const [rowsFTS, setRowsFTS] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
+  const [totalRowsFTS, setTotalRowsFTS] = useState(0);
   const [columnDefs, setColumnDefs] = useState([]);
   const { layerInfo } = useMapViewStore();
   const {
@@ -108,11 +110,11 @@ export default function PaginationLayerTable() {
   };
   return (
     <ControlledTable
-      rows={rows}
+      rows={(searchSubmit && ftsQuery && ftsQuery.value !== '') ? rowsFTS : rows}
       columnDefs={columnDefs}
-      getRows={(searchSubmit && ftsQuery) ? getRowsFTS : getRows}
-      totalCount={totalRows}
-      onChange={setRows}
+      getRows={(searchSubmit && ftsQuery && ftsQuery.value !== '') ? getRowsFTS : getRows}
+      totalCount={(searchSubmit && ftsQuery && ftsQuery.value !== '') ? totalRowsFTS : totalRows}
+      onChange={(searchSubmit && ftsQuery && ftsQuery.value !== '') ? setRowsFTS : setRows}
       onPageNumberChange={setPageNumber}
       pageSize={ROWS_PER_PAGE}
       pageNumber={pageNumber}

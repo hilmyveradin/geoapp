@@ -61,6 +61,9 @@ const MapSidebar = () => {
     // Destructure the name and value from
     // the changed element
     const { name, value } = e.target;
+    if (value === '') {
+      setSearchSubmit(false);
+    }
     setFtsQuery({ ...ftsQuery, value });
   };
 
@@ -334,6 +337,7 @@ const MapSidebar = () => {
                 setTableLoaded(false);
                 setReloadTable(false);
                 setHighlightedLayer(null);
+                setSearchSubmit(false);
               }}
             >
               <X />
