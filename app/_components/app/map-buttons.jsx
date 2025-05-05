@@ -11,6 +11,8 @@ const MapsButtons = () => {
         <Filter className="w-5 h-5" fill="#006236" />
         Filter
       </Button> */}
+      {/*TODO: Delete this later */}
+      <div className="flex-grow" />
       <div className="flex items-center justify-center gap-4">
         <ComposeMapDialog>
           <Button className="flex gap-2">

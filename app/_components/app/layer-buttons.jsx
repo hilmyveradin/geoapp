@@ -68,6 +68,8 @@ const LayersButtons = () => {
 
   return (
     <div className="flex items-center justify-between w-full">
+      {/*TODO: Delete this later */}
+      <div className="flex-grow" />
       {/* <Button variant="secondary" className="flex gap-2">
         <Filter className="w-5 h-5" fill="#006236" />
         Filter
