@@ -65,6 +65,8 @@ const MapsDashboard = () => {
               ...data,
               cardType: "map",
               cardTitle: data.mapTitle,
+              cardDescription: data.mapDescription,
+              cardTags: data.mapTags,
               cardUid: data.mapUid,
               thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
             };

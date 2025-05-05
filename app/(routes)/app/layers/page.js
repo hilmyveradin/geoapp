@@ -65,6 +65,8 @@ const LayersDashboard = () => {
               ...data,
               cardType: "layer",
               cardTitle: data.layerTitle,
+              cardDescription: data.layerDescription,
+              cardTags: data.layerTags,
               cardUid: data.layerUid,
               thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             };
