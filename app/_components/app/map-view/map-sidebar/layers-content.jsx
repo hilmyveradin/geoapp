@@ -173,28 +173,35 @@ const LayersCard = ({ data }) => {
           />
         </div>
       )}
-      {collapsibleContent === "options" && <OptionsSection />}
+      {collapsibleContent === "options" && <OptionsSection data={data} />}
     </div>
   );
 };
 
-const OptionsSection = () => {
+const OptionsSection = ({ data }) => {
+  const { setZoomedLayerBbox } = useMapViewStore();
   const buttonLists = [
     {
       icon: <ZoomIn className="w-3 h-3 stroke-2" />,
       name: "Zoom to",
+      onClick: () => {
+        setZoomedLayerBbox(data.layerBbox);
+      },
     },
     {
       icon: <Table className="w-3 h-3 stroke-2" />,
       name: "Show Table",
+      onClick: null,
     },
     {
       icon: <PencilIcon className="w-3 h-3 stroke-2" />,
       name: "Rename",
+      onClick: null,
     },
     {
       icon: <Trash className="w-3 h-3 stroke-2" />,
       name: "Remove",
+      onClick: null,
     },
   ];
 
@@ -204,6 +211,7 @@ const OptionsSection = () => {
         <button
           key={`button-${item}-${index}`}
           className="flex items-center justify-start gap-2 p-1"
+          onClick={item.onClick}
         >
           <span>{item.icon}</span>
           {item.name}
