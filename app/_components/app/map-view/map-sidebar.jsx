@@ -12,8 +12,6 @@ import {
   Printer,
 } from "lucide-react";
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LegendContent from "./map-sidebar/legend-content";
 import LayersContent from "./map-sidebar/layers-content";
 import { ButtonSidebar } from "@/components/ui/button-sidebar";
 
@@ -21,6 +19,7 @@ const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [showButtonSidebar, setShowButtonSidebar] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
+  const [showSidebarRight, setShowSidebarRight] = useState(true);
 
   // Reusable Button component
   const Button = ({ icon, label, onClick }) => (
@@ -34,7 +33,6 @@ const MapSidebar = () => {
   const AddContent = () => <div>Add content goes here</div>;
   // const LayersContent = () => <div>Layers content goes here</div>;
   const BasemapContent = () => <div>Basemap content goes here</div>;
-  const TablesContent = () => <div>Tables content goes here</div>;
   const SaveContent = () => <div>Save content goes here</div>;
   const ShareContent = () => <div>Share content goes here</div>;
   const PrintContent = () => <div>Print content goes here</div>;
@@ -45,7 +43,6 @@ const MapSidebar = () => {
     add: <AddContent />,
     layers: <LayersContent />,
     basemap: <BasemapContent />,
-    tables: <TablesContent />,
     save: <SaveContent />,
     share: <ShareContent />,
     print: <PrintContent />,
@@ -54,6 +51,7 @@ const MapSidebar = () => {
 
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
+    setShowButtonSidebar((prev) => !prev)
   };
 
   // Button data
@@ -80,11 +78,6 @@ const MapSidebar = () => {
       onClick: () => handleButtonClick("basemap"),
     },
     {
-      icon: <Sheet className={cn("w-4 h-4")} />,
-      label: "Tables",
-      onClick: () => handleButtonClick("tables"),
-    },
-    {
       icon: <Save className={cn("w-4 h-4")} />,
       label: "Save",
       onClick: () => handleButtonClick("save"),
@@ -109,9 +102,9 @@ const MapSidebar = () => {
       onClick: () => setShowSidebar((prev) => !prev),
     },
   ];
-
+  console.log(showButtonSidebar)
   return (
-    <div className="relative">
+    <div className="flex flex-row">
       <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gn-400 w-[48px]",
@@ -130,7 +123,7 @@ const MapSidebar = () => {
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-white",
             {
-              "left-12 w-fit": showSidebar,
+              "left-12 w-60": showSidebar,
               "left-40 w-60": !showSidebar,
             }
           )}
@@ -138,6 +131,44 @@ const MapSidebar = () => {
           {buttonContent[selectedButton]}
         </div>
       )}
+      <div
+        className = {cn(
+          "fixed bottom-6 z-10 bg-black top-[65vh] h-[calc(100vh-65vh-24px)]",
+          {
+            "left-[292px] w-[calc(100vw-292px-52px)]": !showButtonSidebar && showSidebar,
+            "left-[164px] w-[calc(100vw-164px-52px)]": showButtonSidebar && !showSidebar,
+            "left-[404px] w-[calc(100vw-404px-52px)]": !showButtonSidebar && !showSidebar,
+            "left-[52px] w-[calc(100vw-52px-52px)]": showButtonSidebar && showSidebar && showSidebarRight,
+            "left-[52px] w-[calc(100vw-52px-184px)]": showButtonSidebar && showSidebar && !showSidebarRight,
+          }
+        )}>
+
+      </div>
+      <div
+        className={cn(
+          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
+          {
+            "w-[180px]": !showSidebarRight,
+          },
+        )}
+      >
+        <ButtonSidebar variant="ghost">
+          <img
+            className={cn("w-4 h-4")}
+            src="/app/style-icon.svg"
+            alt="style icon"
+          />
+          {!showSidebarRight && <span className="ml-2 inline-block">Style</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost" onClick={() => setShowSidebarRight((prev) => !prev)}>
+          <ChevronRight
+            className={cn("w-4 h-4", {
+              "-rotate-180": showSidebarRight,
+            })}
+          />
+          {!showSidebarRight && <span className="ml-2 inline-block">Collapse</span>}
+        </ButtonSidebar>
+      </div>
     </div>
   );
 };

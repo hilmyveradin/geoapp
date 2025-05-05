@@ -6,7 +6,6 @@ import MapSidebar from "@/app/_components/app/map-view/map-sidebar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import MapViewLayout from "../../../layout";
-import MapSidebarRight from "@/app/_components/app/map-view/map-sidebar-right";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { Loader2 } from "lucide-react";
 
@@ -79,7 +78,6 @@ const MapView = ({ params }) => {
       <MapHeader />
       <div className="flex items-center justify-center">
         <MapSidebar />
-        <MapSidebarRight />
         <div className="px-12 w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
