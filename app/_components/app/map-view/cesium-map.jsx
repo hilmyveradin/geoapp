@@ -8,7 +8,19 @@ const CesiumMap = () => {
   useEffect(() => {
     if (!viewerRef.current) {
       // Initialize Cesium viewer
-      const viewer = new Cesium.Viewer("cesiumContainer");
+      const viewer = new Cesium.Viewer("cesiumContainer", {
+        baseLayerPicker: false,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        navigationHelpButton: false,
+        animation: false,
+        timeline: false,
+        fullscreenButton: false,
+        vrButton: false,
+        infoBox: false,
+        selectionIndicator: false,
+      });
       viewerRef.current = viewer;
 
       // Load tileset
@@ -29,7 +41,7 @@ const CesiumMap = () => {
   const loadTileset = async (viewer) => {
     try {
       const tileset = await Cesium.Cesium3DTileset.fromUrl(
-        "/jakarta/building/Building/tileset.json",
+        "/arcamanik/GenericCityObject/tileset.json",
         {
           debugShowBoundingVolume: false,
         }

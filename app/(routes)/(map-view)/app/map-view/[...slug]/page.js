@@ -8,7 +8,6 @@ import MapViewLayout from "../../../layout";
 import { Loader2 } from "lucide-react";
 import MapRightSidebar from "@/app/_components/app/map-view/map-right-sidebar";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
-import CesiumMap from "@/app/_components/app/map-view/cesium-map";
 
 const MapView = ({ params }) => {
   const mapType = params.slug[0];
@@ -123,9 +122,7 @@ const MapView = ({ params }) => {
         <MapSidebar />
         {/* adjust this paddign if there's a style sidebar*/}
         <div className="pl-12 w-screen h-[calc(100vh-56px)]">
-          {/* <MapMain /> */}
-          {/* <Map3D /> */}
-          <CesiumMap />
+          <MapMain />
         </div>
         <MapRightSidebar />
       </div>
