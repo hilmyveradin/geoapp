@@ -1,0 +1,53 @@
+name: CI/CD Workflow for GeoPortal
+
+on:
+  pull_request:
+    branches:
+      - main # Trigger CI on pull requests targeting the main branch
+  push:
+    branches:
+      - main # Trigger CD on push to the main branch
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install PNPM
+        run: npm install -g pnpm
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build the project
+        run: pnpm build
+
+  build-and-deploy:
+    needs: ci # Ensure deploy only after CI success
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            source ~/.bashrc || source ~/.profile
+            cd /home/ubuntu/var/www/geoportal/geoportal-webapp
+            git pull origin main
+            /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm install --production
+            /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm build
+            /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 start /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm --name "geoportal" -- start || /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 restart geoportal -f

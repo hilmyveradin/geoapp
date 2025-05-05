@@ -31,7 +31,7 @@ const AppSidebar = () => {
 
   return (
     <aside
-      className="flex flex-col justify-between w-12 px-1 py-4 transition-all duration-100 ease-in-out bg-yellow-500 rounded-xl hover:w-64"
+      className="fixed left-0 z-50 flex flex-col justify-between w-12 px-1 py-4 transition-all duration-100 ease-in-out bg-yellow-500 top-2 bottom-2 rounded-xl hover:w-64"
       onMouseEnter={() => setIsAsideHovered(true)}
       onMouseLeave={() =>
         setTimeout(() => {
