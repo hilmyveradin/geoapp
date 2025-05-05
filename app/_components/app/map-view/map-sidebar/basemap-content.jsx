@@ -196,13 +196,13 @@ const BaseMapCard = ({ name, image, onClick }) => {
       className="flex items-center gap-2 p-2 bg-white rounded-md shadow cursor-pointer hover:bg-gray-100"
       onClick={onClick}
     >
-      <Image
+      {/* <Image
         src={image}
         alt={name}
         width={50}
         height={50}
         className="rounded-md"
-      />
+      /> */}
       <span className="font-medium">{name}</span>
     </div>
   );
