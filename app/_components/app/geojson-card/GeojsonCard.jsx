@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { 
+  useState,
+  useMemo 
+} from "react";
 import { 
   Check, 
   ChevronsUpDown, 
@@ -25,16 +28,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-material.css";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const frameworks = [
   {
@@ -59,40 +56,9 @@ const frameworks = [
   },
 ]
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-  },
-]
-
 const objects = ["obj1", "obj2"];
 
-export function ComboboxDemo() {
+export function ComboboxDemo({layerTitles}) {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState("")
  
@@ -103,23 +69,23 @@ export function ComboboxDemo() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[100%] justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+            : "Select layer title..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandInput placeholder="Select layer title..." />
+          <CommandEmpty>No layer title found.</CommandEmpty>
           <CommandGroup>
-            {frameworks.map((framework) => (
+            {layerTitles.map((layerTitle) => (
               <CommandItem
-                key={framework.value}
-                value={framework.value}
+                key={layerTitle.value}
+                value={layerTitle.value}
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue)
                   setOpen(false)
@@ -128,10 +94,10 @@ export function ComboboxDemo() {
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
+                    value === layerTitle.value ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {framework.label}
+                {layerTitle.label}
               </CommandItem>
             ))}
           </CommandGroup>
@@ -142,33 +108,50 @@ export function ComboboxDemo() {
 }
 
 export function DemoTable() {
+  const [rowData, setRowData] = useState([
+    { make: "Ford", model: "F-Series"},
+    { make: "Tesla", model: "Model Y"},
+    { make: "Toyota", model: "Corolla"},
+  ]);
+  
+  // Column Definitions: Defines the columns to be displayed.
+  const [colDefs, setColDefs] = useState([
+    { field: "make" },
+    { field: "model" },
+  ]);
+
+  const autoSizeStrategy = useMemo(() => {
+    return {
+      type: "fitGridWidth",
+    };
+  }, []);
+  
   return (
-    <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <div
+      className="ag-theme-quartz" // applying the grid theme
+      style={{ height: 170, maxWidth: 400 }} // the grid will fill the size of the parent container
+    >
+      <AgGridReact
+        rowData={rowData}
+        columnDefs={colDefs}
+        autoSizeStrategy={autoSizeStrategy}
+      />
+    </div>
   )
 }
 
 export default function GeojsonCard() {
   const [curObjIdx, setCurObjIdx] = useState(0)
+  const { objectInfoData } = useMapViewStore();
+  console.log(objectInfoData.data);
+  const layerTitles = objectInfoData.data.map((layer) => ({
+    value: layer.layerUid,
+    label: layer.layerTitle,
+  }));
+  console.log(layerTitles);
 
   return (
-    <Card className="w-[50vw] h-[40vh]">
+    <Card className="w-[35vw] h-[50vh]">
       <div className="flex flex-col space-y-3 px-6 pt-6 pb-3">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
@@ -181,7 +164,9 @@ export default function GeojsonCard() {
             <ChevronRight />
           </div>
         </div>
-        <ComboboxDemo />
+        <ComboboxDemo 
+          layerTitles={layerTitles}
+        />
       </div>
       <CardContent className="flex flex-col">
         <DemoTable/>

@@ -14,6 +14,7 @@ const useMapViewStore = create((set) => ({
   tableLoaded: true,
   zoomedLayerBbox: null,
   mapClicked: true,
+  objectInfoData: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -80,6 +81,11 @@ const useMapViewStore = create((set) => ({
   setMapClicked: (data) =>
     set(() => ({
       mapClicked: data,
+    })),
+
+  setObjectInfoData: (data) =>
+    set(() => ({
+      objectInfoData: data,
     })),
 }));
 

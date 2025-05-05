@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useMapViewStore from "./store/useMapViewStore";
 
 const usePopUpManager = () => {
-  const { mapLoaded, map, selectedLayers, mapClicked, setMapClicked, tableLoaded } = useMapViewStore();
+  const { mapLoaded, map, selectedLayers, mapClicked, setMapClicked, tableLoaded, setObjectInfoData } = useMapViewStore();
   // Assuming you have a reference to the event listener function
   useEffect(() => {
     const clickHandler = async function(e) {
@@ -27,6 +27,7 @@ const usePopUpManager = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        setObjectInfoData(data);
         setMapClicked(false);
       } catch (error) {
         console.error("Error during fetch:", error.message);
