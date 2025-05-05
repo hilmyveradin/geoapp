@@ -63,7 +63,7 @@ jobs:
             /home/***/.nvm/versions/node/v20.17.0/bin/pnpm install --frozen-lockfile
 
             # Build the project
-            /home/***/.nvm/versions/node/v20.17.0/bin/pnpm dev
+            /home/***/.nvm/versions/node/v20.17.0/bin/pnpm build:local
 
             # Use pm2 to manage the process
             /home/***/.nvm/versions/node/v20.17.0/bin/pm2 start /home/***/.nvm/versions/node/v20.17.0/bin/pnpm --name "geoportal" -- start || /home/***/.nvm/versions/node/v20.17.0/bin/pm2 restart geoportal -f
