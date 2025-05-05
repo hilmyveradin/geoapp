@@ -29,7 +29,7 @@ const LayersDashboard = () => {
             cardType: "layer",
             cardTitle: data.layerTitle,
             cardUid: data.layerUid,
-            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
+            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
           };
         });
 
