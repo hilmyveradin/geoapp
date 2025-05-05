@@ -8,7 +8,7 @@ const useLayerManager = () => {
 
   useEffect(() => {
     if (mapLoaded && map) {
-      console.log(layerOrderRef);
+      console.log(selectedLayers);
       const updateLayers = () => {
         // Remove layers that are not in selectedLayers
         layerOrderRef.current.forEach((layerId) => {

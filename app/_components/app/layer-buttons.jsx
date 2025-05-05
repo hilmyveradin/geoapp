@@ -21,7 +21,7 @@ const LayersButtons = () => {
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const { refetchLayers, setRefetchLayers } = useRefetchStore();
+  const { toggleRefetchLayers } = useRefetchStore();
   const [progressValue, setProgressValue] = useState(0);
 
   const handleFileChange = (newState) => {
@@ -60,12 +60,13 @@ const LayersButtons = () => {
                 variant: "destructive"
               })
             }
-            setRefetchLayers(!refetchLayers);
+            toggleRefetchLayers();
           } catch (error) {
             console.error("Error during fetch:", error.message);
             toast({
               title: "ERROR",
               description: error.message,
+              variant: "destructive"
             });
           } finally {
             setUploadProgress(false); // Reset progress on error

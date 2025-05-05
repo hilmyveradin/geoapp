@@ -5,6 +5,7 @@ import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { useShallow } from "zustand/react/shallow";
 import useLayerManager from "@/helpers/hooks/useLayerManager";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
+import usePopUpManager from "@/helpers/hooks/usePopUpManager";
 
 const MapMain = () => {
   const mapContainerRef = useRef(null);
@@ -12,6 +13,7 @@ const MapMain = () => {
 
   useLayerManager();
   useZoomToLayer();
+  usePopUpManager();
 
   const { setMap, setMapLoaded, setZoomedLayerBbox } = useMapViewStore();
 

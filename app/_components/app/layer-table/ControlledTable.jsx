@@ -95,6 +95,16 @@ const ControlledTable = ({
   );
 
   if (rows?.length < totalCount) {
+    if (totalCount > 100000) {
+      const quotient = parseInt(totalCount / 100000);
+      for (let index = 0; index < quotient; index++) {
+        rows.splice(
+          rows.length,
+          0,
+          ...getPlaceholderItems(rows.length, 100000 * (index + 1))
+        );
+      }
+    }
     rows.splice(
       rows.length,
       0,
