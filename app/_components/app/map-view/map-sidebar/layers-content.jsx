@@ -3,19 +3,62 @@ import { Separator } from "@/components/ui/separator";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const LayersContent = () => {
-  const { layersData } = useMapViewStore();
+  const { layersData, setLayersData } = useMapViewStore();
 
   if (!layersData) {
     return null;
   }
 
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedItems = Array.from(layersData);
+    const [removed] = reorderedItems.splice(result.source.index, 1);
+    reorderedItems.splice(result.destination.index, 0, removed);
+
+    // Update your state with the new items array
+    // For example, if you're managing your state in a store or with useState:
+    setLayersData(reorderedItems);
+  };
+
   return (
     <div className="flex flex-col w-full h-full overflow-y-auto ">
-      {layersData.map((item, index) => {
-        return <LayersCard key={`${item}-${index}`} data={item} />;
-      })}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppableId">
+          {(provided, snapshot) => (
+            <div
+              style={{
+                backgroundColor: snapshot.isDraggingOver ? "blue" : "grey",
+              }}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {layersData.map((item, index) => (
+                <Draggable
+                  key={`${item.layerUid}`}
+                  draggableId={`${item.layerUid}`}
+                  index={index}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <LayersCard data={item} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };
@@ -36,8 +79,6 @@ const LayersCard = ({ data }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
-    // Check if this layer is in the selectedLayers
-    console.log("SELECTED LAYERS: ", selectedLayers);
     if (selectedLayers) {
       setIsChecked(selectedLayers.some((layer) => layer === data));
     }
