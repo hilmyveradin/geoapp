@@ -21,11 +21,14 @@ const MenuCard = (props) => {
         className="px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100"
       >
         <CardContent className="relative flex items-center justify-center p-0">
-          <AspectRatio ratio={450 / 200}>
+          <AspectRatio
+            ratio={450 / 200}
+            className="flex items-center justify-center"
+          >
             <img
               src={cardData.thumbnailUrl}
               alt="Thumbnail"
-              className="w-full"
+              className="w-fit"
             />
           </AspectRatio>
           <MenuCardDropdown>
