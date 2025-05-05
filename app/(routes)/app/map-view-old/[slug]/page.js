@@ -3,51 +3,72 @@
 import MapHeader from "@/app/_components/app/map-view/map-header";
 import MapMain from "@/app/_components/app/map-view/map-main-old";
 import MapSidebar from "@/app/_components/app/map-view/map-sidebar-old";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import useMapViewStore from "@/helpers/hooks/useMapViewStore";
+import { useEffect, useState } from "react";
 
 const MapView = ({ params }) => {
-  const layerUid = params.slug;
-  const router = useRouter();
+  const mapUid = params.slug;
 
-  const { mapData, setMapData, setLayersData } = useMapViewStore();
+  const { mapData, layersData, setMapData, setSelectedLayers, setLayersData } =
+    useMapViewStore();
 
   useEffect(() => {
-    async function loadLayerData() {
-      if (layerUid) {
-        try {
-          const response = await fetch(
-            `/api/get-layer-id?layerUid=${layerUid}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const data = await response.json();
+    async function getLayerUid(layerUid) {
+      const response = await fetch(`/api/get-layer-id?layerUid=${layerUid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const datas = await response.json();
+      const modifiedDatas = datas.data.map((data) => {
+        return {
+          ...data,
+          imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+        };
+      });
 
-          const mapData = {
-            title: data.data[0].layerTitle,
-          };
+      return modifiedDatas;
+    }
 
-          setMapData(mapData);
-          setLayersData(data.data);
-        } catch (error) {
-          console.log(error);
-        }
+    async function loadMapData() {
+      try {
+        const response = await fetch(`/api/get-map-id?mapUid=${mapUid}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const responseData = await response.json();
+        const data = responseData.data;
+        // Create an array of promises
+        const layerDataPromises = data.mapLayerUid.map((layerUid) =>
+          getLayerUid(layerUid)
+        );
+        // Wait for all promises to resolve
+        const resolvedLayerDatas = await Promise.all(layerDataPromises);
+
+        // Flatten the array of arrays (if necessary) and set the state
+        const layerDatas = resolvedLayerDatas.flat(); // Use .flat() if each promise resolves to an array
+
+        setSelectedLayers(layerDatas);
+        setLayersData(layerDatas);
+        setMapData(data);
+      } catch (error) {
+        console.log(error);
       }
     }
 
-    loadLayerData();
-  }, [layerUid, setLayersData, setMapData]);
+    loadMapData();
+  }, [mapUid, setLayersData, setMapData, setSelectedLayers]);
 
-  if (!mapData) return <div>Loading...</div>;
+  if (!mapData && !layersData) return <div>Loading...</div>;
 
   return (
     <div className="flex flex-col">
-      <MapHeader />
+      {/* <MapHeader /> */}
       <div className="flex items-center justify-center">
         <MapSidebar />
         <div className="w-screen h-[calc(100vh-112px)]">

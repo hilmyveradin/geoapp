@@ -21,12 +21,15 @@ const MapsDashboard = () => {
 
         const temp = await response.json();
 
+        console.log(temp);
         const tempData = temp.data.map((data) => {
+          //TODO: Change this maptitle to camelCase
           return {
+            ...data,
             cardType: "map",
             cardTitle: data.mapTitle,
             cardUid: data.mapUid,
-            ...data,
+            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
           };
         });
 

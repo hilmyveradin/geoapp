@@ -33,7 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import useMapViewStore from "@/helpers/hooks/useMapViewStore";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const MapHeader = () => {
   const { mapData } = useMapViewStore();
@@ -42,43 +42,43 @@ const MapHeader = () => {
       <div className="flex w-full h-10 justify-between items-center bg-[#D9D9D93D]">
         <div className="flex flex-row justify-between pl-2 space-x-8">
           <div className="flex flex-row justify-between px-4">
-            <DropdownMenuLabel>{`${mapData.title}`}</DropdownMenuLabel> 
+            <DropdownMenuLabel>{`${mapData.title}`}</DropdownMenuLabel>
           </div>
         </div>
         <div className="flex flex-row justify-between pr-6">
-              <Dialog>
-                <DialogTrigger>
-                  <Button variant="ghost">
-                    <Save className="w-4 h-4 mr-2" /> Save
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Save Map</DialogTitle>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid items-center grid-cols-4 gap-4">
-                      <Label htmlFor="title" className="text-right">
-                        Title
-                      </Label>
-                      <Input
-                        id="title"
-                        defaultValue={`${mapData.title}`}
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid items-center grid-cols-4 gap-4">
-                      <Label htmlFor="Tags" className="text-right">
-                        Tags
-                      </Label>
-                      <Textarea placeholder="Add Tags" className="col-span-3" />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+          <Dialog>
+            <DialogTrigger>
+              <Button variant="ghost">
+                <Save className="w-4 h-4 mr-2" /> Save
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Save Map</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="title" className="text-right">
+                    Title
+                  </Label>
+                  <Input
+                    id="title"
+                    defaultValue={`${mapData.title}`}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="Tags" className="text-right">
+                    Tags
+                  </Label>
+                  <Textarea placeholder="Add Tags" className="col-span-3" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           <Button variant="ghost">
             <Share2 className="w-4 h-4 mr-2" /> Share
           </Button>
