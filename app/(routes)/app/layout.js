@@ -14,7 +14,7 @@ const AppLayout = async ({ children }) => {
   return (
     <div className="flex flex-col w-full h-full bg-nileBlue-50">
       <AppHeader />
-      <div className="w-full mx-1 my-2 ">{children}</div>
+      <div className="w-full">{children}</div>
       <Toaster />
     </div>
   );

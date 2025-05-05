@@ -5,7 +5,6 @@ import authOptions from "../../auth/[...nextauth]/options";
 export async function POST(request) {
   try {
     const formData = await request.formData();
-    console.log(formData.get("vector_zip"));
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
