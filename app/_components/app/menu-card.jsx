@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -17,10 +17,30 @@ import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
 
 const MenuCard = ({ cardData }) => {
-  const { isCtrlPressed, toggleCardSelection, selectedCards } = useCardStore();
+  const {
+    isCtrlPressed,
+    toggleCardSelection,
+    selectedCards,
+    setCardDimensions,
+  } = useCardStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (cardRef.current) {
+        const { width, height } = cardRef.current.getBoundingClientRect();
+        setCardDimensions({ width, height });
+      }
+    };
+
+    updateDimensions(); // Initial measurement
+    window.addEventListener("resize", updateDimensions); // Update on resize
+
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, [setCardDimensions]);
 
   const handleCardClick = (e) => {
     if (isCtrlPressed) {
@@ -54,6 +74,7 @@ const MenuCard = ({ cardData }) => {
         "px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100",
         { "outline-nileBlue-700 outline": isSelected }
       )}
+      ref={cardRef}
       onClick={handleCardClick}
     >
       <CardContent className="relative flex items-center justify-center p-0">

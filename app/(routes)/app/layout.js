@@ -14,7 +14,7 @@ const AppLayout = async ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-nileBlue-50">
       <AppHeader />
-      <main className="flex-grow w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 py-6 overflow-x-hidden">
+      <main className="flex-grow w-full max-w-screen mx-auto px-4 sm:px-6 md:px-8 py-6 overflow-x-hidden">
         {children}
       </main>
       <Toaster />

@@ -3,6 +3,7 @@ import { create } from "zustand";
 const useCardStore = create((set) => ({
   isCtrlPressed: false,
   selectedCards: [],
+  cardDimension: { width: 0, height: 0 },
 
   setIsCtrlPressed: (isPressed) => set(() => ({ isCtrlPressed: isPressed })),
 
@@ -17,6 +18,8 @@ const useCardStore = create((set) => ({
     }),
 
   clearSelection: () => set(() => ({ selectedCards: [] })),
+
+  setCardDimensions: (dimensions) => set(() => ({ cardDimension: dimensions })),
 }));
 
 export default useCardStore;
