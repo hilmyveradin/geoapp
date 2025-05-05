@@ -69,7 +69,7 @@ const MapSidebar = () => {
             variant="ghost"
             onClick={() => handleButtonClick("addLayer")}
             className={cn("flex justify-start text-blackHaze-500", {
-              "text-white": selectedButton === "addLayer",
+              "text-white bg-nileBlue-700": selectedButton === "addLayer",
               "p-0 justify-center": !showSidebar,
             })}
           >
@@ -88,7 +88,7 @@ const MapSidebar = () => {
           variant="ghost"
           onClick={() => handleButtonClick("layers")}
           className={cn("flex justify-start text-blackHaze-500", {
-            "text-white": selectedButton === "layers",
+            "text-white bg-nileBlue-700": selectedButton === "layers",
             "p-0 justify-center": !showSidebar,
           })}
         >

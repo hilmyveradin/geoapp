@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outline:
           "border border-input bg-background shadow-sm hover:bg-nileBlue-300 hover:text-white",
 
-        ghost: "hover:bg-nileBlue-200 hover:text-accent-foreground",
+        ghost: "hover:bg-nileBlue-200 hover:bg-nileBlue-700",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
