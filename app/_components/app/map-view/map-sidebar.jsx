@@ -20,7 +20,7 @@ import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
 
 const MapSidebar = () => {
-  debugger;
+  // debugger;
   const [showSidebar, setShowSidebar] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
 
@@ -100,7 +100,7 @@ const MapSidebar = () => {
   };
 
   const handleButtonClick = (buttonName) => {
-    debugger;
+    // debugger;
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
   };
 

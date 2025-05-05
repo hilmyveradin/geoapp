@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const LayersContent = () => {
-  const { layersData, setLayersData } = useMapViewStore();
+  const { layersData, setLayersData, mapData } = useMapViewStore();
+
+  console.log("MAP DATA: ", mapData);
 
   if (!layersData) {
     return null;
   }
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     if (!result.destination) {
       return;
     }
@@ -21,6 +23,26 @@ const LayersContent = () => {
     const [removed] = reorderedItems.splice(result.source.index, 1);
     reorderedItems.splice(result.destination.index, 0, removed);
 
+    const body = {
+      mapLayerUid: reorderedItems.map((item) => item.layerUid),
+    };
+
+    try {
+      const response = fetch(
+        `/api/post-reorder-layer?mapUid=${mapData.mapUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
     // Update your state with the new items array
     // For example, if you're managing your state in a store or with useState:
     setLayersData(reorderedItems);
