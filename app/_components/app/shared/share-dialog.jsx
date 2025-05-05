@@ -43,10 +43,6 @@ const ShareDialog = ({ children }) => {
 
   // Function to memoize colors for users and groups
   const useColorMemo = (items) => {
-    if (items === undefined) {
-      return;
-    }
-
     const memoizedColors = useMemo(() => {
       const colors = {};
       items.forEach((item) => {
