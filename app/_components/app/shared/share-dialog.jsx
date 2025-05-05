@@ -86,7 +86,7 @@ const ShareDialog = ({ children }) => {
         fetch(`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/users/list`, {
           method: "GET",
         }),
-        fetch(`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}//api/groups/list`, {
+        fetch(`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/list`, {
           method: "GET",
         }),
         fetch(
@@ -109,6 +109,7 @@ const ShareDialog = ({ children }) => {
 
       setUserList(usersData.data);
       setGroupList(groupsData.data);
+      debugger;
       setOwner(mapsData.data.owner);
       setSharedGroupList(mapsData.data.groups);
       setSharedUserList(mapsData.data.users);
@@ -256,6 +257,11 @@ const ShareDialog = ({ children }) => {
 
       // Call the function to fetch data and reset states
       await fetchDataAndResetState();
+
+      toast({
+        title: "Success sharing data",
+        variant: "success",
+      });
     } catch (error) {
       console.log("Error fetching data: ", error);
     } finally {
