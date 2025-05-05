@@ -20,6 +20,8 @@ const useMapViewStore = create((set) => ({
   refreshLayerOrder: false,
   isLayerReordered: false,
   currentViewBbox: null,
+  addedLayerUids: [],
+  selectedPopupLayer: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -165,6 +167,10 @@ const useMapViewStore = create((set) => ({
       currentViewBbox: data,
     }));
   },
+  setSelectedPopupLayer: (data) =>
+    set(() => ({
+      selectedPopupLayer: data,
+    })),
 }));
 
 export default useMapViewStore;
