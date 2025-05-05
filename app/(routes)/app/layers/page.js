@@ -24,15 +24,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Dropzone } from "@/components/ui/dropzone";
+import ClientPagination from "@/components/client-pagination";
 
 const LayersDashboard = () => {
   const [layersData, setLayersData] = useState([]);
   const [files, setFiles] = useState([]);
-
-  // Define image url since it is a public link
-  // If we use fetch, there will be too many
-  // Async handling, and the thumbnail image is public
-  const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -91,7 +87,6 @@ const LayersDashboard = () => {
 
   return (
     <div className="px-6">
-      {/* TODO: Add Upload Layers Button */}
       <div className="py-2">
         <Dialog>
           <DialogTrigger asChild>
@@ -109,30 +104,33 @@ const LayersDashboard = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 ">
-        {/* Create a loop to render every thumbnail image */}
-        {/* TODO: Add Pagination Handling */}
-        {layersData.slice(0, 6).map((layersData) => (
-          // Define key so each Card has unique id
-          <Card key={layersData.layer_id}>
-            <CardContent className="p-2 pt-6">
-              <img
-                src={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
-                alt="Thumbnail"
-              />
-            </CardContent>
-            {/* Card layer name and creator name */}
-            <CardHeader className="p-2">
-              <h3 className={cn("font-semibold overflow-x-auto")}>
-                {layersData.layer_title}
-              </h3>
-              <CardDescription>{layersData.creator}</CardDescription>
-            </CardHeader>
-          </Card>
-        ))}
-      </div>
+      <ClientPagination
+        data={layersData}
+      />
     </div>
   );
 };
 
 export default LayersDashboard;
+// {/* <div className="grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 ">
+// {/* Create a loop to render every thumbnail image */}
+// {/* TODO: Add Pagination Handling */}
+// {layersData.slice(0, 6).map((layersData) => (
+//   // Define key so each Card has unique id
+//   <Card key={layersData.layer_id}>
+//     <CardContent className="p-2 pt-6">
+//       <img
+//         src={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
+//         alt="Thumbnail"
+//       />
+//     </CardContent>
+//     {/* Card layer name and creator name */}
+//     <CardHeader className="p-2">
+//       <h3 className={cn("font-semibold overflow-x-auto")}>
+//         {layersData.layer_title}
+//       </h3>
+//       <CardDescription>{layersData.creator}</CardDescription>
+//     </CardHeader>
+//   </Card>
+// ))}
+// </div> */}
