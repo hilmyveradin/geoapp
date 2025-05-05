@@ -205,7 +205,6 @@ const ControlledTable = ({
         console.log(error);
       }
     }
-    console.log(selectedRows);
     if (selectedRows.length != 0) {
       zoomToSelectedObjects();
     }
