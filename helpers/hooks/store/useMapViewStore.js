@@ -15,6 +15,7 @@ const useMapViewStore = create((set) => ({
   zoomedLayerBbox: null,
   multiSelectedLayers: [],
   deletedLayerUids: [],
+  addedLayerUids: [],
   reorderLayer: false,
 
   setMap: (data) => set(() => ({ map: data })),
@@ -106,6 +107,11 @@ const useMapViewStore = create((set) => ({
   addDeletedLayerUids: (data) =>
     set((state) => ({
       deletedLayerUids: [...(state.deletedLayerUids || []), data],
+    })),
+
+  addAddedLayerUids: (data) =>
+    set((state) => ({
+      addedLayerUids: [...(state.addedLayerUids || []), data],
     })),
 
   toggleReorderLayer: () => {

@@ -2,16 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import useMapViewStore from "./store/useMapViewStore";
 
 const useLayerManager = () => {
-  const { mapLoaded, map, mapData, mapLayers, reorderLayer } =
+  const { mapLoaded, map, mapData, mapLayers, reorderLayer, addedLayerUids } =
     useMapViewStore();
   const [firstRender, setFirstRender] = useState(true);
   const layerOrderRef = useRef([]); // Tracks the intended order of all layers, initialized once
   const layerReorderRef = useRef(false); // Tracks the intended trigger reorder layer
+  const addedLayerUidsRef = useRef([]); // Tracks the intended trigger reorder layer
 
   useEffect(() => {
     // Reset and reinitialize layers when reorderMaps changes
     // Remove all layers
-    if (layerReorderRef.current !== reorderLayer) {
+    if (
+      layerReorderRef.current !== reorderLayer ||
+      addedLayerUidsRef !== addedLayerUids
+    ) {
       layerOrderRef.current.forEach((layerId) => {
         if (map.getLayer(layerId)) {
           map.removeLayer(layerId);
@@ -22,9 +26,11 @@ const useLayerManager = () => {
       layerOrderRef.current = mapLayers
         .map((layer) => layer.layerUid)
         .reverse();
+
       layerReorderRef.current = reorderLayer;
+      addedLayerUidsRef.current = addedLayerUids;
     }
-  }, [map, mapLayers, reorderLayer]);
+  }, [, map, mapLayers, reorderLayer, addedLayerUids]);
 
   useEffect(() => {
     if (mapLoaded && map) {

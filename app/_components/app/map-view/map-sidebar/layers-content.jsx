@@ -91,9 +91,6 @@ const LayersContent = () => {
     const [removed] = reorderedItems.splice(result.source.index, 1);
     reorderedItems.splice(result.destination.index, 0, removed);
 
-    console.log("MAP LAYERS: ", mapLayers);
-    console.log("REORDERED MAP: ", reorderedItems);
-
     setMapLayers(reorderedItems);
     toggleReorderLayer();
   };
