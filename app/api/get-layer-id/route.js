@@ -1,12 +1,11 @@
-export async function GET() {
-  try {
-    const cookieStore = cookies();
-    const token = cookieStore.get("accessToken");
+// export async function GET() {
+//   try {
+//     const cookieStore = cookies();
+//     const token = cookieStore.get("accessToken");
 
-    
-  } catch {
+//   } catch {
 
-  } finally {
+//   } finally {
 
-  }
-}
+//   }
+// }
