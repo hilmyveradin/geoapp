@@ -12,8 +12,7 @@ const UserAvatar = (props) => {
         className={cn("rounded-full p-1")}
       />
       <AvatarFallback
-        style={{ backgroundColor: "#216C76" }}
-        className={cn("rounded-full p-1 font-bold text-white")}
+        className={cn("rounded-full p-1 font-bold text-white bg-nileBlue-950")}
       >
         {getUserNameInitial(user?.fullName)}
       </AvatarFallback>

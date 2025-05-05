@@ -85,19 +85,21 @@ const AddLayerCard = ({ data }) => {
   return (
     <div className="flex flex-col gap-4 p-2 border rounded-lg shadow-md">
       <div className="flex items-center justify-center gap-3">
-        <div className="w-24">
+        <div className="flex flex-col w-full gap-1">
           <AspectRatio ratio={450 / 200} className="flex items-center">
-            <img src={data.thumbnailUrl} alt="map image" className="w-24" />
+            <img
+              src={data.thumbnailUrl}
+              alt="map image"
+              className="rounded-md "
+            />
           </AspectRatio>
-        </div>
-        <div className="flex flex-col gap-1">
           <TooltipText content={data.layerTitle} side="top" align="start">
-            <p className="w-32 font-bold truncate cursor-pointer">
+            <p className="w-full text-base font-bold truncate cursor-pointer">
               {data.layerTitle}
             </p>
           </TooltipText>
           <p>
-            {data.layerDataModel} by <span>{data.creator.fullName}</span>
+            by <span className="font-bold">{data.creator.fullName}</span>
           </p>
           <p>{generateDate()}</p>
         </div>
@@ -172,13 +174,13 @@ const AddLayersContent = () => {
       const xhr = new XMLHttpRequest();
 
       // Set the upload progress event listener.
-      xhr.upload.addEventListener("progress", function(event) {
+      xhr.upload.addEventListener("progress", function (event) {
         if (event.lengthComputable) {
           setProgressValue((event.loaded / event.total) * 85);
         }
       });
 
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (xhr.status === 200) {
           setProgressValue(0);
           try {
@@ -187,21 +189,21 @@ const AddLayersContent = () => {
               toast({
                 title: responseData.status,
                 description: responseData.msg,
-                variant: "success"
+                variant: "success",
               });
             } else {
               toast({
                 title: responseData.status,
                 description: responseData.msg,
-                variant: "destructive"
-              })
+                variant: "destructive",
+              });
             }
           } catch (error) {
             console.error("Error during fetch:", error.message);
             toast({
               title: "ERROR",
               description: error.message,
-              variant: "destructive"
+              variant: "destructive",
             });
           } finally {
             setRefetchLayers(!refetchLayers);
@@ -214,8 +216,8 @@ const AddLayersContent = () => {
             variant: "destructive",
           });
         }
-      }
-      xhr.open("POST", "/api/upload-vectordata")
+      };
+      xhr.open("POST", "/api/upload-vectordata");
       xhr.send(formData);
     }
 
@@ -247,7 +249,7 @@ const AddLayersContent = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-2 overflow-y-auto text-xs">
+    <div className="flex flex-col gap-4 p-2 overflow-y-auto text-xs bg-nileBlue-50">
       <div className="flex flex-col gap-2 p-2 border rounded-lg shadow-md">
         <p className="font-bold"> Upload new layer </p>
         <Dropzone
@@ -257,7 +259,7 @@ const AddLayersContent = () => {
           progress={uploadProgress}
           resetView={refetchLayers}
           progressValue={progressValue}
-          />
+        />
       </div>
 
       <div className="flex items-center gap-2 py-2 pl-2 pr-3 bg-white border rounded-lg">
