@@ -67,7 +67,7 @@ const useLayerManager = () => {
         setFirstRender(false);
       }
     }
-  }, [mapLoaded, selectedLayers]);
+  }, [firstRender, map, mapData.mapBbox, mapLoaded, selectedLayers]);
 };
 
 export default useLayerManager;

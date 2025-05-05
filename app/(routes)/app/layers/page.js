@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 
 const LayersDashboard = () => {
   const [layersData, setLayers] = useState([]);
+  const [pageLoading, setPageLoading] = useState(true);
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -35,6 +36,8 @@ const LayersDashboard = () => {
         setLayers(tempLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
+      } finally {
+        setPageLoading(false);
       }
     }
     getLayersData()
@@ -42,7 +45,7 @@ const LayersDashboard = () => {
       .catch(console.error);
   }, []);
 
-  if (layersData.length === 0) {
+  if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-96">
         <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
@@ -56,7 +59,16 @@ const LayersDashboard = () => {
         <LayersButtons />
       </div>
       {/* Pagination */}
-      <ClientPagination data={layersData} />
+      {layersData.length > 0 ? (
+        <ClientPagination data={layersData} />
+      ) : (
+        <div className="flex items-center justify-center w-full h-96">
+          <p>
+            {" "}
+            <p> You do not have any layers data. Add a new one! </p>
+          </p>
+        </div>
+      )}
     </div>
   );
 };

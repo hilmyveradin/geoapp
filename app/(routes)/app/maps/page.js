@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const MapsDashboard = () => {
+  const [pageLoading, setPageLoading] = useState(true);
   const [mapsData, setMapsData] = useState([]);
 
   useEffect(() => {
@@ -22,7 +23,6 @@ const MapsDashboard = () => {
 
         const temp = await response.json();
 
-        console.log(temp);
         const tempData = temp.data.map((data) => {
           //TODO: Change this maptitle to camelCase
           return {
@@ -37,6 +37,8 @@ const MapsDashboard = () => {
         setMapsData(tempData);
       } catch (error) {
         console.error("Error during fetch:", error.message);
+      } finally {
+        setPageLoading(false);
       }
     }
 
@@ -45,7 +47,7 @@ const MapsDashboard = () => {
       .catch(console.error);
   }, []);
 
-  if (mapsData.length === 0) {
+  if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-96">
         <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
@@ -59,7 +61,13 @@ const MapsDashboard = () => {
         <MapsButtons />
       </div>
       {/* Pagination */}
-      <ClientPagination data={mapsData} />
+      {mapsData.length > 0 ? (
+        <ClientPagination data={mapsData} />
+      ) : (
+        <div className="flex items-center justify-center w-full h-96">
+          <p> You do not have any maps. Add a new one! </p>
+        </div>
+      )}
     </div>
   );
 };
