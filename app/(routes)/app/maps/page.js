@@ -2,7 +2,13 @@
 
 import ClientPagination from "@/app/_components/app/client-pagination";
 import MapsButtons from "@/app/_components/app/map-buttons";
+import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
+import ReusableAlertDialog from "@/app/_components/shared/DestructiveDialog";
+import useCardStore from "@/helpers/hooks/store/useCardStore";
 import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import { X } from "lucide-react";
+import { Share2Icon } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -10,6 +16,36 @@ const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [mapsData, setMapsData] = useState([]);
   const { refetchMaps } = useRefetchStore();
+  const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
+    useCardStore();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey) setIsCtrlPressed(true);
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === "Control" || e.key === "Meta") {
+        setIsCtrlPressed(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [setIsCtrlPressed]);
+
+  useEffect(() => {
+    return clearSelection();
+  }, [clearSelection]);
+
+  useEffect(() => {
+    console.log("SELECTED CARDS: ", selectedCards);
+  }, [selectedCards]);
 
   useEffect(() => {
     // Define function to get layers API
@@ -61,7 +97,29 @@ const MapsDashboard = () => {
   return (
     <div className="w-full h-full px-8 mt-4">
       <div className="mb-4">
-        <MapsButtons />
+        {selectedCards.length > 0 ? (
+          <div className="flex items-center w-full gap-3 h-9">
+            <X
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => clearSelection()}
+            />{" "}
+            <div className="flex items-center gap-2">
+              <p>{selectedCards.length}</p>
+              <p> selected </p>
+            </div>
+            <DestructiveDialog
+              title="Are you sure you want to delete these maps?"
+              description="This action cannot be undone"
+              actionText="Yes, I'm sure"
+              action={() => console.log("delete action clicked")}
+            >
+              <Trash2 className="w-4 h-4 cursor-pointer" />
+            </DestructiveDialog>
+            <Share2Icon className="w-4 h-4 cursor-pointer" />
+          </div>
+        ) : (
+          <MapsButtons />
+        )}
       </div>
       {/* Pagination */}
       {mapsData.length > 0 ? (
