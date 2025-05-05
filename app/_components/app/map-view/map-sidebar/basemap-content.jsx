@@ -94,12 +94,54 @@ const BaseMapContent = () => {
     {
       name: "Satellite",
       image: "/images/basemaps/satellite.png",
-      style: `https://api.maptiler.com/maps/satellite/style.json?key=${MAPTILER_KEY}`,
+      style: {
+        version: 8,
+        sources: {
+          "satellite-tiles": {
+            type: "raster",
+            tiles: [
+              `https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=${MAPTILER_KEY}`,
+            ],
+            tileSize: 256,
+            maxzoom: 22,
+            attribution: "© MapTiler © OpenStreetMap contributors",
+          },
+        },
+        layers: [
+          {
+            id: "satellite",
+            type: "raster",
+            source: "satellite-tiles",
+            minzoom: 0,
+            maxzoom: 22,
+          },
+        ],
+      },
     },
+
     {
       name: "Dark",
       image: "/images/basemaps/dark.png",
-      style: `https://api.maptiler.com/maps/darkmatter/style.json?key=${MAPTILER_KEY}`,
+      style: {
+        version: 8,
+        sources: {
+          "dark-tiles": {
+            type: "raster",
+            tiles: [
+              `https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
+            ],
+            tileSize: 256,
+            attribution: "© MapTiler © OpenStreetMap contributors",
+          },
+        },
+        layers: [
+          {
+            id: "dark",
+            type: "raster",
+            source: "dark-tiles",
+          },
+        ],
+      },
     },
     {
       name: "3D Buildings",
