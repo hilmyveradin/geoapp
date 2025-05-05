@@ -48,6 +48,6 @@ jobs:
             source ~/.bashrc || source ~/.profile
             cd /home/ubuntu/var/www/geoportal/geoportal-webapp
             git pull origin main
-            /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm install --production
+            /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm install
             /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm build
             /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 start /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pnpm --name "geoportal" -- start || /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 restart geoportal -f
