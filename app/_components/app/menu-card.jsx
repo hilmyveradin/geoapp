@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import MenuCardDropdown from "./menu-card-dropdown";
 import Link from "next/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import useCardStore from "@/helpers/hooks/store/useCardStore";
 import { useRouter } from "next/navigation";
+import useCardStore from "@/helpers/hooks/store/use-card-store";
 
 const MenuCard = (props) => {
   const { key, cardData } = props;

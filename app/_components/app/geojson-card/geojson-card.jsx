@@ -27,14 +27,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import TooltipText from "../../shared/tooltipText";
+import TooltipText from "../../shared/tooltip-text";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import "./styles.css";
-import Draggable from "react-draggable";
-import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
 
 export function Combobox({ layerTitles, value, setValue, setPageIdx }) {
   const [open, setOpen] = useState(false);

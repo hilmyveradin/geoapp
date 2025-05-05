@@ -8,12 +8,12 @@ import {
 import { PencilIcon } from "lucide-react";
 import ChangePropDialog from "./shared/change-prop-dialog";
 import { useState } from "react";
-import DestructiveDialog from "../shared/DestructiveDialog";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import { Trash2 } from "lucide-react";
 import { handleErrorMessage } from "@/helpers/string-helpers";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import DestructiveDialog from "../shared/destructive-dialog";
 const MenuCardDropdown = ({ children, cardData }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const { toggleRefetchLayers, toggleRefetchMaps } = useRefetchStore();

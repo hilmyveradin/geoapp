@@ -11,11 +11,9 @@ import {
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDownIcon } from "lucide-react";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
-import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 import { Trash2 } from "lucide-react";
 import {
   Collapsible,
@@ -23,6 +21,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import useTableQueryStore from "@/helpers/hooks/store/use-table-query-store";
 
 const FilterContent = () => {
   const { mapLayers, selectedLayer, setSelectedLayer, setHighlightedLayer } =

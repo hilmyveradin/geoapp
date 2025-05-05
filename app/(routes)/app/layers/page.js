@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import ClientPagination from "@/app/_components/app/client-pagination";
 import LayersButtons from "@/app/_components/app/layer-buttons";
 import { Loader2 } from "lucide-react";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
-import useCardStore from "@/helpers/hooks/store/useCardStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
+
 import { Share2Icon } from "lucide-react";
 import { Trash2 } from "lucide-react";
-import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import { X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import useSearchQueryStore from "@/helpers/hooks/store/useSearchQueryStore";
+import useCardStore from "@/helpers/hooks/store/use-card-store";
+import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
+import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
 
 const LayersDashboard = () => {
   const [mapLayers, setLayers] = useState([]);
@@ -88,8 +89,8 @@ const LayersDashboard = () => {
 
   useEffect(() => {
     return () => {
-      setSearchedTitle("")
-    }
+      setSearchedTitle("");
+    };
   }, [setSearchedTitle]);
 
   const deleteLayers = async () => {

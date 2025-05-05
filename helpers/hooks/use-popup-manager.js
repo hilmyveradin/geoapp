@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import useMapViewStore from "./store/useMapViewStore";
+import useMapViewStore from "./store/use-map-view-store";
 
 const usePopUpManager = () => {
   const {

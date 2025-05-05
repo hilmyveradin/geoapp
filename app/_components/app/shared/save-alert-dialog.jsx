@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 

@@ -1,8 +1,7 @@
 "use client";
 
-import TooltipText from "@/app/_components/shared/tooltipText";
+import TooltipText from "@/app/_components/shared/tooltip-text";
 import { Skeleton } from "@/components/ui/skeleton";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { cn } from "@/lib/utils";
 import { EyeOff } from "lucide-react";
 import { Eye } from "lucide-react";
@@ -23,13 +22,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import { Trash2 } from "lucide-react";
 import { X } from "lucide-react";
 import { PencilIcon } from "lucide-react";
 import ChangePropDialog from "../../shared/change-prop-dialog";
-import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 import { List } from "lucide-react";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
+import useTableQueryStore from "@/helpers/hooks/store/use-table-query-store";
 
 const LayersContent = () => {
   const {

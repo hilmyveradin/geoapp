@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/command";
 
 import { useToast } from "@/components/ui/use-toast";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { UsersRound } from "lucide-react";
@@ -28,6 +27,7 @@ import UserAvatar from "./user-avatar";
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 
 const ShareDialog = ({ children }) => {
   // Utility function to generate a random color

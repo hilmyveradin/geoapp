@@ -24,8 +24,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 
 const ComposeMapDialog = (props) => {
   const { children } = props;

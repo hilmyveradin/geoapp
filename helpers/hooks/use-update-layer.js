@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import useMapViewStore from "./store/useMapViewStore";
-import useRefetchStore from "./store/useRefetchStore";
+import useMapViewStore from "./store/use-map-view-store";
+import useRefetchStore from "./store/use-refetch-store";
 
 const useUpdateLayer = () => {
   const { setMapLayers, mapData } = useMapViewStore();

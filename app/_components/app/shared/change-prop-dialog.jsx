@@ -14,8 +14,8 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 
 const ChangePropDialog = ({
   children,
