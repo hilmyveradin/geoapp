@@ -10,15 +10,28 @@ const BaseMapContent = () => {
   const threeDStyle = {
     version: 8,
     sources: {
-      "mapbox-streets": {
+      "osm-tiles": {
+        type: "raster",
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "&copy; OpenStreetMap Contributors",
+      },
+      openmaptiles: {
         type: "vector",
         url: `https://api.maptiler.com/tiles/v3/tiles.json?key=${MAPTILER_KEY}`,
       },
     },
     layers: [
       {
+        id: "osm-tiles",
+        type: "raster",
+        source: "osm-tiles",
+        minzoom: 0,
+        maxzoom: 19,
+      },
+      {
         id: "3d-buildings",
-        source: "mapbox-streets",
+        source: "openmaptiles",
         "source-layer": "building",
         type: "fill-extrusion",
         minzoom: 15,
@@ -26,7 +39,7 @@ const BaseMapContent = () => {
           "fill-extrusion-color": [
             "interpolate",
             ["linear"],
-            ["get", "height"],
+            ["get", "render_height"],
             0,
             "lightgray",
             200,
@@ -34,8 +47,22 @@ const BaseMapContent = () => {
             400,
             "lightblue",
           ],
-          "fill-extrusion-height": ["get", "height"],
-          "fill-extrusion-base": ["get", "min_height"],
+          "fill-extrusion-height": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            15,
+            0,
+            16,
+            ["get", "render_height"],
+          ],
+          "fill-extrusion-base": [
+            "case",
+            [">=", ["get", "zoom"], 16],
+            ["get", "render_min_height"],
+            0,
+          ],
+          "fill-extrusion-opacity": 0.6,
         },
       },
     ],
