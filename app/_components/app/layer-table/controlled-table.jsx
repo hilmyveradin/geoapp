@@ -199,11 +199,14 @@ const ControlledTable = ({
           layerUid: layerInfo.layerUid,
           objectid: arrObjectId,
         };
-        const response = await fetch("/api/maps/zoom-to-object", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/zoom-to-object`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        );
         const data = await response.json();
         setZoomedLayerBbox(data.bbox);
         setHighlightedLayer(data.data);

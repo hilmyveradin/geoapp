@@ -51,9 +51,12 @@ const MapsDashboard = () => {
     // Define function to get layers API
     async function getMapsData() {
       try {
-        const response = await fetch("/api/maps/get-maps", {
-          method: "GET",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}//api/maps/get-maps`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -98,10 +101,13 @@ const MapsDashboard = () => {
     // const mapUids = selectedCards.map((e) => ({ mapUid: e }));
     selectedCards.forEach(async (mapUid) => {
       try {
-        const response = await fetch(`/api/maps/delete-map?mapUid=${mapUid}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/delete-map?mapUid=${mapUid}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

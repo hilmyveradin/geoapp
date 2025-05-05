@@ -10,7 +10,9 @@ const GroupMembersPage = ({ groupUid }) => {
     const fetchMembers = async () => {
       try {
         // Replace with your actual API endpoint
-        const response = await fetch(`/api/groups/${groupUid}/members`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/${groupUid}/members`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch members");
         }

@@ -51,9 +51,12 @@ const ComposeMapDialog = (props) => {
     // Define function to get layers API
     async function getLayersData() {
       try {
-        const response = await fetch("/api/layers/get-layers", {
-          method: "GET",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layers`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -165,11 +168,14 @@ const ComposeMapDialog = (props) => {
 
       setSubmittingData(true);
       try {
-        const response = await fetch("/api/maps/compose-map", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/compose-map`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

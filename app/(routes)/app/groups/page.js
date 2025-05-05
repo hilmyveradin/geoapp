@@ -23,7 +23,7 @@ const GruopsDashboard = () => {
   useEffect(() => {
     async function getGroupInfo(groupUid) {
       const response = await fetch(
-        `/api/groups/get-group-info?groupUid=${groupUid}`,
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/get-group-info?groupUid=${groupUid}`,
         {
           method: "GET",
           headers: {
@@ -38,9 +38,12 @@ const GruopsDashboard = () => {
     // Define function to get layers API
     async function getGroupLists() {
       try {
-        const response = await fetch("/api/groups/get-groups", {
-          method: "GET",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/get-groups`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

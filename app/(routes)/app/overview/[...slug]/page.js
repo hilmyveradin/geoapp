@@ -19,8 +19,8 @@ const MapOverview = ({ params }) => {
       try {
         const endpoint =
           overviewType === "layer"
-            ? `/api/layers/get-layer-id?layerUid=${overviewUid}`
-            : `/api/maps/get-map-id?mapUid=${overviewUid}`;
+            ? `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${overviewUid}`
+            : `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/get-map-id?mapUid=${overviewUid}`;
 
         const response = await fetch(endpoint, {
           method: "GET",

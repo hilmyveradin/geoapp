@@ -31,9 +31,12 @@ const AddLayersContent = () => {
     // Define function to get layers API
     async function getLayersData() {
       try {
-        const response = await fetch("/api/layers/get-layers", {
-          method: "GET",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layers`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -116,7 +119,10 @@ const AddLayersContent = () => {
           });
         }
       };
-      xhr.open("POST", "/api/layers/upload-vectordata");
+      xhr.open(
+        "POST",
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/upload-vectordata`
+      );
       xhr.send(formData);
     }
 

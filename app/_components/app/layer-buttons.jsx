@@ -80,7 +80,10 @@ const LayersButtons = () => {
           console.log("not 200");
         }
       };
-      xhr.open("POST", "/api/layers/upload-vectordata");
+      xhr.open(
+        "POST",
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/upload-vectordata`
+      );
       xhr.send(formData);
     }
 

@@ -22,7 +22,7 @@ const MapView = ({ params }) => {
   useEffect(() => {
     async function getLayerUid(layerUid) {
       const response = await fetch(
-        `/api/layers/get-layer-id?layerUid=${layerUid}`,
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${layerUid}`,
         {
           method: "GET",
           headers: {
@@ -45,12 +45,15 @@ const MapView = ({ params }) => {
 
     async function loadMapData() {
       try {
-        const response = await fetch(`/api/maps/get-map-id?mapUid=${mapUid}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/get-map-id?mapUid=${mapUid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const responseData = await response.json();
         const data = { ...responseData.data, mapType: mapType };
@@ -75,7 +78,7 @@ const MapView = ({ params }) => {
     async function loadLayerData() {
       try {
         const response = await fetch(
-          `/api/layers/get-layer-id?layerUid=${mapUid}`,
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${mapUid}`,
           {
             method: "GET",
             headers: {

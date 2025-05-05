@@ -83,12 +83,16 @@ const ShareDialog = ({ children }) => {
   const fetchDataAndResetState = async () => {
     try {
       const [usersResponse, groupsResponse, mapsResponse] = await Promise.all([
-        fetch("/api/users/list", { method: "GET" }),
-        fetch("/api/groups/list", { method: "GET" }),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`, {
+          method: "GET",
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}//api/groups/list`, {
+          method: "GET",
+        }),
         fetch(
           mapData.mapType === "map"
-            ? `/api/maps/shared_to?mapUid=${mapData.mapUid}`
-            : `/api/layers/shared_to?layerUid=${mapData.mapUid}`,
+            ? `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/shared_to?mapUid=${mapData.mapUid}`
+            : `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/shared_to?layerUid=${mapData.mapUid}`,
           { method: "GET" }
         ),
       ]);
@@ -227,17 +231,23 @@ const ShareDialog = ({ children }) => {
     try {
       let response;
       if (mapData.mapType === "map") {
-        response = await fetch(`/api/maps/share?mapUid=${mapData.mapUid}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+        response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/share?mapUid=${mapData.mapUid}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        );
       } else {
-        response = await fetch(`/api/layers/share?layerUid=${mapData.mapUid}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+        response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/share?layerUid=${mapData.mapUid}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        );
       }
 
       if (!response.ok) {
@@ -482,11 +492,7 @@ const ShareDialog = ({ children }) => {
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <TooltipText
-        content="Share Map"
-        side="right"
-        align="start"
-      >
+      <TooltipText content="Share Map" side="right" align="start">
         <DialogTrigger asChild>{children}</DialogTrigger>
       </TooltipText>
       <DialogContent>{generateCurrentView()}</DialogContent>
