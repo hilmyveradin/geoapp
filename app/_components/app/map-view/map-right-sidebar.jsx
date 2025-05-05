@@ -12,6 +12,7 @@ import StyleContent from "./map-right-sidebar/style-content";
 import FilterContent from "./map-right-sidebar/filter-content";
 import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import TooltipText from "@/app/_components/shared/tooltip-text";
 
 const MapRightSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -51,68 +52,86 @@ const MapRightSidebar = () => {
     <div>
       <div
         className={cn(
-          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-nileBlue-50 w-12 justify-end p-1 text-xs",
+          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-50 bg-nileBlue-50 w-12 justify-end p-1 text-xs",
           {
             "w-28": showRightSidebar,
           }
         )}
       >
-        <Button
-          variant="ghost"
-          className={cn("flex justify-center", {
-            "p-0 justify-center": !showRightSidebar,
-            "stroke-white stroke-2 bg-nileBlue-400":
-              selectedButton === "styleContent",
-          })}
-          onClick={() => handleButtonClick("styleContent")}
-          disabled={!selectedLayer}
+        <TooltipText
+          content="Edit style"
+          side="left"
+          align="start"
         >
-          <Shapes
-            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
-              "stroke-white stroke-2": selectedButton === "styleContent",
+          <Button
+            variant="ghost"
+            className={cn("flex justify-center", {
+              "p-0 justify-center": !showRightSidebar,
+              "stroke-white stroke-2 bg-nileBlue-400":
+                selectedButton === "styleContent",
             })}
-          />
-          {showRightSidebar && (
-            <span className="inline-block ml-2">Styles</span>
-          )}
-        </Button>
-        <Button
-          variant="ghost"
-          className={cn("flex justify-center", {
-            "p-0 justify-center": !showRightSidebar,
-            "stroke-white stroke-2 bg-nileBlue-400":
-              selectedButton === "filterContent",
-          })}
-          onClick={() => handleButtonClick("filterContent")}
-          disabled={!selectedLayer}
+            onClick={() => handleButtonClick("styleContent")}
+            disabled={!selectedLayer}
+          >
+            <Shapes
+              className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
+                "stroke-white stroke-2": selectedButton === "styleContent",
+              })}
+            />
+            {showRightSidebar && (
+              <span className="inline-block ml-2">Styles</span>
+            )}
+          </Button>
+        </TooltipText>
+        <TooltipText
+          content="Filter layer"
+          side="left"
+          align="start"
         >
-          <Filter
-            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
-              "stroke-white stroke-2": selectedButton === "filterContent",
+          <Button
+            variant="ghost"
+            className={cn("flex justify-center", {
+              "p-0 justify-center": !showRightSidebar,
+              "stroke-white stroke-2 bg-nileBlue-400":
+                selectedButton === "filterContent",
             })}
-          />
-          {showRightSidebar && (
-            <span className="inline-block ml-2">Filters</span>
-          )}
-        </Button>
-        <Button
-          variant="ghost"
-          className={cn("flex justify-center", {
-            "p-0 justify-center": !showRightSidebar,
-            " bg-nileBlue-400": selectedButton === "fieldAliasContent",
-          })}
-          onClick={() => handleButtonClick("fieldAliasContent")}
-          disabled={!selectedLayer}
+            onClick={() => handleButtonClick("filterContent")}
+            disabled={!selectedLayer}
+          >
+            <Filter
+              className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
+                "stroke-white stroke-2": selectedButton === "filterContent",
+              })}
+            />
+            {showRightSidebar && (
+              <span className="inline-block ml-2">Filters</span>
+            )}
+          </Button>
+        </TooltipText>
+        <TooltipText
+          content="Edit field alias"
+          side="left"
+          align="start"
         >
-          <FilePenLine
-            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
-              "stroke-white stroke-2": selectedButton === "fieldAliasContent",
+          <Button
+            variant="ghost"
+            className={cn("flex justify-center", {
+              "p-0 justify-center": !showRightSidebar,
+              " bg-nileBlue-400": selectedButton === "fieldAliasContent",
             })}
-          />
-          {showRightSidebar && (
-            <span className="inline-block ml-2">Fields</span>
-          )}
-        </Button>
+            onClick={() => handleButtonClick("fieldAliasContent")}
+            disabled={!selectedLayer}
+          >
+            <FilePenLine
+              className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
+                "stroke-white stroke-2": selectedButton === "fieldAliasContent",
+              })}
+            />
+            {showRightSidebar && (
+              <span className="inline-block ml-2">Fields</span>
+            )}
+          </Button>
+        </TooltipText>
 
         {/* Additional empty div for spacing, pushing the Collapse button to the bottom */}
         <div className="flex-grow" />

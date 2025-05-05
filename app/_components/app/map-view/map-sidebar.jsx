@@ -91,65 +91,83 @@ const MapSidebar = () => {
     <div className="">
       <div
         className={cn(
-          "flex flex-col fixed top-14 h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-nileBlue-900 w-12 text-white text-xs p-1",
+          "flex flex-col fixed top-14 h-[calc(100vh-56px)] left-0 bottom-10 z-50 bg-nileBlue-900 w-12 text-white text-xs p-1",
           {
             "w-[160px]": showLeftSidebar,
           }
         )}
       >
         {mapData.mapType === "map" && (
+          <TooltipText
+            content="Add Layer"
+            side="right"
+            align="start"
+          >
+            <Button
+              variant="ghost"
+              onClick={() => handleButtonClick("addLayer")}
+              className={cn("flex justify-start text-blackHaze-500", {
+                "text-white bg-nileBlue-700": selectedButton === "addLayer",
+                "p-0 justify-center": !showLeftSidebar,
+              })}
+            >
+              <PlusCircle
+                className={cn("w-4 h-4 stroke-blackHaze-500", {
+                  "stroke-white stroke-2": selectedButton === "addLayer",
+                })}
+              />
+              {showLeftSidebar && (
+                <span className="inline-block ml-2">Add Layer</span>
+              )}
+            </Button>
+          </TooltipText>
+        )}
+
+        <TooltipText
+          content="Layers"
+          side="right"
+          align="start"
+        >
           <Button
             variant="ghost"
-            onClick={() => handleButtonClick("addLayer")}
+            onClick={() => handleButtonClick("layers")}
             className={cn("flex justify-start text-blackHaze-500", {
-              "text-white bg-nileBlue-700": selectedButton === "addLayer",
+              "text-white bg-nileBlue-700": selectedButton === "layers",
               "p-0 justify-center": !showLeftSidebar,
             })}
           >
-            <PlusCircle
+            <Layers3
               className={cn("w-4 h-4 stroke-blackHaze-500", {
-                "stroke-white stroke-2": selectedButton === "addLayer",
+                "stroke-white stroke-2": selectedButton === "layers",
+              })}
+            />
+            {showLeftSidebar && <span className="inline-block ml-2">Layers</span>}
+          </Button>
+        </TooltipText>
+
+        <TooltipText
+          content="Basemap"
+          side="right"
+          align="start"
+        >
+          <Button
+            variant="ghost"
+            onClick={() => handleButtonClick("basemap")}
+            className={cn("flex justify-start text-blackHaze-500", {
+              "text-white bg-nileBlue-700": selectedButton === "basemap",
+              "p-0 justify-center": !showLeftSidebar,
+            })}
+          >
+            <Earth
+              className={cn("w-4 h-4 stroke-blackHaze-500", {
+                "stroke-white stroke-2": selectedButton === "basemap",
               })}
             />
             {showLeftSidebar && (
-              <span className="inline-block ml-2">Add Layer</span>
+              <span className="inline-block ml-2">Basemap</span>
             )}
           </Button>
-        )}
-
-        <Button
-          variant="ghost"
-          onClick={() => handleButtonClick("layers")}
-          className={cn("flex justify-start text-blackHaze-500", {
-            "text-white bg-nileBlue-700": selectedButton === "layers",
-            "p-0 justify-center": !showLeftSidebar,
-          })}
-        >
-          <Layers3
-            className={cn("w-4 h-4 stroke-blackHaze-500", {
-              "stroke-white stroke-2": selectedButton === "layers",
-            })}
-          />
-          {showLeftSidebar && <span className="inline-block ml-2">Layers</span>}
-        </Button>
-
-        <Button
-          variant="ghost"
-          onClick={() => handleButtonClick("basemap")}
-          className={cn("flex justify-start text-blackHaze-500", {
-            "text-white bg-nileBlue-700": selectedButton === "basemap",
-            "p-0 justify-center": !showLeftSidebar,
-          })}
-        >
-          <Earth
-            className={cn("w-4 h-4 stroke-blackHaze-500", {
-              "stroke-white stroke-2": selectedButton === "basemap",
-            })}
-          />
-          {showLeftSidebar && (
-            <span className="inline-block ml-2">Basemap</span>
-          )}
-        </Button>
+        </TooltipText>
 
         {/* <Button
           variant="ghost"

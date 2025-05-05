@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import TooltipText from "@/app/_components/shared/tooltip-text";
 
 const ShareDialog = ({ children }) => {
   // Utility function to generate a random color
@@ -481,7 +482,13 @@ const ShareDialog = ({ children }) => {
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <TooltipText
+        content="Share Map"
+        side="right"
+        align="start"
+      >
+        <DialogTrigger asChild>{children}</DialogTrigger>
+      </TooltipText>
       <DialogContent>{generateCurrentView()}</DialogContent>
     </Dialog>
   );
