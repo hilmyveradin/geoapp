@@ -1,11 +1,19 @@
 "use client";
 
 import UserAvatar from "./user-avatar";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { handleErrorMessage } from "@/helpers/string-helpers";
+import { toast } from "@/components/ui/use-toast";
 
 const DesktopHeader = () => {
   const pathName = usePathname();
@@ -30,6 +38,36 @@ const DesktopHeader = () => {
       path: "/app/groups",
     },
   ];
+
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log(response);
+
+      debugger;
+
+      if (!response.ok) {
+        const error = new Error(response.statusText || "Unknown error");
+        error.status = response.status;
+        throw error;
+      }
+
+      signOut();
+    } catch {
+      const { title, description } = handleErrorMessage(error.status);
+      toast({
+        title: title,
+        description: description, // Provides more specific error detail
+        variant: "destructive",
+      });
+    }
+  };
 
   if (status === "loading") {
     return (
@@ -59,7 +97,22 @@ const DesktopHeader = () => {
           );
         })}
         <div className="ml-10">
-          <UserAvatar user={session.user} className="w-8 h-8 text-xs" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <UserAvatar
+                user={session.user}
+                className="w-8 h-8 text-xs cursor-pointer"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                className="text-red-500 font-semibold hover:text-red-400"
+                onClick={() => handleSignOut()}
+              >
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

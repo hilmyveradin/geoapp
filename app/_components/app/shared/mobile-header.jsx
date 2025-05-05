@@ -6,6 +6,12 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const MobileHeader = () => {
   const pathName = usePathname();
@@ -89,7 +95,16 @@ const MobileHeader = () => {
             })}
           </div>
           <div className="mb-10">
-            <UserAvatar user={mockUser} className="w-8 h-8" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <UserAvatar user={mockUser} className="w-8 h-8" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem className="text-red-500 font-semibold">
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
