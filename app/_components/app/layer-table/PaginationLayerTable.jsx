@@ -13,7 +13,7 @@ export default function PaginationLayerTable() {
   const getRows = async (numRows, startRow) => {
     try {
       const response = await fetch(
-        `/api/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
+        `/api/layers/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
         {
           method: "GET",
           headers: {

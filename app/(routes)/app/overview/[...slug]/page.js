@@ -20,7 +20,7 @@ const MapOverview = ({ params }) => {
     async function loadLayerData() {
       try {
         const response = await fetch(
-          `/api/get-layer-id?layerUid=${overviewUid}`,
+          `/api/layers/get-layer-id?layerUid=${overviewUid}`,
           {
             method: "GET",
             headers: {
@@ -44,12 +44,15 @@ const MapOverview = ({ params }) => {
 
     async function loadMapData() {
       try {
-        const response = await fetch(`/api/get-map-id?mapUid=${overviewUid}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `/api/maps/get-map-id?mapUid=${overviewUid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const datas = await response.json();
         const modifiedDatas = datas.data;
         modifiedDatas[

@@ -49,7 +49,7 @@ const LayersDashboard = () => {
     // Define function to get layers API
     async function getLayersData() {
       try {
-        const response = await fetch("/api/get-layers", {
+        const response = await fetch("/api/layers/get-layers", {
           method: "GET",
         });
 
@@ -84,7 +84,7 @@ const LayersDashboard = () => {
   const deleteLayers = async () => {
     const layerUids = selectedCards.map((e) => ({ layer_uid: e }));
     try {
-      const response = await fetch("/api/delete-layer", {
+      const response = await fetch("/api/layers/delete-layer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ layerUids: layerUids }),

@@ -7,12 +7,15 @@ const useUpdateLayer = () => {
   const { refetchMapLayers } = useRefetchStore();
   useEffect(() => {
     async function getLayerUid(layerUid) {
-      const response = await fetch(`/api/get-layer-id?layerUid=${layerUid}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `/api/layers/get-layer-id?layerUid=${layerUid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const datas = await response.json();
       const modifiedDatas = datas.data.map((data) => {
         return {
@@ -29,7 +32,7 @@ const useUpdateLayer = () => {
     async function loadMapData() {
       try {
         const response = await fetch(
-          `/api/get-map-id?mapUid=${mapData.mapUid}`,
+          `/api/maps/get-map-id?mapUid=${mapData.mapUid}`,
           {
             method: "GET",
             headers: {
