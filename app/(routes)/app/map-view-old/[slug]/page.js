@@ -5,7 +5,7 @@ import MapMain from "@/app/_components/app/map-view/map-main-old";
 import MapSidebar from "@/app/_components/app/map-view/map-sidebar-old";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import useMapViewStore from "@/helpers/hooks/useMapViewStore";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const MapView = ({ params }) => {
   const mapUid = params.slug;

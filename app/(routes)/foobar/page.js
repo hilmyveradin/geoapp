@@ -14,6 +14,12 @@ const MapComponent = () => {
     -7.5570068359375,
   ];
 
+  const centerLng = (layerBbox[0] + layerBbox[2]) / 2;
+  const centerLat = (layerBbox[1] + layerBbox[3]) / 2;
+  // const layerBbox = [
+  //   110.65032861399999, -7.593513776000009, 110.72121924800001,
+  //   -7.553795591999972,
+  // ];  const centerLat = (layerBbox[1] + layerBbox[3]) / 2;
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
       container: mapContainerRef.current,
@@ -67,12 +73,14 @@ const MapComponent = () => {
     }
   };
 
+  // `http://103.6.53.254:11790/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=${"_33B1_5RD_LN_SR_AIR_KECAMATANSAWIT_2021"}&bbox=${"110.65032861399999,-7.593513776000009,110.72121924800001,-7.553795591999972"}&width=768&height=395&srs=${"EPSG:4326"}&styles=&format=image%2Fpng1`,
+
   const addLayerAndSources = () => {
     if (mapRef.current.getLayer("testing") === undefined) {
       mapRef.current.addSource("testSource", {
         type: "raster",
         tiles: [
-          "http://103.6.53.254:11790/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=geocms%3A_33b1_5rd_ln_sr_energi_kecamatansawit_2021_aspbq&bbox=110.65032196044922%2C-7.593528747558594%2C110.72122192382812%2C-7.5570068359375&width=768&height=395&srs=EPSG%3A4326&styles=&format=image%2Fpng",
+          "http://dev3.webgis.co.id/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=geocms%3A_33b1_5rd_ln_sr_energi_kecamatansawit_2021_aspbq&bbox=110.65032196044922%2C-7.593528747558594%2C110.72122192382812%2C-7.5570068359375&width=768&height=395&srs=EPSG%3A4326&styles=&format=image%2Fpng",
         ],
         maxZoom: 40,
       });
