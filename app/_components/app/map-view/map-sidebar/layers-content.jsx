@@ -13,11 +13,11 @@ const LayersContent = () => {
   }
 
   return (
-    <TabsContent value="layers" className="pt-4">
+    <div className="flex flex-col w-full h-full overflow-y-auto ">
       {layersData.map((item, index) => {
         return <LayersCard key={`${item}-${index}`} data={item} />;
       })}
-    </TabsContent>
+    </div>
   );
 };
 

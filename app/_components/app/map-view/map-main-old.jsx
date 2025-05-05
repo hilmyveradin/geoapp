@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
-import useMapViewStore from "@/helpers/hooks/useMapViewStore";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const MapMain = () => {
   const mapContainerRef = useRef(null);
