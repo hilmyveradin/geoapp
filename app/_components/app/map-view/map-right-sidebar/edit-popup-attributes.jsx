@@ -20,7 +20,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const EditPopupAttributes = () => {
-  const { layersData, selectedPopupLayer, setSelectedPopupLayer } =
+  const { mapLayers, selectedPopupLayer, setSelectedPopupLayer } =
     useMapViewStore();
 
   const [layerFields, setLayerFields] = useState(); // Responsible for all of the fields available
@@ -31,10 +31,9 @@ const EditPopupAttributes = () => {
 
   useEffect(() => {
     if (!selectedPopupLayer) {
-      setSelectedPopupLayer(layersData[0]);
-      // setCurrentLayerRadio([layersData[0].layerUid]);
+      setSelectedPopupLayer(mapLayers[0]);
     }
-  }, [layersData, selectedPopupLayer, setSelectedPopupLayer]);
+  }, [mapLayers, selectedPopupLayer, setSelectedPopupLayer]);
 
   useEffect(() => {
     if (selectedPopupLayer) {
@@ -121,7 +120,7 @@ const EditPopupAttributes = () => {
                 value={selectedPopupLayer}
                 onValueChange={setSelectedPopupLayer}
               >
-                {layersData.map((item, index) => {
+                {mapLayers.map((item, index) => {
                   return (
                     <DropdownMenuRadioItem
                       value={item}

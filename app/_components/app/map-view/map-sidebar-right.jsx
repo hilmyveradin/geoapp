@@ -8,19 +8,17 @@ import { Shapes } from "lucide-react";
 import { FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import EditPopupAttributes from "./map-right-sidebar/edit-popup-attributes";
+import StyleContent from "./map-right-sidebar/style-content";
 
 const MapSidebarRight = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(false);
 
-  useEffect(() => {
-    console.log(selectedButton);
-  }, [selectedButton]);
-
   // Define content for each button
   const BUTTON_CONTENT = {
     editPopupAttributes: <EditPopupAttributes />,
+    styleContent: <StyleContent />,
   };
 
   const handleButtonClick = (buttonName) => {
@@ -47,6 +45,7 @@ const MapSidebarRight = () => {
           className={cn("flex justify-end", {
             "p-0 justify-center": !showSidebar,
           })}
+          onClick={() => handleButtonClick("styleContent")}
         >
           <Shapes
             className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
@@ -128,7 +127,8 @@ const MapSidebarRight = () => {
         <LegendContent />
       </Tabs> */}
       </div>
-      {selectedButton === "editPopupAttributes" && (
+      {(selectedButton === "editPopupAttributes" ||
+        selectedButton === "styleContent") && (
         <div
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",
