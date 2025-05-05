@@ -15,6 +15,7 @@ import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import TooltipText from "@/app/_components/shared/tooltip-text";
 
 const SaveAlertDialog = ({ children }) => {
   const {
@@ -198,7 +199,13 @@ const SaveAlertDialog = ({ children }) => {
 
   return (
     <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <TooltipText
+        content="Save Map"
+        side="right"
+        align="start"
+      >
+        <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      </TooltipText>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
