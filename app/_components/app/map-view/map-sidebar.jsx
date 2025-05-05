@@ -14,8 +14,10 @@ import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
 import AddLayersContent from "./map-sidebar/add-layer-content";
 import { Separator } from "@/components/ui/separator";
-import DemoPaginationTable from "../layer-table/dummydata";
+import { ButtonSidebar } from '@/components/ui/button-sidebar';
+import PaginationLayerTable from '../layer-table/PaginationLayerTable';
 import SaveAlertDialog from "../shared/save-alert-dialog";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import {
   Menubar,
   MenubarContent,
@@ -29,6 +31,7 @@ const MapSidebar = () => {
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
+  const { tableLoaded } = useMapViewStore();
 
   // Button data
   const BUTTONS_CONSTANTS = [
@@ -259,29 +262,25 @@ const MapSidebar = () => {
         </div>
       )}
       {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
-      {/* TODO: Show this sidebar based on state */}
-      {false && (
-        <div
-          className={cn(
-            "fixed rounded-md border bottom-6 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
-            {
-              "left-[300px] w-[calc(100vw-300px-60px+48px)]":
-                !expandedSidebarButtons && showSidebar,
-              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
-                expandedSidebarButtons && !showSidebar,
-              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
-                !expandedSidebarButtons && !showSidebar,
-              "left-[60px] w-[calc(100vw-60px-60px+48px)]":
-                expandedSidebarButtons && showSidebar && showSidebarRight,
-              "left-[60px] w-[calc(100vw-60px-192px+48px)]":
-                expandedSidebarButtons && showSidebar && !showSidebarRight,
-            }
-          )}
-        >
-          <DemoPaginationTable></DemoPaginationTable>
-        </div>
-      )}
-
+      <div
+        className={cn(
+          "fixed rounded-md top-[60vh] h-[calc(100vh-60vh-24px)] pb-5 z-10",
+          {
+            "left-[300px] w-[calc(100vw-300px-60px+48px)]":
+              !expandedSidebarButtons && showSidebar,
+            "left-[172px] w-[calc(100vw-172px-60px+48px)]":
+              expandedSidebarButtons && !showSidebar,
+            "left-[412px] w-[calc(100vw-412px-60px+48px)]":
+              !expandedSidebarButtons && !showSidebar,
+            "left-[60px] w-[calc(100vw-60px-60px+48px)]":
+              expandedSidebarButtons && showSidebar && showSidebarRight,
+            "left-[60px] w-[calc(100vw-60px-192px+48px)]":
+              expandedSidebarButtons && showSidebar && !showSidebarRight,
+          }
+        )}
+      >
+        {tableLoaded && <PaginationLayerTable/>}
+      </div>
       {/* TODO: Add this sidebar div <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",

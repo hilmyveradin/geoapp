@@ -2,7 +2,6 @@
 
 import TooltipText from "@/app/_components/shared/tooltipText";
 import { Skeleton } from "@/components/ui/skeleton";
-import useLayerStore from "@/helpers/hooks/store/useLayerStore";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { cn } from "@/lib/utils";
 import { EyeOff } from "lucide-react";
@@ -179,7 +178,8 @@ const LayersCard = ({ data }) => {
 };
 
 const OptionsSection = ({ data }) => {
-  const { setZoomedLayerBbox } = useMapViewStore();
+  const { setZoomedLayerBbox, selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded, layerInfo, setLayerInfo } = useMapViewStore();
+  const id = data.layerUid
   const buttonLists = [
     {
       icon: <ZoomIn className="w-3 h-3 stroke-2" />,
@@ -191,7 +191,7 @@ const OptionsSection = ({ data }) => {
     {
       icon: <Table className="w-3 h-3 stroke-2" />,
       name: "Show Table",
-      onClick: null,
+      onClick: (e) => handleTableButtonClick(e.currentTarget.name),
     },
     {
       icon: <PencilIcon className="w-3 h-3 stroke-2" />,
@@ -205,11 +205,24 @@ const OptionsSection = ({ data }) => {
     },
   ];
 
+  const handleTableButtonClick = (key) => {
+    if (key == layerInfo.layerUid) {
+      setTableLoaded(!tableLoaded)
+    } else {
+      setTableLoaded(false)
+      setTimeout(() => {
+        setTableLoaded(true);
+      }, 100);
+    }
+    setLayerInfo(key, data.layerTitle);
+  };
+  
   return (
     <div className="flex flex-col gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
       {buttonLists.map((item, index) => (
         <button
-          key={`button-${item}-${index}`}
+          key={`button-${item.name}-${id}`}
+          name={id}
           className="flex items-center justify-start gap-2 p-1"
           onClick={item.onClick}
         >
@@ -220,3 +233,4 @@ const OptionsSection = ({ data }) => {
     </div>
   );
 };
+
