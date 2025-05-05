@@ -1,32 +1,18 @@
-import * as React from "react"
+import React, { useState } from "react";
 import { 
   Check, 
   ChevronsUpDown, 
-  ChevronUp, 
-  X,
   ChevronLeft,
   ChevronRight,
-  ZoomIn
+  ZoomIn,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   Command,
   CommandEmpty,
@@ -39,6 +25,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const frameworks = [
   {
@@ -63,9 +59,42 @@ const frameworks = [
   },
 ]
 
+const invoices = [
+  {
+    invoice: "INV001",
+    paymentStatus: "Paid",
+  },
+  {
+    invoice: "INV002",
+    paymentStatus: "Pending",
+  },
+  {
+    invoice: "INV003",
+    paymentStatus: "Unpaid",
+  },
+  {
+    invoice: "INV004",
+    paymentStatus: "Paid",
+  },
+  {
+    invoice: "INV005",
+    paymentStatus: "Paid",
+  },
+  {
+    invoice: "INV006",
+    paymentStatus: "Pending",
+  },
+  {
+    invoice: "INV007",
+    paymentStatus: "Unpaid",
+  },
+]
+
+const objects = ["obj1", "obj2"];
+
 export function ComboboxDemo() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
  
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -112,10 +141,35 @@ export function ComboboxDemo() {
   )
 }
 
-export default function GeojsonCard() {
+export function DemoTable() {
   return (
-    <Card className="w-[350px]">
-      <div className="flex flex-col space-y-1.5 p-6">
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Invoice</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {invoices.map((invoice) => (
+            <TableRow key={invoice.invoice}>
+              <TableCell className="font-medium">{invoice.invoice}</TableCell>
+              <TableCell>{invoice.paymentStatus}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
+  )
+}
+
+export default function GeojsonCard() {
+  const [curObjIdx, setCurObjIdx] = useState(0)
+
+  return (
+    <Card className="w-[50vw] h-[40vh]">
+      <div className="flex flex-col space-y-3 px-6 pt-6 pb-3">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
             <ZoomIn/>
@@ -123,40 +177,15 @@ export default function GeojsonCard() {
           </div>
           <div className="flex items-center">
             <ChevronLeft />
-            <Label>1 of 2</Label>
+            <Label>{curObjIdx+1} of {objects.length}</Label>
             <ChevronRight />
           </div>
         </div>
         <ComboboxDemo />
       </div>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your project" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Framework</Label>
-              <Select>
-                <SelectTrigger id="framework">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </form>
+      <CardContent className="flex flex-col">
+        <DemoTable/>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
-      </CardFooter>
     </Card>
   )
 }

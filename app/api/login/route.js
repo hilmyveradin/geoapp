@@ -30,8 +30,8 @@ export async function POST(request) {
     const response = NextResponse.json(data);
 
     // Assuming 'data' contains your tokens
-    const accessToken = data.access_token;
-    const refreshToken = data.refresh_token;
+    const accessToken = data.accessToken;
+    const refreshToken = data.refreshToken;
 
     // Set your tokens here as cookies
     response.cookies.set("accessToken", accessToken, {

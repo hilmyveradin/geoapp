@@ -26,18 +26,19 @@ import {
 import SaveAlertDialog from "../shared/save-alert-dialog";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
+import GeojsonCard from "@/app/_components/app/geojson-card/GeojsonCard";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
-  const { tableLoaded, setTableLoaded, mapData, layerInfo } = useMapViewStore();
+  const { tableLoaded, setTableLoaded, mapData, layerInfo, mapClicked, setMapClicked } = useMapViewStore();
 
   useEffect(() => {
     setTableLoaded(true);
-  }, [setTableLoaded]);
-
+    setMapClicked(true);
+  }, [setMapClicked, setTableLoaded]);
   // Define content for each button
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
@@ -238,6 +239,25 @@ const MapSidebar = () => {
             </Button>
           </div>
           <PaginationLayerTable />
+        </div>
+      )}
+      {!mapClicked && (
+        <div
+          className={cn(
+            "fixed z-10 top-[68px]",
+            {
+              "left-[300px]":
+                !expandedSidebarButtons && showSidebar,
+              "left-[172px]":
+                expandedSidebarButtons && !showSidebar,
+              "left-[412px]":
+                !expandedSidebarButtons && !showSidebar,
+              "left-[61px]":
+                expandedSidebarButtons && showSidebar,
+            }
+          )}
+        >
+          <GeojsonCard></GeojsonCard>
         </div>
       )}
       {/* TODO: Add this sidebar div <div

@@ -1,6 +1,5 @@
-"use client";
-
-import React, { useEffect, useRef } from "react";
+"use client"
+import React,{ useState, useEffect } from "react";
 import GeojsonCard from "@/app/_components/app/geojson-card/GeojsonCard";
 
 const MapComponent = () => {
@@ -107,3 +106,22 @@ export default MapComponent;
   //     });
   //   }
   // };
+
+    // const [sliderValue, setSliderValue] = useState(50);
+
+  // return (
+  //   <>
+  //     <h1>
+  //       Hello, React <CalciteIcon icon="banana" />
+  //     </h1>
+  //     <CalciteButton onClick={(e) => setSliderValue(0)}>Reset</CalciteButton>
+  //     <CalciteSlider
+  //       min="1"
+  //       max="100"
+  //       value={sliderValue}
+  //       step="1"
+  //       onCalciteSliderInput={(e) => setSliderValue(e.target.value)}
+  //     />
+  //     <p>The slider currently has a value of {sliderValue}</p>
+  //   </>
+  // );

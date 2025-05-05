@@ -41,7 +41,7 @@ const DesktopHeader = () => {
 
   const user = {
     ...session.user,
-    fullName: session.user.fullname,
+    fullName: session.user.fullName,
   };
 
   return (

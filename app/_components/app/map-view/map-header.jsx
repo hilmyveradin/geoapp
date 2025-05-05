@@ -13,7 +13,7 @@ const MapHeader = () => {
   const { data: session, status } = useSession();
   const user = {
     ...session.user,
-    fullName: session.user.fullname,
+    fullName: session.user.fullName,
   };
 
   const resetData = () => {
