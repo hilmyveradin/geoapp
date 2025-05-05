@@ -49,13 +49,13 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen min-w-screen">
       <div className="flex flex-col items-start w-2/3 p-8 border rounded-lg shadow-lg h-4/5">
         <img src="/geoportal-logo.svg" alt="logo" className="h-20 mb-4" />
-        <div className="flex w-full h-full gap-4">
+        <div className="flex w-full gap-4">
           <img
             src="/login-image.svg"
             alt="user avatar"
-            className="rounded-lg"
+            className="w-[60%] rounded-lg"
           />
-          <div className="flex flex-col flex-grow gap-12 text-center">
+          <div className="flex flex-col w-[40%] gap-12 text-center">
             <p className="text-3xl font-bold">Welcome to Geoportal</p>
             <div className="flex flex-col gap-4 text-start">
               <div className="">

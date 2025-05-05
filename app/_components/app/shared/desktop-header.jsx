@@ -21,14 +21,14 @@ const DesktopHeader = () => {
       name: "Layers",
       path: "/app/layers",
     },
-    {
-      name: "Users",
-      path: "/app/users",
-    },
-    {
-      name: "Groups",
-      path: "/app/groups",
-    },
+    // {
+    //   name: "Users",
+    //   path: "/app/users",
+    // },
+    // {
+    //   name: "Groups",
+    //   path: "/app/groups",
+    // },
   ];
 
   if (status === "loading") {
