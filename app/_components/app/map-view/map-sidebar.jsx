@@ -24,6 +24,8 @@ import { Separator } from "@/components/ui/separator";
 import { DataTableDemo } from '../layer-table/layer-table';
 import { ButtonSidebar } from '@/components/ui/button-sidebar';
 import { GridExample } from '@/app/_components/app/layer-table/ag-grid-react';
+import DemoPaginationTable from '../layer-table/dummydata';
+
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [showButtonSidebar, setShowButtonSidebar] = useState(true);
@@ -176,7 +178,7 @@ const MapSidebar = () => {
             "left-[60px] w-[calc(100vw-60px-192px)]": showButtonSidebar && showSidebar && !showSidebarRight,
           }
         )}>
-          <GridExample></GridExample>
+          <DemoPaginationTable></DemoPaginationTable>
       </div>
       <div
         className={cn(
