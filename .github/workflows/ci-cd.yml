@@ -30,7 +30,7 @@ jobs:
         run: pnpm build
 
   build-and-deploy:
-    needs: ci # Ensure deploy only after CI success
+    needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
@@ -49,30 +49,18 @@ jobs:
             source ~/.bashrc || source ~/.profile
             cd /home/***/var/www/geoportal/geoportal-webapp
 
-            # Stash any local changes before running pnpm install
-            git stash push -m "Stash local changes"
-
-            # Stash any remaining changes (if any)
-            git stash push -m "Stash remaining local changes"
+            # Stash changes in pnpm-lock.yaml
+            git stash push pnpm-lock.yaml
 
             # Force pull changes from main
             git fetch origin main
             git reset --hard origin/main
 
-            # Ensure the lockfile is up to date again after resolving conflicts
-            /home/***/.nvm/versions/node/v20.17.0/bin/pnpm install
+            # Use the pnpm-lock.yaml from the repository
+            git checkout origin/main -- pnpm-lock.yaml
 
-            # Apply stashed changes and resolve conflicts if necessary
-            git stash pop || true
-            if git diff --name-only --diff-filter=U | grep -q "pnpm-lock.yaml"; then
-              echo "pnpm-lock.yaml has unresolved conflicts. Automatically resolving conflicts."
-              git checkout --theirs pnpm-lock.yaml
-              git add pnpm-lock.yaml
-              git commit -m "Automatically resolved conflicts in pnpm-lock.yaml"
-            fi
-
-            git add pnpm-lock.yaml
-            git commit -m "Update pnpm-lock.yaml after pnpm install"
+            # Install dependencies using the updated lock file
+            /home/***/.nvm/versions/node/v20.17.0/bin/pnpm install --frozen-lockfile
 
             # Build the project
             /home/***/.nvm/versions/node/v20.17.0/bin/pnpm build

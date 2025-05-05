@@ -24,6 +24,11 @@ const NAVIGATION_ITEMS = [
   { name: "Layers", path: "/app/layers", icon: <Layers className="w-6 h-6" /> },
 ];
 
+const MOBILE_NAV_ITEMS = [
+  { name: "Groups", path: "/app/groups", icon: <Users2 className="w-6 h-6" /> },
+  { name: "Users", path: "/app/users", icon: <Users2 className="w-6 h-6" /> },
+];
+
 const AppHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathName = usePathname();
@@ -116,6 +121,23 @@ const AppHeader = () => {
 
         <nav className="flex-grow">
           {NAVIGATION_ITEMS.map((item, index) => (
+            <Link
+              key={`mobile-menu-item-${index}`}
+              href={item.path}
+              className={cn(
+                "flex items-center py-4 text-lg",
+                pathName.includes(item.path)
+                  ? "text-nileBlue-700 font-bold"
+                  : "text-gray-700"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span className="mr-4">{item.icon}</span>
+              {item.name}
+            </Link>
+          ))}
+
+          {MOBILE_NAV_ITEMS.map((item, index) => (
             <Link
               key={`mobile-menu-item-${index}`}
               href={item.path}
