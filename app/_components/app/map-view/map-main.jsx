@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
@@ -43,7 +43,7 @@ const MapMain = () => {
     expandedRightSidebarContent,
   } = useMapSidebarStore();
 
-  const calculateBounds = () => {
+  const calculateBounds = useCallback(() => {
     const parentRect = mapContainerRef.current.getBoundingClientRect(); // Get the parent container's dimensions
     const consistentTop = 68; // Consistent top boundary in pixels
 
@@ -59,10 +59,10 @@ const MapMain = () => {
       adjustedRight = 300; // Only content expanded
     }
 
-    // Initialize right boundary to be within the parent by default
+    // Initialize left boundary to be within the parent by default
     let adjustedLeft = 0; // Default setting for no sidebar interference
 
-    // Adjust the right boundary based on the right sidebar state
+    // Adjust the left boundary based on the left sidebar state
     if (expandedLeftSidebarContent && showLeftSidebar) {
       adjustedLeft = 412; // Both sidebar visible and content expanded
     } else if (showLeftSidebar) {
@@ -77,7 +77,12 @@ const MapMain = () => {
       right: parentRect.width - (adjustedRight + adjustedLeft), // Adjusted based on sidebar
       bottom: parentRect.height, // Full height use, no restriction here since only top is set
     };
-  };
+  }, [
+    expandedRightSidebarContent,
+    showRightSidebar,
+    expandedLeftSidebarContent,
+    showLeftSidebar,
+  ]);
 
   useEffect(() => {
     const updateBounds = () => {
@@ -90,8 +95,13 @@ const MapMain = () => {
     updateBounds();
     window.addEventListener("resize", updateBounds); // Recalculate bounds on window resize
     return () => window.removeEventListener("resize", updateBounds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expandedLeftSidebarContent, showLeftSidebar]); // Recalculate when sidebar states change
+  }, [
+    calculateBounds,
+    expandedLeftSidebarContent,
+    showLeftSidebar,
+    expandedRightSidebarContent,
+    showRightSidebar,
+  ]);
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({

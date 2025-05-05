@@ -243,7 +243,7 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
               e.stopPropagation();
               updateMultiSelection(layer);
             } else {
-              if (selectedLayer) {
+              if (selectedLayer?.layerUid === layer.layerUid) {
                 setSelectedLayer(null);
               } else {
                 setSelectedLayer(layer);
