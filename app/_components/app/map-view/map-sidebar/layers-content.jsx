@@ -284,14 +284,14 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
       </TooltipText>
       {collapsibleContent === "layer" && (
         <div className="flex items-center gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
-          {!imageLoaded && <Skeleton className="h-5 rounded-full w-fit" />}
+          {!imageLoaded && <Skeleton className="w-full h-5 rounded-full" />}
           <div
             className={isSquare ? "w-5 h-5" : "overflow-y-auto max-h-60 w-full"}
           >
             <img
               key={`${layer.layerUid}`}
               src={layer.legendUrl}
-              className="w-full"
+              className="w-fit"
               alt="legend logo"
               onLoad={() => setImageLoaded(true)}
               style={{ display: imageLoaded ? "block" : "none" }}
