@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
 
-export async function GET(request) {
+export async function GET() {
   try {
     const cookieStore = cookies()
     const token = cookieStore.get('accessToken')
@@ -10,7 +10,7 @@ export async function GET(request) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": response.headers.get("Authorization")
+        "Authorization": `Bearer ${token.value}`
       },
     });
 
