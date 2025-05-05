@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { cn } from "@/lib/utils";
 import {
   ChevronLeft,
+  ChevronRight,
   PlusCircle,
   Layers3,
   Sheet,
@@ -20,10 +21,12 @@ import TablesContent from "./map-sidebar/tables-content";
 import SaveContent from "./map-sidebar/save-content";
 import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
-
+import { DataTableDemo } from '../layer-table/layer-table';
+import { ButtonSidebar } from '@/components/ui/button-sidebar';
 const MapSidebar = () => {
   // debugger;
   const [showSidebar, setShowSidebar] = useState(true);
+  const [showButtonSidebar, setShowButtonSidebar] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
 
