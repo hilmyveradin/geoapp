@@ -108,6 +108,42 @@ export default function PaginationLayerTable() {
       console.error("Error fetching rows:", error);
     }
   };
+
+  useEffect(() => {
+    async function prepFTS() {
+      try {
+        const body = JSON.stringify({
+          force: true,
+        })
+        const response = await fetch(
+          `/api/layers/set-fts-prep?layerUid=${layerInfo.layerUid}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: body
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        const data = await response.json();
+        if (data.msg.includes("ready for FTS")) {
+          return "success";
+        } else {
+          console.error("FTS Prep failed:", data.msg);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
+    prepFTS();
+  }, [layerInfo.layerUid])
+  
   return (
     <ControlledTable
       rows={(searchSubmit && ftsQuery && ftsQuery.value !== '') ? rowsFTS : rows}
