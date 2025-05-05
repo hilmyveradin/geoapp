@@ -43,7 +43,6 @@ const useLayerManager = () => {
 
       refreshLayerReorderRef.current = refreshLayerOrder;
       addedLayerUidsRef.current = addedLayerUids;
-      console.log("CALLED");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, refreshLayerOrder, addedLayerUids, mapStyle]);
@@ -51,12 +50,10 @@ const useLayerManager = () => {
   useEffect(() => {
     if (mapLoaded && map) {
       if (map && mapStyle) {
-        console.log("FOOBAR");
         map.setStyle(mapStyle);
       }
 
       const updateLayers = () => {
-        console.log("FOOBAR 2");
         // Initialize layerOrderRef only once on first effective load
         if (layerOrderRef.current.length === 0 && mapLayers.length > 0) {
           layerOrderRef.current = mapLayers

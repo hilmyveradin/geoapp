@@ -71,7 +71,7 @@ const BaseMapContent = () => {
   const mapChoices = [
     {
       name: "OpenStreetMap",
-      image: "/images/basemaps/osm.png",
+      image: "/basemaps/osm-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -93,7 +93,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Satellite",
-      image: "/images/basemaps/satellite.png",
+      image: "/basemaps/satellite-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -121,7 +121,7 @@ const BaseMapContent = () => {
 
     {
       name: "Dark",
-      image: "/images/basemaps/dark.png",
+      image: "/basemaps/dark-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -145,12 +145,12 @@ const BaseMapContent = () => {
     },
     {
       name: "3D Buildings",
-      image: "/images/basemaps/3d.png",
+      image: "/basemaps/3d-basemap.png",
       style: threeDStyle,
     },
     {
       name: "Esri World Topo",
-      image: "/images/basemaps/esri-topo.png",
+      image: "/basemaps/esri-world-topo-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -174,7 +174,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Google Imagery With Rain Viewer",
-      image: "/images/basemaps/google-imagery-rain.png",
+      image: "/basemaps/rain-viewer-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -214,7 +214,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Google Maps",
-      image: "/images/basemaps/google-maps.png",
+      image: "/basemaps/google-maps-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -238,7 +238,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Google Terrain",
-      image: "/images/basemaps/google-terrain.png",
+      image: "/basemaps/google-maps-terrain-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -262,12 +262,12 @@ const BaseMapContent = () => {
     },
     {
       name: "Dark Gray Canvas",
-      image: "/images/basemaps/dark-gray-canvas.png",
+      image: "/basemaps/dark-canvas-basemap.png",
       style: `https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json`,
     },
     {
       name: "Bing Map Aerial",
-      image: "/images/basemaps/bing-aerial.png",
+      image: "/basemaps/bing-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -293,7 +293,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Bing Map Hybrid",
-      image: "/images/basemaps/bing-hybrid.png",
+      image: "/basemaps/bing-map-hybrid-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -319,7 +319,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Bing Map Road",
-      image: "/images/basemaps/bing-road.png",
+      image: "/basemaps/bing-road-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -345,7 +345,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Oceans",
-      image: "/images/basemaps/oceans.png",
+      image: "/basemaps/ocean-basemap.png",
       style: `https://api.maptiler.com/maps/ocean/style.json?key=${MAPTILER_KEY}`,
     },
   ];
@@ -372,13 +372,13 @@ const BaseMapCard = ({ name, image, onClick }) => {
       className="flex items-center gap-2 p-2 bg-white rounded-md shadow cursor-pointer hover:bg-gray-100"
       onClick={onClick}
     >
-      {/* <Image
+      <Image
         src={image}
         alt={name}
-        width={50}
-        height={50}
+        width={100}
+        height={80}
         className="rounded-md"
-      /> */}
+      />
       <span className="font-medium">{name}</span>
     </div>
   );
