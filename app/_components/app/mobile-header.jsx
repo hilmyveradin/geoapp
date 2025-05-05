@@ -57,7 +57,7 @@ const MobileHeader = () => {
         )}
 
         {/* Drawer content */}
-        <div className="relative flex flex-col justify-between h-full p-4 ml-auto bg-white rounded-lg w-80">
+        <div className="relative flex flex-col justify-between w-full h-full p-4 ml-auto bg-white rounded-lg">
           <div className="flex flex-col justify-start w-full">
             <div className="flex items-center justify-between w-full">
               <img src="/geoportal-logo.svg" alt="logo" className="w-20 mb-4" />
