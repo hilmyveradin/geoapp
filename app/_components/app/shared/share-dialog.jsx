@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -19,24 +16,43 @@ import {
 } from "@/components/ui/command";
 
 import { useToast } from "@/components/ui/use-toast";
-import useGroupStore from "@/helpers/hooks/store/useGroupStore";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import useUsersStore from "@/helpers/hooks/store/useUserStore";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { X } from "lucide-react";
 import { UsersRound } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import UserAvatar from "./user-avatar";
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const ShareDialog = ({ children }) => {
+  // Utility function to generate a random color
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  // Function to memoize colors for users and groups
+  const useColorMemo = (items) => {
+    const memoizedColors = useMemo(() => {
+      const colors = {};
+      items.forEach((item) => {
+        colors[item.userUid || item.groupUid] = getRandomColor();
+      });
+      return colors;
+    }, [items]);
+
+    return memoizedColors;
+  };
+
   const { toast } = useToast();
   const { mapData } = useMapViewStore();
 
@@ -58,6 +74,9 @@ const ShareDialog = ({ children }) => {
   const [submittingData, setSubmittingData] = useState(false);
 
   const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const userColors = useColorMemo(userList);
+  const groupColors = useColorMemo(groupList);
 
   // Fetching logic
   const fetchDataAndResetState = async () => {
@@ -347,10 +366,18 @@ const ShareDialog = ({ children }) => {
               <Search className="items-center justify-center w-6 h-6 mr-3" />
             </div>
             <p className="text-lg font-bold">People who have access</p>
-            <UserCard user={owner} />
-            {sharedUserList.map((user) => {
-              return <UserCard key={user.userUid} user={user} />;
-            })}
+            <div className="flex flex-col gap-4 overflow-y-auto max-h-80">
+              <UserCard user={owner} color={userColors[owner.userUid]} />
+              {sharedUserList.map((user) => {
+                return (
+                  <UserCard
+                    key={user.userUid}
+                    user={user}
+                    color={userColors[user.userUid]}
+                  />
+                );
+              })}
+            </div>
             <p className="text-lg font-bold">Set group sharing</p>
             <div className="flex justify-between">
               {sharedGroupList?.length === 0 ? (
@@ -358,7 +385,11 @@ const ShareDialog = ({ children }) => {
               ) : (
                 <div className="flex gap-2 overflow-x-auto">
                   {sharedGroupList.map((group) => (
-                    <UsersRound className="w-5 h-5" key={group.groupUid} />
+                    <UsersRound
+                      className="w-5 h-5"
+                      key={group.groupUid}
+                      color={groupColors[group.groupUid]}
+                    />
                   ))}
                 </div>
               )}
@@ -438,6 +469,7 @@ const ShareDialog = ({ children }) => {
                     group={group}
                     isChecked={isGroupSelected(group.groupUid)}
                     onCheckedChange={() => handleGroupSelection(group.groupUid)}
+                    color={groupColors[group.groupUid]}
                   />
                 );
               })}
@@ -457,10 +489,10 @@ const ShareDialog = ({ children }) => {
 
 export default ShareDialog;
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, color }) => {
   return (
     <div className="flex items-center gap-4">
-      <UserRound className="w-6 h-6" />
+      <UserRound className="w-6 h-6" style={{ color: color }} />
       <div className="flex flex-col gap-1">
         <p className="font-semibold">{user.fullName}</p>
         <p>{user.email}</p>
@@ -469,11 +501,11 @@ const UserCard = ({ user }) => {
   );
 };
 
-const GroupCard = ({ group, isChecked, onCheckedChange }) => {
+const GroupCard = ({ group, isChecked, onCheckedChange, color }) => {
   return (
     <div className="flex items-center gap-2">
       <Checkbox checked={isChecked} onCheckedChange={onCheckedChange} />
-      <UsersRound className="w-5 h-5" />
+      <UsersRound className="w-5 h-5" style={{ color: color }} />
       <div className="flex flex-col gap-1">
         <p className="font-semibold">{group.groupName}</p>
       </div>
