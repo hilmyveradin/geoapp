@@ -34,6 +34,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import useMapViewStore from "@/helpers/hooks/useMapViewStore";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 const MapHeader = () => {
   const { mapData } = useMapViewStore();
@@ -42,9 +52,29 @@ const MapHeader = () => {
       <div className="flex w-full h-14 justify-between items-center bg-white">
         {/* <div className="flex flex-row justify-between pl-2 space-x-8"> */}
           <div className="flex flex-row justify-between">
-            <Button variant="ghost">
-              <Menu className="w-4 h-4" />
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost">
+                  <Menu className="w-4 h-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side={"left"}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Name
+                    </Label>
+                    <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      Username
+                    </Label>
+                    <Input id="username" value="@peduarte" className="col-span-3" />
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
             {/* <h1 className="text-2xl">{`${mapData.title}`}</h1>  */}
             <Label className="pt-2 text-sm font-medium">{`${mapData.title}`}</Label>
           </div>
