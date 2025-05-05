@@ -1,36 +1,78 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronLeft, PlusCircle, Layers3, Sheet, Save, Share2, Printer } from "lucide-react";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LegendContent from "./map-sidebar/legend-content";
 import LayersContent from "./map-sidebar/layers-content";
+import { ButtonSidebar } from "@/components/ui/button-sidebar";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   return (
     <div
       className={cn(
-        "fixed top-[112px] h-[calc(100vh-112px)] left-0 bottom-10 z-10 bg-white w-[360px] transition-all rounded-r-lg px-1",
+        "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gn-400 w-[48px]",
         {
-          "left-[-340px]": !showSidebar,
-        }
+          "w-[180px]": !showSidebar,
+        },
       )}
     >
-      <div
-        className={cn(
-          "flex items-center justify-center absolute top-12 right-[-20px] w-10 h-10 bg-white p-1 rounded-full transition-all cursor-pointer"
-        )}
-        onClick={() => setShowSidebar((prev) => !prev)}
-      >
-        <ChevronRight
-          className={cn("w-6 h-6 transition-all duration-200", {
-            "-rotate-180": showSidebar,
-          })}
-        />
-      </div>
-      <Tabs defaultValue="layers" className="w-full mt-2">
+        <ButtonSidebar variant="ghost">
+          <PlusCircle
+            className={cn("w-4 h-4")}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Add layers</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost">
+          <Layers3
+            className={cn("w-4 h-4")}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Layers</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost">
+          <img
+            className={cn("w-4 h-4")}
+            src="/app/basemap-svgrepo-com.svg"
+            alt="basemap icon"
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Basemap</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost">
+          <Sheet
+            className={cn("w-4 h-4")}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Tables</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost">
+          <Save
+            className={cn("w-4 h-4")}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Save</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost">
+          <Share2
+            className={cn("w-4 h-4")}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Share</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost">
+          <Printer
+            className={cn("w-4 h-4")}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Print</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghost" onClick={() => setShowSidebar((prev) => !prev)}>
+          <ChevronLeft
+            className={cn("w-4 h-4", {
+              "-rotate-180": showSidebar,
+            })}
+          />
+          {!showSidebar && <span className="ml-2 inline-block">Collapse</span>}
+        </ButtonSidebar>
+      {/* </div> */}
+      {/* <Tabs defaultValue="layers" className="w-full mt-2">
         <TabsList className="flex justify-between w-full">
           <TabsTrigger value="layers" className="w-1/2">
             Layers
@@ -41,7 +83,7 @@ const MapSidebar = () => {
         </TabsList>
         <LayersContent />
         <LegendContent />
-      </Tabs>
+      </Tabs> */}
     </div>
   );
 };

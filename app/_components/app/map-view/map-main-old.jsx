@@ -21,7 +21,7 @@ const MapMain = () => {
             type: "raster",
             tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
             tileSize: 256,
-            // attribution: "©️ OpenStreetMap contributors",
+            attribution: "©️ OpenStreetMap contributors",
           },
         },
         layers: [
@@ -36,7 +36,7 @@ const MapMain = () => {
       zoom: 2, // starting zoom
     });
 
-    // mapRef.current.addControl(new maplibregl.NavigationControl());
+    mapRef.current.addControl(new maplibregl.NavigationControl());
 
     return () => mapRef.current.remove(); // Cleanup on unmount
   }, []);
