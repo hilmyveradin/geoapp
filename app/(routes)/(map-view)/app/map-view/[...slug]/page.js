@@ -114,7 +114,7 @@ const MapView = ({ params }) => {
       loadLayerData();
     }
 
-    isLoading(false);
+    setIsLoading(false);
   }, [mapType, mapUid, setMapLayers, setMapData, setSelectedLayers]);
 
   if ((!mapData && !mapLayers) || isLoading)
