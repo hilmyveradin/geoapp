@@ -27,8 +27,7 @@ const LayersDashboard = () => {
         const tempLayers = temp.data.map((layers) => {
           return {
             ...layers,
-            user: mockUser,
-            thumbnail_url: `${IMAGE_BASE_URL}/cms/layer/thumbnail/${layers.thumbnail_url}`,
+            thumbnailUrl: `${IMAGE_BASE_URL}/cms/layer/thumbnail/${layers.thumbnailUrl}`,
           };
         });
         setLayers(tempLayers);

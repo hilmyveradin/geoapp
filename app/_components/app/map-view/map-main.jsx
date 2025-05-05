@@ -4,7 +4,8 @@ import React, { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 
-const MapMain = () => {
+const MapMain = (props) => {
+  const { data } = props;
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 

@@ -5,12 +5,13 @@ import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const MapSidebar = () => {
+const MapSidebar = (props) => {
+  const { data } = props;
   const [showSidebar, setShowSidebar] = useState(true);
   return (
     <div
       className={cn(
-        "fixed top-[200px] h-[calc(100vh-128px)] left-0 bottom-10 z-10 bg-white w-[360px] transition-all rounded-r-lg px-1",
+        "fixed top-[112px] h-[calc(100vh-112px)] left-0 bottom-10 z-10 bg-white w-[360px] transition-all rounded-r-lg px-1",
         {
           "left-[-340px]": !showSidebar,
         }
