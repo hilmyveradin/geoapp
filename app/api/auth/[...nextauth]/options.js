@@ -43,7 +43,7 @@ const authOptions = {
         token.user = user.data;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.accessTokenExpires = dayjs().add(15, "minute").toDate().getTime();
+        token.accessTokenExpires = dayjs().add(60, "minute").toDate().getTime();
       }
 
       // If the token hasn't expired yet, just return it
@@ -85,7 +85,7 @@ async function refreshAccessToken(token) {
         ...token,
         accessToken: refreshedTokens.accessToken,
         refreshToken: refreshedTokens.refreshToken,
-        accessTokenExpires: dayjs().add(15, "minute").toDate().getTime(),
+        accessTokenExpires: dayjs().add(60, "minute").toDate().getTime(),
       };
     }
 
