@@ -44,6 +44,13 @@ const MenuCardDropdown = ({ children, cardData }) => {
           throw error;
         }
 
+        const data = await response.json();
+        if (data.status.includes("failed")) {
+          const error = new Error(response.statusText || "Unknown error");
+          error.status = response.status;
+          throw error;
+        }
+
         toast({ title: "Success deleting maps", variant: "success" });
         toggleRefetchMaps();
         handleCloseDropdown();
@@ -67,6 +74,13 @@ const MenuCardDropdown = ({ children, cardData }) => {
         );
 
         if (!response.ok) {
+          const error = new Error(response.statusText || "Unknown error");
+          error.status = response.status;
+          throw error;
+        }
+
+        const data = await response.json();
+        if (data.status.includes("failed")) {
           const error = new Error(response.statusText || "Unknown error");
           error.status = response.status;
           throw error;
