@@ -9,11 +9,15 @@ import { FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import EditPopupAttributes from "./map-right-sidebar/edit-popup-attributes";
 import StyleContent from "./map-right-sidebar/style-content";
+import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
 
 const MapSidebarRight = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(false);
+
+  // Agar bisa diakses di map-sidebar.jsx
+  const {showRightSidebar, setShowRightSidebar, setExpandedRightSidebarButtons} = useMapRightSidebar();
 
   // Define content for each button
   const BUTTON_CONTENT = {
@@ -24,9 +28,11 @@ const MapSidebarRight = () => {
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
     if (selectedButton == buttonName) {
-      setExpandedSidebarButtons(true);
-    } else {
       setExpandedSidebarButtons(false);
+      setExpandedRightSidebarButtons(false);
+    } else {
+      setExpandedSidebarButtons(true);
+      setExpandedRightSidebarButtons(true);
     }
   };
 
@@ -90,7 +96,10 @@ const MapSidebarRight = () => {
           className={cn("flex justify-end", {
             "p-0 justify-center": !showSidebar,
           })}
-          onClick={() => setShowSidebar((prev) => !prev)}
+          onClick={() => {
+            setShowSidebar((prev) => !prev);
+            setShowRightSidebar(!showRightSidebar);
+          }}
         >
           <ChevronLeft
             className={cn("!w-4 !h-4 transition-all", {
