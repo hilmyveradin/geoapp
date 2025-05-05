@@ -156,12 +156,15 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     setMapClicked,
     selectedLayer,
     setSelectedLayer,
+    changedLayerStyleUid,
+    setChangedLayerStyleUid,
   } = useMapViewStore();
 
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
   const [imageLoaded, setImageLoaded] = useState(false);
   const [multipleSelectedLayerChecked, setMultipleSelectedLayerChecked] =
     useState(false);
+  const [dateHash, setDateHash] = useState();
 
   const [isSquare, setIsSquare] = useState(false);
 
@@ -173,8 +176,13 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
         setIsSquare(true);
       }
       setImageLoaded(true);
+      setDateHash(Date.now());
     };
   }, [layer.legendUrl]);
+
+  useEffect(() => {
+    setDateHash(Date.now());
+  }, [changedLayerStyleUid, layer.layerUid]);
 
   useEffect(() => {
     if (multiSelectedLayers) {
@@ -303,8 +311,8 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
             className={isSquare ? "w-5 h-5" : "overflow-y-auto max-h-60 w-full"}
           >
             <img
-              key={`${layer.layerUid}`}
-              src={layer.legendUrl}
+              key={`${layer.layerUid}-${dateHash}`}
+              src={`${layer.legendUrl}?${dateHash}`}
               className="w-fit"
               alt="legend logo"
               onLoad={() => setImageLoaded(true)}

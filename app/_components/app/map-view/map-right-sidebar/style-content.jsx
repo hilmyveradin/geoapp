@@ -27,7 +27,10 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { capitalizeFirstLetter } from "@/helpers/string-helpers";
+import {
+  capitalizeFirstLetter,
+  handleErrorMessage,
+} from "@/helpers/string-helpers";
 
 const StyleContent = () => {
   const {
@@ -35,6 +38,7 @@ const StyleContent = () => {
     selectedLayer,
     setSelectedLayer,
     toggleRefreshLayerOrder,
+    setChangedLayerStyleUid,
   } = useMapViewStore();
   const { toast } = useToast();
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -280,15 +284,26 @@ const StyleContent = () => {
     saveFunction
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(response.status);
         }
-        toast({ title: "Success changing layers", variant: "success" });
+
+        const responseJson = await response.json();
+        setChangedLayerStyleUid(responseJson.style);
+        toast({
+          title: "Success changing layer style",
+          description: responseJson.msg || "", // Optional description if available
+          variant: "success",
+        });
         setToggleRefetchStyle((state) => !state);
         toggleRefreshLayerOrder(); // Assuming this function needs to be called here
       })
       .catch((error) => {
-        console.log(error);
-        toast({ title: "Error changing layer style", variant: "destructive" });
+        const { title, description } = handleErrorMessage(error);
+        toast({
+          title: title,
+          description: description, // Provides more specific error detail
+          variant: "destructive",
+        });
       })
       .finally(() => {
         setIsSavingChanges(false);

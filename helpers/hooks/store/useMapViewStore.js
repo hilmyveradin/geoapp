@@ -22,6 +22,7 @@ const useMapViewStore = create((set) => ({
   addedLayerUids: [],
   selectedLayer: null,
   highlightedLayer: null,
+  changedLayerStyleUid: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -161,6 +162,12 @@ const useMapViewStore = create((set) => ({
     set(() => ({
       highlightedLayer: data,
     })),
+
+  setChangedLayerStyleUid: (data) => {
+    set(() => ({
+      changedLayerStyleUid: data,
+    }));
+  },
 }));
 
 export default useMapViewStore;
