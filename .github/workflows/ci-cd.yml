@@ -60,7 +60,7 @@ jobs:
             git reset --hard origin/main
 
             # Ensure the lockfile is up to date again after resolving conflicts
-            /home/***/.nvm/versions/node/v18.20.2/bin/pnpm install
+            /home/***/.nvm/versions/node/v20.17.0/bin/pnpm install
 
             # Apply stashed changes and resolve conflicts if necessary
             git stash pop || true
@@ -75,7 +75,7 @@ jobs:
             git commit -m "Update pnpm-lock.yaml after pnpm install"
 
             # Build the project
-            /home/***/.nvm/versions/node/v18.20.2/bin/pnpm build
+            /home/***/.nvm/versions/node/v20.17.0/bin/pnpm build
 
             # Use pm2 to manage the process
-            /home/***/.nvm/versions/node/v18.20.2/bin/pm2 start /home/***/.nvm/versions/node/v18.20.2/bin/pnpm --name "geoportal" -- start || /home/***/.nvm/versions/node/v18.20.2/bin/pm2 restart geoportal -f
+            /home/***/.nvm/versions/node/v20.17.0/bin/pm2 start /home/***/.nvm/versions/node/v20.17.0/bin/pnpm --name "geoportal" -- start || /home/***/.nvm/versions/node/v20.17.0/bin/pm2 restart geoportal -f
