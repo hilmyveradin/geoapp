@@ -2,7 +2,7 @@
 
 import GroupButtons from "@/app/_components/app/group-buttons";
 import GroupCards from "@/app/_components/app/group-cards";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 

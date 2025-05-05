@@ -3,7 +3,7 @@
 import GroupButtons from "@/app/_components/app/group-buttons";
 import GroupMembersPage from "@/app/_components/app/groups/group-members-page";
 import GroupOverviewPage from "@/app/_components/app/groups/group-overview-page";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
