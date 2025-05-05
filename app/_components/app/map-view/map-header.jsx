@@ -1,57 +1,18 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-
-import { List, Layers3, Map, Save, Share2, Printer, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const MapHeader = () => {
   const { mapData } = useMapViewStore();
-  console.log(mapData)
   return (
     <div>
-      <div className="flex items-center justify-between w-full bg-white h-14">
-        {/* <div className="flex flex-row justify-between pl-2 space-x-8"> */}
+      <div className="flex items-center justify-between w-full bg-white border shadow-xl h-14">
         <div className="flex flex-row justify-between">
           <Sheet>
             <SheetTrigger asChild>
@@ -59,29 +20,29 @@ const MapHeader = () => {
                 <Menu className="w-4 h-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side={"left"}>
-              <div className="grid gap-4 py-4">
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
+            <SheetContent side="left" className="flex flex-col gap-2 p-2">
+              <Link href="/app/maps">
+                <Button
+                  className="flex items-center justify-between w-full !border"
+                  variant="secondary"
+                >
+                  Maps
+                  <span>
+                    <ChevronRight className="stroke-2 stroke-greenGable-500 " />
+                  </span>
+                </Button>
+              </Link>
+              <Link href="/app/layers">
+                <Button
+                  className="flex items-center justify-between w-full !border"
+                  variant="secondary"
+                >
+                  Layers
+                  <span>
+                    <ChevronRight className="stroke-2 stroke-greenGable-500 " />
+                  </span>
+                </Button>
+              </Link>
             </SheetContent>
           </Sheet>
           {/* <h1 className="text-2xl">{`${mapData.title}`}</h1>  */}

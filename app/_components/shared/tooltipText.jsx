@@ -8,14 +8,13 @@ import { cn } from "@/lib/utils";
 
 const TooltipText = ({ children, content, className, ...props }) => {
   return (
-    <TooltipProvider>
-      <Tooltip>
+    <TooltipProvider className="z-50">
+      <Tooltip className="z-50">
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         {content && content.length > 0 && (
           <TooltipContent
-            side={"right"}
             {...props}
-            className={cn("border-none bg-blackHaze-500", className)}
+            className={cn("border-none bg-blackHaze-500 z-50", className)}
           >
             <span className="text-xs font-normal leading-[18px] text-nn-0">
               {content}

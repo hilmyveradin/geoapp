@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const useLayerStore = create((set) => ({
-  layersData: [],
+  layers: [],
 
   setLayers: (newLayers) =>
     set(() => ({
