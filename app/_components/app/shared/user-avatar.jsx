@@ -7,7 +7,7 @@ const UserAvatar = (props) => {
   return (
     <Avatar className={cn(className)}>
       <AvatarImage
-        src={user.avatar}
+        src={user?.avatar}
         alt="user avatar"
         className={cn("rounded-full p-1")}
       />

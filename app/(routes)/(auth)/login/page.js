@@ -13,30 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
-  const router = useRouter();
   // TODO: Change this to shadcn Form
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      router.push("/app/maps");
-    } catch (error) {
-      console.error("Error during fetch:", error.message);
-    }
+    signIn("credentials", {
+      username: username,
+      password: password,
+      redirect: true,
+      callbackUrl: "/app/maps",
+    });
   };
 
   return (
