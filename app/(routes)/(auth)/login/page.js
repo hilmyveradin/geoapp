@@ -1,49 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { signIn } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-export default function LoginPage() {
+const Login = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const formRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
-
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(formRef.current);
     const username = formData.get("username");
     const password = formData.get("password");
 
+    setIsLoading(true);
     try {
-      const result = await signIn("credentials", {
+      const signInResult = await signIn("credentials", {
         username,
         password,
         redirect: false,
       });
 
-      if (result?.error) {
+      if (signInResult?.error) {
         toast({
-          title: "Login Failed",
-          description: result.error,
           variant: "destructive",
+          title: "Invalid username/password",
+          description: "Please try again",
         });
-      } else {
+      } else if (signInResult?.ok) {
         router.push("/app/maps");
       }
     } catch (error) {
       console.error("Login error:", error);
       toast({
-        title: "Login Error",
-        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
+        title: "Login failed",
+        description: "An error occurred during login. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -51,76 +53,80 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-nileBlue-50">
-      <div className="flex flex-col justify-center flex-1 px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="w-full max-w-sm mx-auto lg:w-96">
-          <div className="flex justify-center mb-6">
+    <div
+      className="flex items-center justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/login-image.png')" }}
+    >
+      <Card className="w-full max-w-md relative z-10 backdrop-blur-md bg-white/30">
+        <CardHeader className="space-y-1">
+          <div className="flex justify-center mb-4">
             <Image
               src="/geoportal-logo.svg"
-              alt="Geoportal Logo"
-              width={200}
-              height={50}
-              priority
+              alt="logo"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
             />
           </div>
-          <div className="mt-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-nileBlue-900"
-                >
-                  Username
-                </Label>
-                <Input
-                  id="username"
-                  name="username"
-                  type="username"
-                  autoComplete="username"
-                  required
-                  className="block w-full px-3 py-2 mt-1 bg-white border border-nileBlue-300 rounded-md shadow-sm focus:outline-none focus:ring-nileBlue-500 focus:border-nileBlue-500 sm:text-sm"
-                />
-              </div>
-
-              <div>
-                <Label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-nileBlue-900"
-                >
-                  Password
-                </Label>
+          <CardTitle className="text-2xl font-bold text-center">
+            Welcome to Geoportal
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form ref={formRef} onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="username">
+                Username
+              </label>
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                required
+                placeholder="Enter your username"
+                className="bg-white text-black placeholder-gray-500"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="password">
+                Password
+              </label>
+              <div className="relative">
                 <Input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
-                  className="block w-full px-3 py-2 mt-1 bg-white border border-nileBlue-300 rounded-md shadow-sm focus:outline-none focus:ring-nileBlue-500 focus:border-nileBlue-500 sm:text-sm"
+                  placeholder="Enter your password"
+                  className="bg-white text-black placeholder-gray-500"
                 />
-              </div>
-
-              <div>
-                <Button
-                  type="submit"
-                  className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-nileBlue-600 border border-transparent rounded-md shadow-sm hover:bg-nileBlue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nileBlue-500"
-                  disabled={isLoading}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
-                  {isLoading ? "Signing in..." : "Sign in"}
-                </Button>
+                  {showPassword ? (
+                    <EyeOffIcon className="h-5 w-5 text-gray-500" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5 text-gray-500" />
+                  )}
+                </button>
               </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div className="relative flex-1 hidden w-0 lg:block">
-        <Image
-          className="absolute inset-0 object-cover w-full h-full"
-          src="/login-image.png"
-          alt="Login background"
-          layout="fill"
-          priority
-        />
-      </div>
+            </div>
+            <Button
+              type="submit"
+              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-nileBlue-600 border border-transparent rounded-md shadow-sm hover:bg-nileBlue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nileBlue-500"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Sign in"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
-}
+};
+
+export default Login;
