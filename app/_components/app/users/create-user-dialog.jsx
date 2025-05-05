@@ -22,10 +22,7 @@ const CreateUserDialog = ({ children }) => {
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [submittingData, setSubmittingData] = useState(false);
-  const [roles, setRoles] = useState([
-    { role_uid: "abcdef", name: "aaaa" },
-    { role_uid: "abcdefg", name: "aaaab" },
-  ]);
+  const [roles, setRoles] = useState([]);
 
   const [userData, setUserData] = useState({
     login_name: "",
@@ -37,11 +34,11 @@ const CreateUserDialog = ({ children }) => {
 
   const fetchRoles = useCallback(async () => {
     try {
-      const response = await fetch("/api/users/roles");
+      const response = await fetch("/api/admin/roles");
       if (!response.ok) throw new Error("Failed to fetch roles");
-      const data = await response.json();
-      debugger;
-      setRoles(data);
+      const responseJson = await response.json();
+      const rolesData = responseJson.data;
+      setRoles(rolesData);
     } catch (error) {
       console.error("Error fetching roles:", error);
     }
@@ -73,7 +70,7 @@ const CreateUserDialog = ({ children }) => {
   const createUser = async () => {
     setSubmittingData(true);
     try {
-      const response = await fetch("/api/users/create", {
+      const response = await fetch("/api/admin/user/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -141,12 +138,10 @@ const CreateUserDialog = ({ children }) => {
             </SelectTrigger>
             <SelectContent>
               {roles.map((role) => (
-                <SelectItem key={role.role_uid} value={role.role_uid}>
-                  {role.name}
+                <SelectItem key={role.roleUid} value={role.roleUid}>
+                  {role.roleName}
                 </SelectItem>
               ))}
-              {/* <SelectItem value="foobar"> Foobar </SelectItem>
-              <SelectItem value="foobar 2"> Foobar 2 </SelectItem> */}
             </SelectContent>
           </Select>
         </div>

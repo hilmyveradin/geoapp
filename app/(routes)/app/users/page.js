@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
 import UsersButtons from "@/app/_components/app/users-buttons";
 import useUserStore from "@/helpers/hooks/store/use-user-store";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 
 const UsersDashboard = () => {
   const { isAdmin } = useUserStore();
@@ -21,6 +22,7 @@ const UsersDashboard = () => {
   const [usersData, setUsersData] = useState([]);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const { refetchUsers, toggleRefetchUsers } = useRefetchStore();
 
   useEffect(() => {
     async function getUsers() {
@@ -43,11 +45,24 @@ const UsersDashboard = () => {
     }
 
     getUsers();
-  }, []);
+  }, [refetchUsers]);
 
-  const deleteUser = (userUid) => {
-    // Implement delete user logic here
-    console.log(`Deleting user with UID: ${userUid}`);
+  const deleteUser = async (userUid) => {
+    try {
+      const response = await fetch(`/api/admin/user/delete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userUid: userUid }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      toast({ title: "Success deleting group", variant: "success" });
+      toggleRefetchUsers();
+    } catch (error) {
+      console.error("Error during fetch:", error.message);
+    }
   };
 
   const sortedData = [...usersData].sort((a, b) => {
