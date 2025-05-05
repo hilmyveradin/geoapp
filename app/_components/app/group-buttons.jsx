@@ -14,7 +14,7 @@ const GroupButtons = () => {
         <div className="flex items-center gap-2 py-2 pl-2 pr-3 mr-3 bg-white rounded-lg w-full">
           <Search className="w-4 h-4" />
           <input
-            placeholder="Search for layers"
+            placeholder="Search for groups"
             className="w-full border-none outline-none"
             value={searchedGroupTitle}
             onChange={(e) => setSearchedGroupTitle(e.target.value)}
