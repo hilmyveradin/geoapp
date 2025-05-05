@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import ControlledTable from "./ControlledTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
