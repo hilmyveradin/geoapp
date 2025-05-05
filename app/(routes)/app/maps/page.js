@@ -158,10 +158,10 @@ const MapsDashboard = () => {
             <Share2Icon className="w-4 h-4 cursor-pointer" />
           </div>
         ) : (
-          <div className="w-full overflow-x-auto">
-            <MapsButtons />
-          </div>
         )} */}
+        <div className="w-full overflow-x-auto">
+          <MapsButtons />
+        </div>
       </div>
       {/* Pagination */}
       {filteredMaps.length > 0 ? (

@@ -7,8 +7,7 @@
     "build": "NODE_ENV=production next build",
     "build:local": "NODE_ENV=local next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "symlink-dir node_modules/cesium/Build/Cesium public/cesium"
+    "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -38,7 +37,6 @@
     "ace-builds": "^1.33.2",
     "ag-grid-react": "^31.1.1",
     "autoprefixer": "10.4.14",
-    "cesium": "^1.120.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",

@@ -124,8 +124,8 @@ const MenuCardDropdown = ({ children, cardData }) => {
             <p>View item details</p>
           </button>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild onClick={handleDropdownClick}>
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuItem asChild onClick={handleDropdownClick}>
           <ChangePropDialog
             changePropType={cardData.cardType}
             objectUid={cardData.cardUid}
@@ -139,7 +139,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
               <p>Change properties</p>
             </button>
           </ChangePropDialog>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         {/* <DropdownMenuItem asChild onClick={handleDropdownClick}>
           <button className="flex w-full">
             <img
@@ -150,7 +150,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
             <p>Share</p>
           </button>
         </DropdownMenuItem> */}
-        <DropdownMenuItem asChild onClick={handleDropdownClick}>
+        {/* <DropdownMenuItem asChild onClick={handleDropdownClick}>
           <DestructiveDialog
             title={`Are you sure you want to delete this ${cardData.cardType}`}
             description="This action cannot be undone"
@@ -162,7 +162,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
               <p>{`Delete ${cardData.cardType}`}</p>
             </button>
           </DestructiveDialog>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

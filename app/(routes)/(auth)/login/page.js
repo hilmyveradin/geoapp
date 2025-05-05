@@ -63,7 +63,7 @@ const Login = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Image
-              src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoportal-logo.svg`}
+              src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoapp-logo.svg`}
               alt="logo"
               width={120}
               height={40}
@@ -71,7 +71,7 @@ const Login = () => {
             />
           </div>
           <CardTitle className="text-2xl font-bold text-center">
-            Welcome to Geoportal
+            Welcome to Geoapp
           </CardTitle>
         </CardHeader>
         <CardContent>

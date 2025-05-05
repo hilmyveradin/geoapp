@@ -134,7 +134,9 @@ const LayersDashboard = () => {
 
   return (
     <div className="w-full h-full px-8 mt-4">
-      <div className="mb-4"></div>
+      <div className="mb-4">
+        <LayersButtons />
+      </div>
       {/* Pagination */}
       {filteredLayers.length > 0 ? (
         <ClientPagination data={filteredLayers} />

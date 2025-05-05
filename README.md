@@ -1,4 +1,4 @@
-# Geoportal Web App Repository
+# GeoApp Web App Repository
 
 ## Getting Started
 

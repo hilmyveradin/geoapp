@@ -101,11 +101,11 @@ const AppHeader = () => {
     <div className="fixed inset-0 bg-white z-50 animate-fadeIn">
       <div className="flex flex-col h-full p-6">
         <div className="flex justify-between items-center mb-8">
-          <img
-            src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoportal-logo.svg`}
-            alt="Geoportal"
+          {/* <img
+            src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoapp-logo.svg`}
+            alt="GeoApp"
             className="h-8"
-          />
+          /> */}
           <button onClick={() => setIsMobileMenuOpen(false)} className="p-2">
             <X className="h-6 w-6" />
           </button>
@@ -137,7 +137,7 @@ const AppHeader = () => {
             </Link>
           ))}
 
-          {MOBILE_NAV_ITEMS.map((item, index) => (
+          {/* {MOBILE_NAV_ITEMS.map((item, index) => (
             <Link
               key={`mobile-menu-item-${index}`}
               href={item.path}
@@ -152,7 +152,7 @@ const AppHeader = () => {
               <span className="mr-4">{item.icon}</span>
               {item.name}
             </Link>
-          ))}
+          ))} */}
         </nav>
 
         <button
@@ -170,11 +170,11 @@ const AppHeader = () => {
     <header className="shadow-lg">
       <div className="flex items-center justify-between w-full h-16 px-4 md:px-6">
         <div className="flex items-center">
-          <img
-            src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoportal-logo.svg`}
+          {/* <img
+            src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoapp-logo.svg`}
             alt="logo"
             className="w-20 md:w-28"
-          />
+          /> */}
         </div>
         <nav className="hidden md:flex items-center justify-center gap-6">
           {NAVIGATION_ITEMS.map((item, index) => (
@@ -222,7 +222,7 @@ const AppHeader = () => {
               >
                 Group
               </DropdownMenuItem> */}
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator /> */}
               <DropdownMenuItem
                 className="text-red-500 font-semibold hover:text-red-400"
                 onClick={handleSignOut}

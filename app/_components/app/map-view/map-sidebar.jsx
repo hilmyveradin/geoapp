@@ -78,7 +78,7 @@ const MapSidebar = () => {
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
     layers: <LayersContent />,
-    basemap: <BaseMapContent />,
+    // basemap: <BaseMapContent />,
   };
 
   const handleButtonClick = (buttonName) => {
@@ -142,7 +142,7 @@ const MapSidebar = () => {
           </Button>
         </TooltipText>
 
-        <TooltipText content="Basemap" side="right" align="start">
+        {/* <TooltipText content="Basemap" side="right" align="start">
           <Button
             variant="ghost"
             onClick={() => handleButtonClick("basemap")}
@@ -160,7 +160,7 @@ const MapSidebar = () => {
               <span className="inline-block ml-2">Basemap</span>
             )}
           </Button>
-        </TooltipText>
+        </TooltipText> */}
 
         {/* <Button
           variant="ghost"

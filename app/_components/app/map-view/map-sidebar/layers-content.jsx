@@ -160,10 +160,8 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     setChangedLayerStyleUid,
   } = useMapViewStore();
 
-  const {
-    expandedRightSidebarContent,
-    setExpandedRightSidebarContent
-  } = useMapSidebarStore();
+  const { expandedRightSidebarContent, setExpandedRightSidebarContent } =
+    useMapSidebarStore();
 
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -421,7 +419,7 @@ const MultiLayerSelection = ({ resetCtrlPressed }) => {
       >
         <Trash2 className="w-3 h-3 cursor-pointer" />
       </DestructiveDialog>
-      <button
+      {/* <button
         onClick={(e) => {
           hideShowAction();
           e.stopPropagation();
@@ -432,7 +430,7 @@ const MultiLayerSelection = ({ resetCtrlPressed }) => {
         ) : (
           <EyeOff className="w-3 h-3" />
         )}
-      </button>
+      </button> */}
     </div>
   );
 };
@@ -516,7 +514,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
           {item.name}
         </button>
       ))}
-      <ChangePropDialog
+      {/* <ChangePropDialog
         changePropType="layer"
         objectUid={layer.layerUid}
         initialTitle={layer.layerTitle}
@@ -527,7 +525,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
           <PencilIcon className="w-3 h-3 stroke-2" />
           Change properties
         </button>
-      </ChangePropDialog>
+      </ChangePropDialog> */}
 
       {mapData.mapType === "map" && mapLayers.length > 0 && (
         <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
