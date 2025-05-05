@@ -6,6 +6,8 @@ import useLayerManager from "@/helpers/hooks/useLayerManager";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 import usePopUpManager from "@/helpers/hooks/usePopUpManager";
 import useHighlightManager from "@/helpers/hooks/useHighlightManager";
+import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
+import useMapControlManager from "@/helpers/hooks/useMapControlManager";
 
 const MapMain = () => {
   const mapContainerRef = useRef(null);
@@ -15,9 +17,12 @@ const MapMain = () => {
   useZoomToLayer();
   usePopUpManager();
   useHighlightManager();
+  useMapControlManager();
 
   const { setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox } =
     useMapViewStore();
+
+  const { showRightSidebar } = useMapRightSidebar();
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
@@ -46,9 +51,6 @@ const MapMain = () => {
     });
 
     setMap(mapRef.current);
-    const navControl = new maplibregl.NavigationControl();
-    navControl._container.className += " absolute right-12"; // Tailwind class for right 100px
-    mapRef.current.addControl(navControl, "top-right");
     mapRef.current.on("load", () => {
       setMapLoaded(true);
       mapRef.current.getCanvas().style.cursor = "crosshair"; // Set the cursor to crosshair
