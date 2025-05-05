@@ -55,7 +55,6 @@ export function Dropzone({
   };
 
   const handleButtonClick = () => {
-    debugger;
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }

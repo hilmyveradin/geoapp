@@ -10,7 +10,8 @@ import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { Loader2 } from "lucide-react";
 
 const MapView = ({ params }) => {
-  const mapUid = params.slug;
+  const mapType = params.slug[0];
+  const mapUid = params.slug[1];
 
   const { mapData, layersData, setMapData, setSelectedLayers, setLayersData } =
     useMapViewStore();
@@ -64,8 +65,38 @@ const MapView = ({ params }) => {
       }
     }
 
-    loadMapData();
-  }, [mapUid, setLayersData, setMapData, setSelectedLayers]);
+    async function loadLayerData() {
+      try {
+        const response = await fetch(`/api/get-layer-id?layerUid=${mapUid}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const datas = await response.json();
+        const modifiedDatas = datas.data.map((data) => {
+          return {
+            ...data,
+            mapBbox: data.layerBbox,
+            mapTitle: data.layerTitle,
+            imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
+          };
+        });
+        setSelectedLayers(modifiedDatas);
+        setLayersData(modifiedDatas);
+        setMapData(modifiedDatas[0]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (mapType === "map") {
+      loadMapData();
+    } else {
+      loadLayerData();
+    }
+  }, [mapType, mapUid, setLayersData, setMapData, setSelectedLayers]);
 
   if (!mapData && !layersData)
     return (
