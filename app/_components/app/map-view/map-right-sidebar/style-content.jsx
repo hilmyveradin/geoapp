@@ -901,9 +901,13 @@ const SliderComponent = (props) => {
         ? numSliderValue + numStepValue
         : numSliderValue - numStepValue;
 
-    return Number.isInteger(stepValue)
+    const changedValue = Number.isInteger(stepValue)
       ? newValue
       : parseFloat(newValue.toFixed(1));
+
+    setParentSliderValue([changedValue]);
+
+    return changedValue;
   };
 
   const generateSliderValue = () => {
