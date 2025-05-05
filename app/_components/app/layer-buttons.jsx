@@ -62,7 +62,7 @@ const LayersButtons = () => {
   }, [files, toast]);
 
   return (
-    <div className="flex items-center justify-between w-full mb-4">
+    <div className="flex items-center justify-between w-full">
       <Button variant="secondary" className="flex gap-2">
         <Filter className="w-5 h-5" fill="#006236" />
         Filter
