@@ -47,7 +47,10 @@ jobs:
           script: |
             source ~/.bashrc || source ~/.profile
             cd /home/ubuntu/var/www/geoportal/geoportal-webapp
-            git pull origin main
+            # Stash pnpm-lock.yaml changes to prevent merge conflicts
+            git stash push -m "Stash pnpm-lock.yaml" -- pnpm-lock.yaml
+            git pull origin main --rebase
             /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm install
             /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm build
+            # Use pm2 to start or restart the application
             /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pm2 start /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm --name "geoportal" -- start || /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pm2 restart geoportal -f
