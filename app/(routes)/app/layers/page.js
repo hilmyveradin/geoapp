@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -91,9 +89,7 @@ const LayersDashboard = () => {
         </Dialog>
       </div>
       {/* Pagination */}
-      <ClientPagination
-        data={layersData}
-      />
+      <ClientPagination data={layersData} />
     </div>
   );
 };

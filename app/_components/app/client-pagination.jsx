@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
+import React, { useState } from "react";
 import MenuCard from "@/app/_components/app/menu-card";
 import {
   Pagination,
@@ -11,60 +10,62 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
 
-export default function ClientPagination({data, ...props}) {
-	const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(6);
+export default function ClientPagination({ data, ...props }) {
+  const [currentPage, setCurrentPage] = useState(1);
 
   const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
 
-	const lastPostIndex = currentPage * postsPerPage;
+  const postsPerPage = 6;
+  const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = data.slice(firstPostIndex, lastPostIndex);
 
-	return (
-		<> {currentPosts.length > 0 ? (
-			<>
-				<div class="sm:grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 flex flex-col">
-					{currentPosts.map((currentPosts) => {
-						const user = {
-							fullName: currentPosts.creator,
-							avatar: currentPosts.creator,
-						};
-						return (
-							<MenuCard 
-								key={currentPosts.layer_id} 
-								source={`${IMAGE_BASE_URL}/gs/thumbnail/${currentPosts.thumbnail_url}`}
-								title={currentPosts.layer_title}
-								user={user}
-							/>
-						);
-					})}
-				</div>
-        <div className="pt-2">
-          <PaginationSection
-            totalPosts={data.length}
-            postsPerPage={postsPerPage}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
-			</>
-			) : (
-				<div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10 w-full p-10"></div>
-			)}
-		</>
-	);
+  return (
+    <>
+      {" "}
+      {currentPosts.length > 0 ? (
+        <>
+          <div class="sm:grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 flex flex-col">
+            {currentPosts.map((currentPosts) => {
+              const user = {
+                fullName: currentPosts.creator,
+                avatar: currentPosts.creator,
+              };
+              return (
+                <MenuCard
+                  key={currentPosts.layer_id}
+                  source={`${IMAGE_BASE_URL}/gs/thumbnail/${currentPosts.thumbnail_url}`}
+                  title={currentPosts.layer_title}
+                  user={user}
+                />
+              );
+            })}
+          </div>
+          <div className="pt-2">
+            <PaginationSection
+              totalPosts={data.length}
+              postsPerPage={postsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        </>
+      ) : (
+        <div className="grid w-full gap-10 p-10 sm:grid-cols-2 md:grid-cols-3"></div>
+      )}
+    </>
+  );
 }
 
 function PaginationSection({
-	totalPosts,
+  totalPosts,
   postsPerPage,
   currentPage,
   setCurrentPage,
 }) {
-	const pageNumbers = [];
+  const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
   }
@@ -126,8 +127,8 @@ function PaginationSection({
 
     return renderedPages;
   };
-	return (
-		<div>
+  return (
+    <div>
       <Pagination>
         <PaginationContent>
           <PaginationItem>
@@ -142,5 +143,5 @@ function PaginationSection({
         </PaginationContent>
       </Pagination>
     </div>
-	);
+  );
 }
