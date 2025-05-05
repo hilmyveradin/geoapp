@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import UserAvatar from "../shared/user-avatar";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 
 const MapHeader = () => {
   const { mapData, setMapData, setMapLayers } = useMapViewStore();

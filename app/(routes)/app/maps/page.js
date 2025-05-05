@@ -2,11 +2,10 @@
 
 import ClientPagination from "@/app/_components/app/client-pagination";
 import MapsButtons from "@/app/_components/app/map-buttons";
-import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
-import ReusableAlertDialog from "@/app/_components/shared/DestructiveDialog";
+import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
 import { useToast } from "@/components/ui/use-toast";
-import useCardStore from "@/helpers/hooks/store/useCardStore";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useCardStore from "@/helpers/hooks/store/use-card-store";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import { X } from "lucide-react";
 import { Share2Icon } from "lucide-react";
 import { Trash2 } from "lucide-react";

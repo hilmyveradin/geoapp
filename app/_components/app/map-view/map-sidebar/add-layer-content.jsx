@@ -9,10 +9,10 @@ import { useEffect } from "react";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
-import TooltipText from "@/app/_components/shared/tooltipText";
+import TooltipText from "@/app/_components/shared/tooltip-text";
 import { useToast } from "@/components/ui/use-toast";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import useUpdateLayer from "@/helpers/hooks/useUpdateLayer";
+import useUpdateLayer from "@/helpers/hooks/use-update-layer";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 
 const AddLayersContent = () => {
   const { toast } = useToast();

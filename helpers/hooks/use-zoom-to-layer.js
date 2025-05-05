@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useMapViewStore from "./store/useMapViewStore";
+import useMapViewStore from "./store/use-map-view-store";
 
 const useZoomToLayer = () => {
   const { mapLoaded, map, zoomedLayerBbox, setZoomedLayerBbox } =

@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import useLayerManager from "@/helpers/hooks/useLayerManager";
-import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
-import usePopUpManager from "@/helpers/hooks/usePopUpManager";
-import useHighlightManager from "@/helpers/hooks/useHighlightManager";
-import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
-import useMapControlManager from "@/helpers/hooks/useMapControlManager";
-import GeojsonCard from "../geojson-card/GeojsonCard";
 import { cn } from "@/lib/utils";
 import Draggable from "react-draggable";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import useLayerManager from "@/helpers/hooks/use-layer-manager";
+import useZoomToLayer from "@/helpers/hooks/use-zoom-to-layer";
+import usePopUpManager from "@/helpers/hooks/use-popup-manager";
+import useHighlightManager from "@/helpers/hooks/use-highlight-manager";
+import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
+import useMapControlManager from "@/helpers/hooks/use-map-control-manager";
+import GeojsonCard from "../geojson-card/geojson-card";
 
 const MapMain = () => {
   const [bounds, setBounds] = useState({

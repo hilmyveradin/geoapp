@@ -9,9 +9,9 @@ import { FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import FieldAliasContent from "./map-right-sidebar/field-alias-content";
 import StyleContent from "./map-right-sidebar/style-content";
-import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
 import FilterContent from "./map-right-sidebar/filter-content";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 
 const MapRightSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);

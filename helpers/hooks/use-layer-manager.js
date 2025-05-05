@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import useMapViewStore from "./store/useMapViewStore";
+import useMapViewStore from "./store/use-map-view-store";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";

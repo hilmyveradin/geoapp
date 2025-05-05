@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import useMapViewStore from "./store/useMapViewStore";
-import useMapSidebarStore from "./store/useMapSidebarStore";
+import useMapViewStore from "./store/use-map-view-store";
+import useMapSidebarStore from "./store/use-map-sidebar-store";
 import MapLibreGL from "maplibre-gl";
 
 const useMapControlManager = () => {

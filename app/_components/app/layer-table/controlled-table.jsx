@@ -2,9 +2,9 @@ import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 // import "ag-grid-community/styles/ag-grid.css";
 // import "ag-grid-community/styles/ag-theme-material.css";
-import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useZoomToLayer from "@/helpers/hooks/use-zoom-to-layer";
 import "./styles.css";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 
 const LoadingBlock = ({ getRows, pageSize, startRow, onLoaded }) => {
   const [rows, setRows] = useState();

@@ -14,8 +14,8 @@ import {
 import { Dropzone } from "@/components/ui/dropzone";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
-import useSearchQueryStore from "@/helpers/hooks/store/useSearchQueryStore";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
+import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
 
 const LayersButtons = () => {
   const { toast } = useToast();
@@ -68,7 +68,7 @@ const LayersButtons = () => {
             toast({
               title: "ERROR",
               description: error.message,
-              variant: "destructive"
+              variant: "destructive",
             });
           } finally {
             setUploadProgress(false); // Reset progress on error
@@ -98,7 +98,7 @@ const LayersButtons = () => {
         Filter
       </Button> */}
       <div className="flex justify-center w-full">
-        <div className="flex items-center gap-2 py-2 pl-2 pr-3 mr-3 bg-white rounded-lg w-full" >
+        <div className="flex items-center gap-2 py-2 pl-2 pr-3 mr-3 bg-white rounded-lg w-full">
           <Search className="w-4 h-4" />
           <input
             placeholder="Search for layers"
@@ -129,7 +129,7 @@ const LayersButtons = () => {
             </DialogHeader>
           </DialogContent>
         </Dialog>
-          {/* <Button variant="secondary" className="flex gap-2">
+        {/* <Button variant="secondary" className="flex gap-2">
             <ArrowDownWideNarrow className="w-5 h-5" />
             Sort By
           </Button> */}

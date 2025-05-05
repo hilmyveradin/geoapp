@@ -10,7 +10,7 @@ import {
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 import { cn } from "@/lib/utils";
 import { PencilIcon } from "lucide-react";
 import { X } from "lucide-react";
