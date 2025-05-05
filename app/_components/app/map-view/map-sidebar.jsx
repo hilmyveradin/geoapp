@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import PaginationLayerTable from "../layer-table/PaginationLayerTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import TooltipText from "@/app/_components/shared/tooltipText";
 import {
@@ -38,9 +38,24 @@ const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
-  const { tableLoaded, setTableLoaded, mapData, layerInfo, mapClicked, setMapClicked } = useMapViewStore();
-  const {ftsQuery, setFtsQuery, reloadTable, setReloadTable, setSearchSubmit} = useTableQueryStore();
-  const {showRightSidebar, expandedRightSidebarButtons} = useMapRightSidebar();
+  const {
+    tableLoaded,
+    setTableLoaded,
+    mapData,
+    layerInfo,
+    mapClicked,
+    setMapClicked,
+    setHighlightedLayer,
+  } = useMapViewStore();
+  const {
+    ftsQuery,
+    setFtsQuery,
+    reloadTable,
+    setReloadTable,
+    setSearchSubmit,
+  } = useTableQueryStore();
+  const { showRightSidebar, expandedRightSidebarButtons } =
+    useMapRightSidebar();
 
   const handleFtsQuery = (e) => {
     // Destructure the name and value from
@@ -239,12 +254,9 @@ const MapSidebar = () => {
           className={cn(
             "fixed rounded-md top-[58vh] h-[calc(100vh-60vh-24px)] pb-8 z-10 left-[60px] w-[calc(100vw-60px-60px)]",
             {
-              "left-[172px] w-[calc(100vw-172px-60px)]":
-                showSidebar,
-              "left-[60px] w-[calc(100vw-60px-124px)]":
-                showRightSidebar,
-              "left-[300px] w-[calc(100vw-300px-60px)]":
-                expandedSidebarButtons,
+              "left-[172px] w-[calc(100vw-172px-60px)]": showSidebar,
+              "left-[60px] w-[calc(100vw-60px-124px)]": showRightSidebar,
+              "left-[300px] w-[calc(100vw-300px-60px)]": expandedSidebarButtons,
               "left-[60px] w-[calc(100vw-60px-300px)]":
                 expandedRightSidebarButtons,
 
@@ -268,25 +280,36 @@ const MapSidebar = () => {
               "left-[172px] w-[calc(100vw-172px-364px)]":
                 showSidebar && showRightSidebar && expandedRightSidebarButtons,
               "left-[412px] w-[calc(100vw-412px-300px)]":
-                showSidebar && expandedSidebarButtons && expandedRightSidebarButtons,
+                showSidebar &&
+                expandedSidebarButtons &&
+                expandedRightSidebarButtons,
 
               "left-[300px] w-[calc(100vw-300px-364px)]":
-                showRightSidebar && expandedSidebarButtons && expandedRightSidebarButtons,
+                showRightSidebar &&
+                expandedSidebarButtons &&
+                expandedRightSidebarButtons,
 
               "left-[412px] w-[calc(100vw-416px-364px)]":
-                showSidebar && expandedSidebarButtons && showRightSidebar && expandedRightSidebarButtons,
+                showSidebar &&
+                expandedSidebarButtons &&
+                showRightSidebar &&
+                expandedRightSidebarButtons,
             }
           )}
         >
           <div className="flex items-center justify-between pl-4 bg-white">
             <div className="w-1/2 pr-4">
-              <TooltipText content={layerInfo.layerTitle} side="top" align="start">
+              <TooltipText
+                content={layerInfo.layerTitle}
+                side="top"
+                align="start"
+              >
                 <p className="text-base font-bold truncate cursor-pointer">
                   {layerInfo.layerTitle}
                 </p>
               </TooltipText>
             </div>
-            <Textarea 
+            <Textarea
               placeholder="Put search query here..."
               className="h-[40px] m-[4px]"
               onChange={handleFtsQuery}
@@ -310,6 +333,7 @@ const MapSidebar = () => {
               onClick={() => {
                 setTableLoaded(false);
                 setReloadTable(false);
+                setHighlightedLayer(null);
               }}
             >
               <X />
@@ -320,19 +344,13 @@ const MapSidebar = () => {
       )}
       {mapClicked && (
         <div
-          className={cn(
-            "fixed z-10 top-[68px] left-[60px]",
-            {
-              "left-[300px]":
-                expandedSidebarButtons,
-              "left-[172px]":
-                showSidebar,
-              "left-[412px]":
-                expandedSidebarButtons && showSidebar,
-            }
-          )}
+          className={cn("fixed z-10 top-[68px] left-[60px]", {
+            "left-[300px]": expandedSidebarButtons,
+            "left-[172px]": showSidebar,
+            "left-[412px]": expandedSidebarButtons && showSidebar,
+          })}
         >
-          <GeojsonCard/>
+          <GeojsonCard />
         </div>
       )}
       {/* TODO: Add this sidebar div <div

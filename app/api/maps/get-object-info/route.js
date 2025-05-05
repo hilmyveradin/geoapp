@@ -1,25 +1,29 @@
-import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   const mapUid = request.nextUrl.searchParams.get("mapUid");
+
   try {
     const body = await request.json();
     const { layer_uid, coord, zoomLevel } = body;
     const session = await getServerSession(authOptions);
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/${mapUid}/object_info`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify({ 
-        layer_uid: layer_uid, 
-        coord: coord, 
-        zoomLevel: zoomLevel
-      }),
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/cms/map/${mapUid}/object_info`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: JSON.stringify({
+          layer_uid: layer_uid,
+          coord: coord,
+          zoomLevel: zoomLevel,
+        }),
+      }
+    );
 
     if (!res.ok) {
       console.error(

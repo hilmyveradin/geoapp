@@ -4,7 +4,7 @@ import { AgGridReact } from "ag-grid-react";
 // import "ag-grid-community/styles/ag-theme-material.css";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import "./styles.css"
+import "./styles.css";
 
 const LoadingBlock = ({ getRows, pageSize, startRow, onLoaded }) => {
   const [rows, setRows] = useState();
@@ -49,7 +49,8 @@ const ControlledTable = ({
   const [gridApi, setGridApi] = useState();
   const [loadingBlocks, setLoadingBlocks] = useState([]);
   let paginationProps = {};
-  const { layerInfo, setZoomedLayerBbox } = useMapViewStore();
+  const { layerInfo, setZoomedLayerBbox, setHighlightedLayer } =
+    useMapViewStore();
   useZoomToLayer();
   const autoSizeStrategy = useMemo(() => {
     return {
@@ -205,6 +206,7 @@ const ControlledTable = ({
         });
         const data = await response.json();
         setZoomedLayerBbox(data.bbox);
+        setHighlightedLayer(data.data);
       } catch (error) {
         console.log(error);
       }

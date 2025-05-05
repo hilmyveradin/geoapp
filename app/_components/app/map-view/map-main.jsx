@@ -5,6 +5,7 @@ import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useLayerManager from "@/helpers/hooks/useLayerManager";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 import usePopUpManager from "@/helpers/hooks/usePopUpManager";
+import useHighlightManager from "@/helpers/hooks/useHighlightManager";
 
 const MapMain = () => {
   const mapContainerRef = useRef(null);
@@ -13,6 +14,7 @@ const MapMain = () => {
   useLayerManager();
   useZoomToLayer();
   usePopUpManager();
+  useHighlightManager();
 
   const { setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox } =
     useMapViewStore();
