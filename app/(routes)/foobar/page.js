@@ -1,82 +1,99 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 
 const MapComponent = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
+  // Define your specific bounding box [minLng, minLat, maxLng, maxLat]
+  const layerBbox = [
+    110.65032196044922, -7.593528747558594, 110.72122192382812,
+    -7.5570068359375,
+  ];
+
   useEffect(() => {
-    if (mapContainerRef.current) {
-      const map = new maplibregl.Map({
-        container: mapContainerRef.current,
-        style:
-          "https://api.maptiler.com/maps/streets/style.json?key=m1WUaSbdmuu7fm4re8lf",
-        center: [106.86522, -10.40108],
-        zoom: 4,
-      });
-
-      new maplibregl.Marker().setLngLat([1006, -5]).addTo(map);
-
-      map.on("load", function () {
-        const popup = new maplibregl.Popup({ closeOnClick: false });
-        popup.setLngLat([106.8272291, -6.175392]);
-        // popup.setHTML("<h1>Ini Monas!</h1>");
-        // popup.addTo(map);
-
-        map.addControl(
-          new maplibregl.GeolocateControl({
-            positionOptions: {
-              enableHighAccuracy: true,
-            },
-            trackUserLocation: true,
-          }),
-          "bottom-right"
-        );
-
-        map.addControl(new maplibregl.NavigationControl(), "top-right");
-      });
-      map.on("load", () => {
-        const layers = map.getStyle().layers;
-        // Find the index of the first symbol layer in the map style
-        let firstSymbolId;
-        for (let i = 0; i < layers.length; i++) {
-          if (layers[i].type === "symbol") {
-            firstSymbolId = layers[i].id;
-            break;
-          }
-        }
-        map.addSource("wms-layer", {
-          type: "raster",
-          tiles: [
-            `http://dev3.webgis.co.id/geoserver/wms?VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=magang:BANGUNAN_AR_25K&STYLES=&SRS=EPSG:3857&CRS=EPSG:3857&TILED=true&WIDTH=512&HEIGHT=512&BBOX={bbox-epsg-3857}`,
-          ],
-
-          tileSize: 256,
-        });
-        map.addLayer(
-          {
-            id: "wms-layer",
+    mapRef.current = new maplibregl.Map({
+      container: mapContainerRef.current,
+      style: {
+        version: 8,
+        sources: {
+          "osm-tiles": {
             type: "raster",
-            source: "wms-layer",
-            // This is the important part of this example: the addLayer
-            // method takes 2 arguments: the layer as an object, and a string
-            // representing another layer's name. if the other layer
-            // exists in the stylesheet already, the new layer will be positioned
-            // right before that layer in the stack, making it possible to put
-            // 'overlays' anywhere in the layer stack.
-            // Insert the layer beneath the first symbol layer.
+            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+            tileSize: 256,
+            attribution: "©️ OpenStreetMap contributors",
           },
-          firstSymbolId
-        );
-      });
+        },
+        layers: [
+          {
+            id: "osm-tiles-layer",
+            type: "raster",
+            source: "osm-tiles",
+          },
+        ],
+      },
+      center: [60, 70], // starting position
+      zoom: 2, // starting zoom
+    });
 
-      return () => map.remove();
-    }
+    mapRef.current.addControl(new maplibregl.NavigationControl());
+
+    mapRef.current.on("load", () => {
+      addLayerAndSources();
+      mapRef.current.on("move", () => checkLayerVisibility());
+    });
+
+    return () => mapRef.current.remove(); // Cleanup on unmount
   }, []);
 
-  return <div ref={mapContainerRef} className="w-1/2 h-1/2" />;
+  const checkLayerVisibility = () => {
+    const mapBounds = mapRef.current.getBounds();
+    console.log("MAP BOUNDS: ", mapBounds.getWest());
+    // Check if the map view is within the specified bounding box
+    if (
+      mapBounds.getWest() > layerBbox[0] &&
+      mapBounds.getSouth() > layerBbox[1] &&
+      mapBounds.getEast() < layerBbox[2] &&
+      mapBounds.getNorth() < layerBbox[3]
+    ) {
+      // If within the bounding box, set the layer to visible
+      mapRef.current.setLayoutProperty("testing", "visibility", "visible");
+    } else {
+      // If outside the bounding box, set the layer to hidden
+      mapRef.current.setLayoutProperty("testing", "visibility", "none");
+    }
+  };
+
+  const addLayerAndSources = () => {
+    if (mapRef.current.getLayer("testing") === undefined) {
+      mapRef.current.addSource("testSource", {
+        type: "raster",
+        tiles: [
+          "http://103.6.53.254:11790/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=geocms%3A_33b1_5rd_ln_sr_energi_kecamatansawit_2021_aspbq&bbox=110.65032196044922%2C-7.593528747558594%2C110.72122192382812%2C-7.5570068359375&width=768&height=395&srs=EPSG%3A4326&styles=&format=image%2Fpng",
+        ],
+        maxZoom: 40,
+      });
+
+      mapRef.current.addLayer({
+        id: "testing",
+        type: "raster",
+        source: "testSource",
+        paint: {},
+        layout: {
+          visibility: "none",
+        },
+      });
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center w-screen h-screen bg-blue-300">
+      <div ref={mapContainerRef} className="w-1/2 h-1/2" />
+    </div>
+  );
 };
 
 export default MapComponent;
