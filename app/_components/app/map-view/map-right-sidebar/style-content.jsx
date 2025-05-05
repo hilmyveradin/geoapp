@@ -28,6 +28,7 @@ import { Cross } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { useInsertionEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 const StyleContent = () => {
   const { mapLayers, selectedPopupLayer, setSelectedPopupLayer } =
@@ -121,7 +122,13 @@ const StyleContent = () => {
     setPointStyle(value);
   };
 
-  if (!selectedPopupLayer) {
+  if (isFetching) {
+    <div className="flex items-center justify-center w-full h-full">
+      <Loader2 className="w-5 h-5 stroke-blackHaze-500 animate-spin" />
+    </div>;
+  }
+
+  if (!selectedPopupLayer || !initialStyle) {
     return null;
   }
 
@@ -183,8 +190,8 @@ const StyleContent = () => {
         <>
           <p className="font-bold">Fill Color</p>
           <ColorComponent
-            color={fillColor}
-            setColorChange={handleFillColorChange}
+            initialColorValue={initialStyle.properties.fillColor}
+            setParentColortValue={handleFillColorChange}
           />
         </>
       )}
@@ -193,8 +200,8 @@ const StyleContent = () => {
         <>
           <p className="font-bold">Line Color</p>
           <ColorComponent
-            color={lineColor}
-            setColorChange={handleLineColorChange}
+            initialColorValue={initialStyle.properties.lineColor}
+            setParentColortValue={handleLineColorChange}
           />
         </>
       )}
@@ -391,11 +398,18 @@ const SymbolComponent = (props) => {
 };
 
 const ColorComponent = (props) => {
-  const { color, setColorChangem, initialStyle } = props;
+  const { setParentColortValue, initialColorValue } = props;
+
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleChangeComplete = (color) => {
-    setColorChange(color.hex);
+  const [color, setColor] = useState();
+
+  useEffect(() => {
+    setColor(initialColorValue);
+  }, [initialColorValue]);
+
+  const handleDoneChangeColor = () => {
+    setParentColortValue(color.hex);
   };
 
   const handlePickerClick = (event) => {
@@ -434,8 +448,8 @@ const ColorComponent = (props) => {
             <span className="font-bold">Select color</span>
             <X onClick={handleClose} className="w-5 h-5 cursor-pointer" />
           </div>
-          <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
-          <Button onClick={handleClose}>Done</Button>
+          <SketchPicker color={color} onChangeComplete={setColor} />
+          <Button onClick={handleDoneChangeColor}>Done</Button>
         </div>
       )}
     </div>
