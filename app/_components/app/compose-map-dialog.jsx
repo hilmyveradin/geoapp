@@ -26,7 +26,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const ComposeMapDialog = (props) => {
   const { children } = props;
 
-  const [LayersData, setLayersData] = useState();
+  const [layersData, setLayersData] = useState();
 
   const [titleValue, setTitleValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
@@ -53,7 +53,14 @@ const ComposeMapDialog = (props) => {
         }
         const temp = await response.json();
 
-        setLayersData(temp.data);
+        const tempLayers = temp.data.map((data) => {
+          return {
+            ...data,
+            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+          };
+        });
+
+        setLayersData(tempLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
@@ -79,8 +86,8 @@ const ComposeMapDialog = (props) => {
   }, [openSearchCommand]);
 
   useEffect(() => {
-    if (LayersData) {
-      const filteredAndSorted = localLayersData
+    if (layersData) {
+      const filteredAndSorted = layersData
         .filter((user) => {
           return !selectedLayersData.some(
             (selected) =>
@@ -100,7 +107,7 @@ const ComposeMapDialog = (props) => {
   };
 
   const handleLayerSelection = (data) => {
-    const layerData = localLayersData.find(
+    const layerData = layersData.find(
       (layer) => layer.layer_uid.toLowerCase() === data
     );
 
@@ -281,7 +288,7 @@ const ComposeMapDialog = (props) => {
                 />
                 {openSearchCommand && (
                   <CommandGroup className="command-group-class absolute right-0 mr-[20] mt-[50px] max-h-[246px] w-full !overflow-y-auto rounded-lg border border-solid border-neutral-100 bg-neutral-50 shadow-lg z-[100]">
-                    {localLayersData?.map((data) => (
+                    {layersData?.map((data) => (
                       <CommandItem
                         key={data.layer_uid}
                         value={data.layer_uid}
@@ -323,9 +330,10 @@ export default ComposeMapDialog;
 
 const SearchLayerPills = (props) => {
   const { data } = props;
+  debugger;
   return (
     <div className="flex items-center w-full space-x-2">
-      <img src={data.thumbnaillUrl} alt="search pills" className="w-10 h-8" />
+      <img src={data.thumbnailUrl} alt="search pills" className="w-10 h-8" />
       <div className="flex flex-col space-y-2">
         <p className="max-w-full truncate">{data.layer_title}</p>
         <div className="flex items-center space-x-1">
