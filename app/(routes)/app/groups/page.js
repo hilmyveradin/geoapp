@@ -10,7 +10,7 @@ const GruopsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [groupsData, setGroupsData] = useState([]);
 
-  const { refetchGroups, toggleRefetchGroups } = useRefetchStore();
+  const { refetchGroups } = useRefetchStore();
 
   useEffect(() => {
     async function getGroupInfo(groupUid) {
