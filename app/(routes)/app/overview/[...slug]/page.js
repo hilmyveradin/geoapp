@@ -38,12 +38,14 @@ const MapOverview = ({ params }) => {
                 imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/thumbnail/${data.data[0].thumbnailUrl}`,
                 owner: data.data[0].creator,
                 mapType: overviewType,
+                mapUid: overviewUid,
               }
             : {
                 ...data.data,
                 imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/thumbnail/${data.data.thumbnailUrl}`,
                 owner: data.data.creator,
                 mapType: overviewType,
+                mapUid: overviewUid,
               };
 
         setMapData(modifiedData);
