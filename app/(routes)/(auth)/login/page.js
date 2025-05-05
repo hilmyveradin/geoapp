@@ -33,7 +33,7 @@ const Login = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      router.push("/app/dashboard");
+      router.push("/app/maps");
     } catch (error) {
       console.error("Error during fetch:", error.message);
     }

@@ -1,3 +1,5 @@
+// TODO: Delete this Sidebar when it's unnecessary
+
 "use client";
 
 import { getUserNameInitial } from "@/app/_helpers/stringHelpers";
