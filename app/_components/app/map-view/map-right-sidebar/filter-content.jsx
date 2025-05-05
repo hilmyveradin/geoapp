@@ -17,6 +17,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 import { Trash2 } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 const FilterContent = () => {
   const { mapLayers, selectedLayer, setSelectedLayer, setHighlightedLayer } =
@@ -29,12 +35,52 @@ const FilterContent = () => {
   const [isSavingChanges, setIsSavingChanges] = useState(false);
   const [ftsQueryInput, setFtsQueryInput] = useState("");
   const [savedFtsQuery, setSavedFtsQuery] = useState("");
+  const [availableFtsFields, setAvailableFtsFields] = useState();
+  const [openNumCollapsible, setOpenNumCollapsible] = useState(true);
+  const [openStrCollapsible, setOpenStrCollapsible] = useState(true);
 
   // useEffect(() => {
   //   if (!selectedLayer) {
   //     setSelectedLayer(mapLayers[0]);
   //   }
   // }, [mapLayers, selectedLayer, setSelectedLayer]);
+
+  useEffect(() => {
+    if (selectedLayer) {
+      async function prepFTS() {
+        try {
+          const body = JSON.stringify({
+            force: true,
+          });
+          const response = await fetch(
+            `/api/layers/set-fts-prep?layerUid=${selectedLayer.layerUid}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: body,
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          if (data.msg.toLowerCase().includes("ready for fts")) {
+            setAvailableFtsFields(data.data);
+          } else {
+            console.error("FTS Prep failed:", data.msg);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      prepFTS();
+    }
+  }, [selectedLayer]);
 
   useEffect(() => {
     const saveFilter = async () => {
@@ -154,7 +200,55 @@ const FilterContent = () => {
           setFtsQueryInput(e.target.value); // Correctly update the state based on event's target value
         }}
       />
-      <div className="h-full" />
+
+      <div className="flex flex-col h-full gap-2 overflow-y-auto">
+        <p className="text-lg font-semibold">Available Fields</p>
+        {availableFtsFields?.numFields && (
+          <div className="flex flex-col max-h-full gap-2">
+            <Collapsible
+              open={openNumCollapsible}
+              onOpenChange={setOpenNumCollapsible}
+            >
+              <CollapsibleTrigger className="flex items-center justify-between w-full px-1 py-1 border rounded-md shadow-md border-nileBlue-300">
+                <p className="font-semibold">Number fields</p>
+                <ChevronDown
+                  className={cn("w-4 h-4 transition-all", {
+                    "-rotate-180": openNumCollapsible,
+                  })}
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="flex flex-col gap-1 p-1 rounded-md">
+                {availableFtsFields.numFields.map((item, index) => (
+                  <p key={`${item}${index}`}>{`${item}`}</p>
+                ))}
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        )}
+
+        {availableFtsFields?.strFields && (
+          <div className="flex flex-col max-h-full gap-2">
+            <Collapsible
+              open={openStrCollapsible}
+              onOpenChange={setOpenStrCollapsible}
+            >
+              <CollapsibleTrigger className="flex items-center justify-between w-full px-1 py-1 border rounded-md shadow-md border-nileBlue-300">
+                <p className="font-semibold">String fields</p>
+                <ChevronDown
+                  className={cn("w-4 h-4 transition-all", {
+                    "-rotate-180": openStrCollapsible,
+                  })}
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="flex flex-col gap-1 p-1 rounded-md">
+                {availableFtsFields.strFields.map((item, index) => (
+                  <p key={`${item}${index}`}>{`${item}`}</p>
+                ))}
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        )}
+      </div>
 
       <Button
         className="font-bold border-none disabled:bg-neutral-100 disabled:text-neutral-400 disabled:opacity-100"

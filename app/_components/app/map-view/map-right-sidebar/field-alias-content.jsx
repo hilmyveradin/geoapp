@@ -62,7 +62,6 @@ const FieldAliasContent = () => {
           setIsFetching(false);
         }
       }
-
       fetchLayerData();
     }
   }, [selectedLayer]); // Make sure to include all dependencies here
