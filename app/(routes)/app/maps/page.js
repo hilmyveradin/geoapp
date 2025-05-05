@@ -85,24 +85,25 @@ const MapsDashboard = () => {
   }, [refetchMaps]);
 
   const deleteMaps = async () => {
-    const mapUids = selectedCards.map((e) => ({ map_uid: e }));
-    try {
-      const response = await fetch("/api/maps/delete-map", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mapUids: mapUids }),
-      });
+    // const mapUids = selectedCards.map((e) => ({ mapUid: e }));
+    selectedCards.forEach(async (mapUid) => {
+      try {
+        const response = await fetch(`/api/maps/delete-map?mapUid=${mapUid}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        toast({ title: "Success deleting maps", variant: "success" });
+        toggleRefetchMaps();
+        clearSelection();
+      } catch (error) {
+        console.error("Error during fetch:", error.message);
       }
-
-      toast({ title: "Success deleting maps", variant: "success" });
-      toggleRefetchMaps();
-      clearSelection();
-    } catch (error) {
-      console.error("Error during fetch:", error.message);
-    }
+    });
   };
 
   if (pageLoading) {
