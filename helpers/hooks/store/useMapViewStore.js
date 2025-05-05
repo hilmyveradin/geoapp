@@ -1,9 +1,18 @@
 import { create } from "zustand";
 
 const useMapViewStore = create((set) => ({
+  map: null,
+  mapLoaded: false,
   selectedLayers: null,
   mapData: null,
   layersData: null,
+
+  setMap: (data) => set(() => ({ map: data })),
+
+  setMapLoaded: (data) =>
+    set(() => ({
+      mapLoaded: data,
+    })),
 
   setMapData: (data) =>
     set(() => ({

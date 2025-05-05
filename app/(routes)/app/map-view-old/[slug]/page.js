@@ -10,7 +10,7 @@ import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 const MapView = ({ params }) => {
   const mapUid = params.slug;
 
-  const { mapData, layersData, setMapData, addLayersData, addSelectedLayers } =
+  const { mapData, layersData, setMapData, setSelectedLayers, setLayersData } =
     useMapViewStore();
 
   useEffect(() => {
@@ -28,8 +28,8 @@ const MapView = ({ params }) => {
           imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
         };
       });
-      addLayersData(modifiedDatas[0]);
-      addSelectedLayers(modifiedDatas[0]);
+
+      return modifiedDatas;
     }
 
     async function loadMapData() {
@@ -40,19 +40,29 @@ const MapView = ({ params }) => {
             "Content-Type": "application/json",
           },
         });
-        const datas = await response.json();
-        const modifiedDatas = datas.data;
-        modifiedDatas.mapLayerUid.forEach((layerUid) => {
-          getLayerUid(layerUid);
-        });
-        setMapData(modifiedDatas);
+
+        const responseData = await response.json();
+        const data = responseData.data;
+        // Create an array of promises
+        const layerDataPromises = data.mapLayerUid.map((layerUid) =>
+          getLayerUid(layerUid)
+        );
+        // Wait for all promises to resolve
+        const resolvedLayerDatas = await Promise.all(layerDataPromises);
+
+        // Flatten the array of arrays (if necessary) and set the state
+        const layerDatas = resolvedLayerDatas.flat(); // Use .flat() if each promise resolves to an array
+
+        setSelectedLayers(layerDatas);
+        setLayersData(layerDatas);
+        setMapData(data);
       } catch (error) {
         console.log(error);
       }
     }
 
     loadMapData();
-  }, [addLayersData, mapUid, setMapData]);
+  }, [mapUid, setLayersData, setMapData, setSelectedLayers]);
 
   if (!mapData && !layersData) return <div>Loading...</div>;
 
