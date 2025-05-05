@@ -9,7 +9,7 @@ import {
   Save,
   Share2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
 import AddLayersContent from "./map-sidebar/add-layer-content";
@@ -34,6 +34,10 @@ const MapSidebar = () => {
   const [showSidebarRight, setShowSidebarRight] = useState(true);
   const { tableLoaded, setTableLoaded, mapData, layerInfo } = useMapViewStore();
 
+  useEffect(() => {
+    setTableLoaded(true);
+  }, [setTableLoaded]);
+  
   // Define content for each button
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
