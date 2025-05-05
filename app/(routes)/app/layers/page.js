@@ -11,10 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Dropzone } from "@/components/ui/dropzone";
 import ClientPagination from "@/app/_components/app/client-pagination";
+import { useToast } from "@/components/ui/use-toast";
 
 const LayersDashboard = () => {
   const [files, setFiles] = useState([]);
   const [layersData, setLayersData] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(false);
+  const { toast } = useToast()
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -42,6 +45,7 @@ const LayersDashboard = () => {
   // Function to handle the change in uploaded files
   const handleFileChange = (newState) => {
     setFiles(newState);
+    setUploadProgress(true);
   };
 
   // remove this useEffect hook if you don't need to do anything with the uploaded files
@@ -57,17 +61,27 @@ const LayersDashboard = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const temp = await response.json();
-        console.log(temp);
+        toast ({
+          title: temp.status,
+          description: temp.msg
+        })
+        setUploadProgress(false); // Set progress to 100 upon completion
       } catch (error) {
         console.error("Error during fetch:", error.message);
+        toast ({
+          title: "ERROR",
+          description: error.message
+        })
+        setUploadProgress(false); // Reset progress on error
       }
     }
     if (files.length > 0) {
       const formData = new FormData();
       formData.append("vector_zip", files[0]);
       postVectorData(formData);
+      setFiles([])
     }
-  }, [files]);
+  }, [files, toast]);
 
   return (
     <div className="px-6">
@@ -76,13 +90,15 @@ const LayersDashboard = () => {
           <DialogTrigger asChild>
             <Button variant="default">+ New Item</Button>
           </DialogTrigger>
+          {/* Conditionally render Dropzone based on fileUploaded state */}
           <DialogContent>
             <DialogHeader>
-              <DialogTitle className="pb-2">New Item</DialogTitle>
+              <DialogTitle className="pb-2">Upload new layer</DialogTitle>
               <Dropzone
                 onChange={handleFileChange}
                 className="w-full"
                 fileExtension="zip"
+                progress={uploadProgress}
               />
             </DialogHeader>
           </DialogContent>
