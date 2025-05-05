@@ -35,27 +35,29 @@ export default function PaginationLayerTable() {
     }
   }
   return (
-      <>
-        <div className="flex justify-between bg-white px-2 pt-1">
+    <ControlledTable
+    rows={rows}
+    columnDefs={columnDefs}
+    getRows={getRows}
+    totalCount={totalRows}
+    onChange={setRows}
+    onPageNumberChange={setPageNumber}
+    pageSize={ROWS_PER_PAGE}
+    pageNumber={pageNumber}
+    pagination={true}
+    getRowNodeId={(data) => data?.name || data?.index}
+  />
+  )
+}
+
+      // <>
+        {/* <div className="flex justify-between bg-white px-2 pt-1">
           <Label className="flex text-sm justify-center font-bold">
             {layerInfo.layerTitle}
-          </Label>
+          </Label> */}
           {/* <Button size="sm">
             <X />
           </Button> */}
-        </div>
-        <ControlledTable
-          rows={rows}
-          columnDefs={columnDefs}
-          getRows={getRows}
-          totalCount={totalRows}
-          onChange={setRows}
-          onPageNumberChange={setPageNumber}
-          pageSize={ROWS_PER_PAGE}
-          pageNumber={pageNumber}
-          pagination={true}
-          getRowNodeId={(data) => data?.name || data?.index}
-        />
-      </>
-    )
-}
+        {/* </div> */}
+
+      // </>

@@ -24,13 +24,15 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import SaveAlertDialog from "../shared/save-alert-dialog";
+import { Label } from "@/components/ui/label";
+import { X } from "lucide-react";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
-  const { tableLoaded, mapData } = useMapViewStore();
+  const { tableLoaded, setTableLoaded, mapData, layerInfo } = useMapViewStore();
 
   // Define content for each button
   const BUTTON_CONTENT = {
@@ -201,25 +203,35 @@ const MapSidebar = () => {
         </div>
       )}
       {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
-      <div
-        className={cn(
-          "fixed rounded-md top-[60vh] h-[calc(100vh-60vh-24px)] pb-5 z-10",
-          {
-            "left-[300px] w-[calc(100vw-300px-60px+48px)]":
-              !expandedSidebarButtons && showSidebar,
-            "left-[172px] w-[calc(100vw-172px-60px+48px)]":
-              expandedSidebarButtons && !showSidebar,
-            "left-[412px] w-[calc(100vw-412px-60px+48px)]":
-              !expandedSidebarButtons && !showSidebar,
-            "left-[60px] w-[calc(100vw-60px-60px+48px)]":
-              expandedSidebarButtons && showSidebar && showSidebarRight,
-            "left-[60px] w-[calc(100vw-60px-192px+48px)]":
-              expandedSidebarButtons && showSidebar && !showSidebarRight,
-          }
-        )}
-      >
-        {tableLoaded && <PaginationLayerTable />}
-      </div>
+      {!tableLoaded && (
+        <div
+          className={cn(
+            "fixed rounded-md top-[60vh] h-[calc(100vh-60vh-24px)] pb-8 z-10",
+            {
+              "left-[300px] w-[calc(100vw-300px-60px+48px)]":
+                !expandedSidebarButtons && showSidebar,
+              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
+                expandedSidebarButtons && !showSidebar,
+              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
+                !expandedSidebarButtons && !showSidebar,
+              "left-[60px] w-[calc(100vw-60px-60px+48px)]":
+                expandedSidebarButtons && showSidebar && showSidebarRight,
+              "left-[60px] w-[calc(100vw-60px-192px+48px)]":
+                expandedSidebarButtons && showSidebar && !showSidebarRight,
+            }
+          )}
+        >
+          <div className="flex justify-between items-center bg-white pl-4">
+            <Label className="flex text-sm justify-center font-bold">
+              {layerInfo.layerTitle}
+            </Label>
+            <Button variant="ghost" size="sm" onClick={() => setTableLoaded((prev) => !prev)}>
+              <X />
+            </Button> 
+          </div>
+          <PaginationLayerTable/>
+        </div>
+      )}
       {/* TODO: Add this sidebar div <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
