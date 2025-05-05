@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { cn } from "@/lib/utils";
+import { PencilIcon } from "lucide-react";
 import { X } from "lucide-react";
 import { MoreVertical } from "lucide-react";
 import { Check } from "lucide-react";
@@ -48,8 +49,12 @@ const FieldAliasContent = () => {
           );
           const responseData = await response.json();
 
-          setLayerFields(responseData.data[0].fieldAlias); // Adjust this if `data` structure is different
-          setSelectedFields(responseData.data[0].fieldAlias);
+          const layerField = responseData.data[0].fieldAlias.filter(
+            (item) => item.fieldName !== "__tsvector__"
+          );
+
+          setLayerFields(layerField);
+          setSelectedFields(layerField);
         } catch (error) {
           console.error("Failed to fetch layer data:", error);
           // Optionally handle error state
@@ -160,7 +165,7 @@ const FieldAliasContent = () => {
 
             {layerFields.map((field, index) => (
               <button
-                className="flex items-center gap-2 px-3 py-1 m-1 rounded-sm shadow-sm outline"
+                className="flex items-center gap-2 px-3 py-1 m-1 rounded-sm shadow-sm outline outline-nileBlue-300"
                 key={index}
                 onClick={() => toggleFieldSelected(field)}
               >
@@ -177,7 +182,7 @@ const FieldAliasContent = () => {
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <MoreVertical className="w-5 h-5 p-1 cursor-pointer" />
+                    <PencilIcon className="w-5 h-5 p-1 cursor-pointer" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
