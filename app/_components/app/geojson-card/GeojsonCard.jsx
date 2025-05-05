@@ -1,13 +1,17 @@
+"use strict";
+
 import React, { 
   useState,
   useMemo 
 } from "react";
 import { 
   Check, 
-  ChevronsUpDown, 
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   ZoomIn,
+  X
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -28,10 +32,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator";
 import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-material.css";
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-material.css';
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import "./styles.css"
 
 export function Combobox({layerTitles, value, setValue, setPageIdx}) {
   const [open, setOpen] = useState(false)
@@ -46,16 +52,16 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[100%] flex justify-between"
+          className="w-[50%] flex justify-between bg-nileBlue-50 hover:bg-nileBlue-50 shadow-md"
           title={titleText}
         >
           <div className="w-[90%] flex items-center">
-            <span className="text-ellipsis overflow-hidden truncate">{value
+            <span className="text-ellipsis overflow-hidden truncate text-black">{value
               ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
               : "Select layer title"}
             </span>
           </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="shrink-0 text-nileBlue-950" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
@@ -107,7 +113,6 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
       minWidth: 175,
     },
   ]);
-  console.log(value);
   if (value !== "" && (pageIdx !== null && pageIdx !== undefined)) {
     const index = layerTitles.findIndex(
       (layerTitle) => layerTitle.value === value
@@ -123,8 +128,8 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
   }, []);
   return (
     <div
-      className="ag-theme-quartz-dark" // applying the grid theme
-      style={{ height: 150 }} // the grid will fill the size of the parent container
+      className={"ag-theme-quartz"} // applying the grid theme
+      style={{ height: 125 }} // the grid will fill the size of the parent container
     >
       <AgGridReact
         rowData={rows}
@@ -138,46 +143,88 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
 }
 
 export default function GeojsonCard() {
-  const { objectInfoData } = useMapViewStore();
-
+  const { objectInfoData, mapClicked, setMapClicked } = useMapViewStore();
+  
   const layerTitles = objectInfoData.data.map((layer) => ({
     value: layer.layerTitle.toLowerCase(),
     label: layer.layerTitle,
-  }));
-  const layerDataArray = objectInfoData.data.map(layer => [...layer.layerData]);
+  })).reverse();
+  const layerDataArray = objectInfoData.data.map(layer => [...layer.layerData]).reverse();
   const newObjects = layerDataArray.map(objArray => 
     objArray.map(obj => {
-      const { geom, ...rest } = obj;
-      return Object.entries(rest).map(([key, value]) => ({ 
+      const { geometry, type, properties } = obj;
+      return Object.entries(properties).map(([key, value]) => ({ 
         key, 
         value: value === null ? "empty" : value.toString()}));
     })
   );
-  const [value, setValue] = useState("");
-  const [pageIdx, setPageIdx] = useState(null);
+  const [value, setValue] = useState(layerTitles[0].value);
+  const [pageIdx, setPageIdx] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(true);
+  
   const index = layerTitles.findIndex(
     (layerTitle) => layerTitle.value === value
   );
   const handlePrevClick = () => {
-    if (index !== -1 && pageIdx !== null && pageIdx > 0) {
-      setPageIdx(pageIdx - 1);
+    if (index !== -1 && pageIdx !== null) {
+      if (pageIdx === 0) {
+        setPageIdx(newObjects[index].length - 1);
+      } else {
+        setPageIdx(pageIdx - 1);
+      }
     }
-  }
+  };
+  
   const handleNextClick = () => {
-    if (index !== -1 && pageIdx !== null && pageIdx < newObjects[index].length - 1) {
-      setPageIdx(pageIdx + 1);
+    if (index !== -1 && pageIdx !== null) {
+      if (pageIdx === newObjects[index].length - 1) {
+        setPageIdx(0);
+      } else {
+        setPageIdx(pageIdx + 1);
+      }
     }
+  };
+
+  const handleToggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleTogglePopUp = () => {
+    setMapClicked(!mapClicked);
   }
 
   return (
-    <Card className="w-[35vw] h-[45vh]">
-      <div className="flex flex-col space-y-3 px-6 pt-6 pb-3">
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-row">
-            <ZoomIn/>
-            <Label className="ml-2 mt-1 inline-block">Zoom to</Label>
+    <Card className={`w-[35vw] bg-nileBlue-50 rounded-md ${
+        isExpanded ? 'h-[45vh]' : 'h-[20vh]'
+      }`}>
+      <div className="flex flex-col space-y-3 py-3">
+        <div className="flex flex-row justify-between px-6">
+          <Combobox 
+            layerTitles={layerTitles}
+            value={value} // Pass value prop
+            setValue={setValue} // Pass setValue prop
+            setPageIdx={setPageIdx}
+          />
+          <div className="flex flex-row items-center mt-1 text-nileBlue-950">
+            <button onClick={handleToggleExpand}>
+              <ChevronUp
+                className={`mr-2 transition-transform ${
+                  isExpanded ? '' : 'rotate-180'
+                }`}
+              />
+            </button>
+            <button onClick={handleTogglePopUp}>
+              <X/>
+            </button>
           </div>
-          <div className="flex items-center">
+        </div>
+        <Separator/>
+        <div className="flex flex-row justify-between px-6">
+          <div className="flex flex-row p-1">
+            <ZoomIn className="text-nileBlue-950"/>
+            <Label className="ml-2 mt-1 inline-block text-nileBlue-800">Zoom to</Label>
+          </div>
+          <div className="flex items-center bg-nileBlue-50 rounded-md shadow-md text-nileBlue-800 p-1">
             <button onClick={handlePrevClick}>
               <ChevronLeft/>
             </button>
@@ -187,21 +234,17 @@ export default function GeojsonCard() {
             </button>
           </div>
         </div>
-        <Combobox 
-          layerTitles={layerTitles}
-          value={value} // Pass value prop
-          setValue={setValue} // Pass setValue prop
-          setPageIdx={setPageIdx}
-        />
       </div>
-      <CardContent className="flex flex-col">
-        <Table 
-          inputLayerDataArray={newObjects}
-          value={value}
-          layerTitles={layerTitles}
-          pageIdx={pageIdx}
+      {isExpanded && (
+        <CardContent className="flex flex-col">
+          <Table
+            inputLayerDataArray={newObjects}
+            value={value}
+            layerTitles={layerTitles}
+            pageIdx={pageIdx}
           />
-      </CardContent>
+        </CardContent>
+      )}
     </Card>
   )
 }

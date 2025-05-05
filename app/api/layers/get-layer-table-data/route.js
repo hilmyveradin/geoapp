@@ -11,7 +11,7 @@ export async function GET(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/layer/data/${layerUid}/${offset}/${length}`,
+      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/data/${offset}/${length}`,
       {
         method: "GET",
         headers: {

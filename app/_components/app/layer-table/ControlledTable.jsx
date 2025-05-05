@@ -95,6 +95,7 @@ const ControlledTable = ({
   );
 
   if (rows?.length < totalCount) {
+    // Optimization when rendering a lot of rows
     if (totalCount > 100000) {
       const quotient = parseInt(totalCount / 100000);
       for (let index = 0; index < quotient; index++) {
