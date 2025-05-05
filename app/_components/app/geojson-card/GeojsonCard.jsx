@@ -35,7 +35,7 @@ import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const objects = ["obj1", "obj2"];
 
-export function ComboboxDemo({layerTitles, value, setValue}) {
+export function ComboboxDemo({layerTitles, value, setValue, setPageIdx}) {
   const [open, setOpen] = useState(false)
  
   return (
@@ -71,6 +71,7 @@ export function ComboboxDemo({layerTitles, value, setValue}) {
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue)
                   setOpen(false)
+                  setPageIdx(0)
                 }}
               >
                 <Check
@@ -91,13 +92,8 @@ export function ComboboxDemo({layerTitles, value, setValue}) {
   )
 }
 
-export function DemoTable({inputLayerDataArray, value, layerTitles}) {
+export function DemoTable({inputLayerDataArray, value, layerTitles, pageIdx}) {
   let rows = [];
-  const [rowData, setRowData] = useState([
-    { make: "Ford", model: "F-Series"},
-    { make: "Tesla", model: "Model Y"},
-    { make: "Toyota", model: "Corolla"},
-  ]);
   
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
@@ -113,11 +109,11 @@ export function DemoTable({inputLayerDataArray, value, layerTitles}) {
     },
   ]);
 
-  if (value) {
+  if (value && pageIdx) {
     const index = layerTitles.findIndex(
       (layerTitle) => layerTitle.value === value
     );
-    rows = inputLayerDataArray[index][0];
+    rows = inputLayerDataArray[index][pageIdx];
   } else {
     rows = [];
   }
@@ -144,8 +140,8 @@ export function DemoTable({inputLayerDataArray, value, layerTitles}) {
 }
 
 export default function GeojsonCard() {
-  const [curObjIdx, setCurObjIdx] = useState(0);
   const { objectInfoData } = useMapViewStore();
+
   const layerTitles = objectInfoData.data.map((layer) => ({
     value: layer.layerTitle.toLowerCase(),
     label: layer.layerTitle,
@@ -156,10 +152,21 @@ export default function GeojsonCard() {
       const { geom, ...rest } = obj;
       return Object.entries(rest).map(([key, value]) => ({ 
         key, 
-        value: value.toString() }));
+        value: value === null ? "empty" : value.toString()}));
     })
-  )
-  const [value, setValue] = useState("")
+  );
+  const [value, setValue] = useState("");
+  const [pageIdx, setPageIdx] = useState(null);
+  const index = layerTitles.findIndex(
+    (layerTitle) => layerTitle.value === value
+  );
+  console.log(newObjects[index]);
+  const handlePrevClick = () => {
+    if (pageIdx > 0) {setPageIdx(pageIdx - 1);}
+  }
+  const handleNextClick = () => {
+    if (index && pageIdx < newObjects[index].length) {setPageIdx(pageIdx + 1);}
+  }
 
   return (
     <Card className="w-[35vw] h-[45vh]">
@@ -170,15 +177,20 @@ export default function GeojsonCard() {
             <Label className="ml-2 mt-1 inline-block">Zoom to</Label>
           </div>
           <div className="flex items-center">
-            <ChevronLeft />
-            <Label>{curObjIdx+1} of {objects.length}</Label>
-            <ChevronRight />
+            <button onClick={handlePrevClick}>
+              <ChevronLeft/>
+            </button>
+            <Label>{pageIdx === null ? "" : pageIdx+1} of {pageIdx === null ? "" : newObjects[index].length}</Label>
+            <button onClick={handleNextClick}>
+              <ChevronRight/>
+            </button>
           </div>
         </div>
         <ComboboxDemo 
           layerTitles={layerTitles}
           value={value} // Pass value prop
           setValue={setValue} // Pass setValue prop
+          setPageIdx={setPageIdx}
         />
       </div>
       <CardContent className="flex flex-col">
@@ -186,6 +198,7 @@ export default function GeojsonCard() {
           inputLayerDataArray={newObjects}
           value={value}
           layerTitles={layerTitles}
+          pageIdx={pageIdx}
           />
       </CardContent>
     </Card>
