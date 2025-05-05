@@ -20,19 +20,20 @@ const GroupOverview = ({ params }) => {
           >
             Overview
           </TabButton>
-          <TabButton
+          {/* <TabButton
             active={currentTab === "member"}
             onClick={() => setCurrentTab("member")}
           >
             Member
-          </TabButton>
+          </TabButton> */}
         </div>
       </div>
       <div className="p-4">
         {currentTab === "overview" ? (
           <GroupOverviewPage groupUid={groupUid} />
         ) : (
-          <GroupMembersPage groupUid={groupUid} />
+          // <GroupMembersPage groupUid={groupUid} />
+          {}
         )}
       </div>
     </div>

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table";
 import DestructiveDialog from "../../shared/destructive-dialog";
 import { toast } from "@/components/ui/use-toast";
+import InviteMembersDialog from "./invite-member-dialog";
 
 const GroupOverviewPage = ({ groupUid }) => {
   const [loading, setLoading] = useState(true);
@@ -74,6 +75,10 @@ const GroupOverviewPage = ({ groupUid }) => {
       toast({ title: "Error removing user", variant: "destructive" });
     }
   };
+
+  const handleInviteDialogClose = useCallback(() => {
+    setRefetchTrigger((prev) => prev + 1);
+  }, []);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -141,10 +146,15 @@ const GroupOverviewPage = ({ groupUid }) => {
       <Card className="shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Group Members</CardTitle>
-          <Button>
-            <UserPlus className="mr-2 h-4 w-4" />
-            Invite Member
-          </Button>
+          <InviteMembersDialog
+            groupUid={groupUid}
+            onDialogClose={handleInviteDialogClose}
+          >
+            <Button>
+              <UserPlus className="mr-2 h-4 w-4" />
+              Invite Member
+            </Button>
+          </InviteMembersDialog>
         </CardHeader>
         <CardContent>
           <Table>
