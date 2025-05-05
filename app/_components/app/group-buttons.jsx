@@ -5,8 +5,10 @@ import { ArrowDownWideNarrow } from "lucide-react";
 import CreateGroupDialog from "./groups/create-group-dialog";
 import { Search } from "lucide-react";
 import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const GroupButtons = () => {
+  const { isAdmin } = useUserStore();
   const { searchedGroupTitle, setSearchedGroupTitle } = useSearchQueryStore(); // Added state for search term
   return (
     <div className="flex items-center justify-between w-full">
@@ -22,18 +24,20 @@ const GroupButtons = () => {
         </div>
       </div>
       <div className="flex-grow" />
-      <div className="flex items-center justify-center gap-4">
-        <CreateGroupDialog>
-          <Button className="flex gap-2">
-            <Plus className="w-5 h-5 stroke-[4px]" fill="white" />
-            Add Group
-          </Button>
-        </CreateGroupDialog>
-        {/* <Button variant="secondary" className="flex gap-2">
-          <ArrowDownWideNarrow className="w-5 h-5" fill="#006236" />
-          Sort By
-        </Button> */}
-      </div>
+      {isAdmin && (
+        <div className="flex items-center justify-center gap-4">
+          <CreateGroupDialog>
+            <Button className="flex gap-2">
+              <Plus className="w-5 h-5 stroke-[4px]" fill="white" />
+              Add Group
+            </Button>
+          </CreateGroupDialog>
+          {/* <Button variant="secondary" className="flex gap-2">
+                <ArrowDownWideNarrow className="w-5 h-5" fill="#006236" />
+                Sort By
+              </Button> */}
+        </div>
+      )}
     </div>
   );
 };

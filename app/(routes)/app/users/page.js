@@ -13,8 +13,10 @@ import { Loader2, UserCog, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
 import UsersButtons from "@/app/_components/app/users-buttons";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const UsersDashboard = () => {
+  const { isAdmin } = useUserStore();
   const [pageLoading, setPageLoading] = useState(true);
   const [usersData, setUsersData] = useState([]);
   const [sortColumn, setSortColumn] = useState(null);
@@ -86,15 +88,15 @@ const UsersDashboard = () => {
   }
 
   return (
-    <div className="w-full h-full px-8 mt-4">
-      <UsersButtons />
+    <div className="w-full h-full px-4 md:px-8 mt-2 md:mt-4">
+      {isAdmin && <UsersButtons />}
       <Table>
         <TableHeader>
           <TableRow>
             <SortableHeader column="fullName">Name</SortableHeader>
             <SortableHeader column="loginName">Username</SortableHeader>
             <SortableHeader column="role">Role</SortableHeader>
-            <TableHead>Actions</TableHead>
+            {isAdmin && <TableHead>Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -113,25 +115,27 @@ const UsersDashboard = () => {
                   {index === 0 ? "Admin" : "Viewer"}
                 </span>
               </TableCell>
-              <TableCell>
-                <Button variant="ghost" size="sm" className="mr-2">
-                  <UserCog className="h-4 w-4" />
-                </Button>
-                <DestructiveDialog
-                  title="Are you sure you want to remove this user?"
-                  description="This action cannot be undone"
-                  actionText="Yes, I'm sure"
-                  action={() => deleteUser(user.userUid)}
-                >
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-red-600 hover:text-red-800 hover:bg-red-100"
-                  >
-                    <Trash2 className="h-4 w-4" />
+              {isAdmin && (
+                <TableCell>
+                  <Button variant="ghost" size="sm" className="mr-2">
+                    <UserCog className="h-4 w-4" />
                   </Button>
-                </DestructiveDialog>
-              </TableCell>
+                  <DestructiveDialog
+                    title="Are you sure you want to remove this user?"
+                    description="This action cannot be undone"
+                    actionText="Yes, I'm sure"
+                    action={() => deleteUser(user.userUid)}
+                  >
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:text-red-800 hover:bg-red-100"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </DestructiveDialog>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

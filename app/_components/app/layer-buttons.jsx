@@ -16,8 +16,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const LayersButtons = () => {
+  const { isAdmin, isEditor } = useUserStore();
   const { toast } = useToast();
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(false);
@@ -109,26 +111,32 @@ const LayersButtons = () => {
         </div>
       </div>
       <div className="flex items-center justify-center gap-4">
-        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-          <DialogTrigger asChild>
-            <Button className="flex gap-2" onClick={() => setOpenDialog(true)}>
-              <Plus className="w-5 h-5 stroke-[4px]" fill="white" />
-              Add Layers
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="pb-2">Upload new layer</DialogTitle>
-              <Dropzone
-                onChange={handleFileChange}
-                className="w-full"
-                fileExtension="zip"
-                progress={uploadProgress}
-                progressValue={progressValue}
-              />
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        {isAdmin ||
+          (isEditor && (
+            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+              <DialogTrigger asChild>
+                <Button
+                  className="flex gap-2"
+                  onClick={() => setOpenDialog(true)}
+                >
+                  <Plus className="w-5 h-5 stroke-[4px]" fill="white" />
+                  Add Layers
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="pb-2">Upload new layer</DialogTitle>
+                  <Dropzone
+                    onChange={handleFileChange}
+                    className="w-full"
+                    fileExtension="zip"
+                    progress={uploadProgress}
+                    progressValue={progressValue}
+                  />
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          ))}
         {/* <Button variant="secondary" className="flex gap-2">
             <ArrowDownWideNarrow className="w-5 h-5" />
             Sort By

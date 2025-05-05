@@ -1,3 +1,4 @@
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 import dayjs from "dayjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -67,6 +68,7 @@ const authOptions = {
       session.refreshToken = token.refreshToken;
       session.accessTokenExpires = token.accessTokenExpires;
       session.user = token.user;
+
       return session;
     },
   },

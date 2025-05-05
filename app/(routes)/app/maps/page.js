@@ -15,6 +15,7 @@ import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
 
 const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
+
   const [mapsData, setMapsData] = useState([]);
   const { refetchMaps, toggleRefetchMaps } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =

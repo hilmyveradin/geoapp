@@ -9,7 +9,7 @@ import CreateUserDialog from "./users/create-user-dialog";
 const UsersButtons = () => {
   // const { searchedGroupTitle, setSearchedGroupTitle } = useSearchQueryStore(); // Added state for search term
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between w-full mb-4">
       <div className="flex justify-center w-full">
         {/* <div className="flex items-center gap-2 py-2 pl-2 pr-3 mr-3 bg-white rounded-lg w-full">
           <Search className="w-4 h-4" />

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { handleErrorMessage } from "@/helpers/string-helpers";
 import { toast } from "@/components/ui/use-toast";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const NAVIGATION_ITEMS = [
   { name: "Maps", path: "/app/maps", icon: <Map className="w-6 h-6" /> },
@@ -29,6 +30,13 @@ const AppHeader = () => {
   const router = useRouter();
 
   const { data: session, status } = useSession();
+  const { isAdmin, isEditor, setUserRoles } = useUserStore();
+
+  useEffect(() => {
+    if (session) {
+      setUserRoles(session.user?.roles);
+    }
+  }, [session, setUserRoles]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
