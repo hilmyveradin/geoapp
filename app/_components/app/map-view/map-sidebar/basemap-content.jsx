@@ -345,7 +345,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Oceans",
-      image: `/basemaps/ocean-basemap.png`,
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/ocean-basemap.png`,
       style: `https://api.maptiler.com/maps/ocean/style.json?key=${MAPTILER_KEY}`,
     },
   ];
