@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
@@ -27,6 +28,8 @@ const SaveAlertDialog = ({ children }) => {
     setIsLayerReordered,
     currentViewBbox,
   } = useMapViewStore();
+
+  const { toggleRefetchMaps } = useRefetchStore();
   const { toast } = useToast();
   const [alertOpen, setAlertOpen] = useState(false);
   const [submittingData, setSubmittingData] = useState(false);

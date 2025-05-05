@@ -52,6 +52,8 @@ const StyleContent = () => {
   // POINT STYLES STATES
   const [pointStyle, setPointStyle] = useState(); // this responsible for conditional rendering for marker and image
   const [symbolSize, setSymbolSize] = useState(0);
+  const [pointImageUrl, setPointImageUrl] = useState("");
+  const [pointImageData, setPointImageData] = useState();
 
   useEffect(() => {
     if (!selectedPopupLayer) {
@@ -124,6 +126,14 @@ const StyleContent = () => {
 
   const handlePointStyleChange = (value) => {
     setPointStyle(value);
+  };
+
+  const handlePointImageUrlChange = (value) => {
+    setPointImageUrl(value);
+  };
+
+  const handlePointImageDataChange = (value) => {
+    setPointImageData(value);
   };
 
   const saveStyleChanges = () => {
@@ -328,18 +338,6 @@ const StyleContent = () => {
       >
         Save
       </Button>
-
-      {/* {pointStyle !== "image" && (
-        <>
-
-        </>
-      )}
-
-      {pointStyle !== "image" && (
-        <>
-
-        </>
-      )} */}
     </div>
   );
 };
@@ -347,7 +345,13 @@ const StyleContent = () => {
 export default StyleContent;
 
 const SymbolComponent = (props) => {
-  const { initialStyle, initialPointStyle, handlePointStyleChange } = props;
+  const {
+    initialStyle,
+    initialPointStyle,
+    handlePointStyleChange,
+    handlePointImageUrlChange,
+    handlePointImageDataChange,
+  } = props;
   const [showPopup, setShowPopup] = useState(false);
 
   const [style, setStyle] = useState(initialPointStyle);
@@ -500,7 +504,10 @@ const SymbolComponent = (props) => {
                 />
               </div>
             ) : (
-              <ImageUpload />
+              <ImageUpload
+                handlePointImageDataChange={handlePointImageDataChange}
+                handlePointImageUrlChange={handlePointImageUrlChange}
+              />
             )}
           </div>
           <Button onClick={handleDone}>Done</Button>
@@ -646,24 +653,14 @@ const SliderComponent = (props) => {
   );
 };
 
-const ImageUpload = () => {
+const ImageUpload = (props) => {
+  const { handlePointImageDataChange, handlePointImageUrlChange } = props;
   const [imageSrc, setImageSrc] = useState(""); // State for the image source for preview
 
-  useEffect(() => {
-    console.log(imageSrc);
-  }, [imageSrc]);
-
   // Handle URL input and fetch image
-  const handleImageUrlChange = async (event) => {
+  const imageUrlOnChange = async (event) => {
     const imageUrl = event.target.value;
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const localUrl = URL.createObjectURL(blob);
-      setImageSrc(localUrl); // Set image source for preview
-    } catch (error) {
-      console.error("Error loading image:", error);
-    }
+    handlePointImageUrlChange(imageUrl);
   };
 
   // Handle local file input
@@ -672,6 +669,7 @@ const ImageUpload = () => {
     if (file) {
       const localUrl = URL.createObjectURL(file);
       setImageSrc(localUrl); // Set image source for preview
+      handlePointImageDataChange(localUrl);
     }
   };
 
@@ -686,7 +684,7 @@ const ImageUpload = () => {
         <Input
           type="text"
           placeholder="Image URL"
-          onChange={handleImageUrlChange}
+          onChange={imageUrlOnChange}
         />
         <input
           type="file"
