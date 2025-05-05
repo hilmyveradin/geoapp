@@ -24,9 +24,9 @@ const GruopsDashboard = () => {
           },
         }
       );
-      const resposneData = await response.json();
+      const responseeData = await response.json();
 
-      return resposneData.data[0];
+      return responseeData.data[0];
     }
     // Define function to get layers API
     async function getGroupLists() {
@@ -78,7 +78,7 @@ const GruopsDashboard = () => {
     <div className="w-full h-full px-8 mt-4">
       <GroupButtons />
       {groupsData.map((group, index) => {
-        return <GroupCards key={index} group={group} />;
+        return <GroupCards key={group.groupUid} group={group} />;
       })}
     </div>
   );
