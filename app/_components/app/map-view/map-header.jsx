@@ -55,32 +55,15 @@ const MapHeader = () => {
         </DropdownMenu>
       </div>
       <div className="flex w-full h-10 justify-between items-center bg-[#D9D9D93D]">
-        <div className="flex flex-row justify-between pl-2">
+        <div className="flex flex-row justify-between pl-2 space-x-8">
           <Button variant="ghost" className="justify-items-start">
             <List className="mr-2 h-4 w-4" /> Details
           </Button>
           <Button variant="ghost">
             <Layers3 className="mr-2 h-4 w-4" /> Add Layer
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
-                <Map className="mr-2 h-4 w-4" /> Basemap
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <ScrollArea className="h-16 w-64 rounded-md">
-                {/* TODO: Add thumbnails for basemap */}
-                <Button variant="ghost">Basemap 1</Button>
-                <Button variant="ghost">Basemap 2</Button>
-                <Button variant="ghost">Basemap 3</Button>
-                <Button variant="ghost">Basemap 4</Button>
-                <Button variant="ghost">Basemap 5</Button>
-              </ScrollArea>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
-        <div className="flex flex-row justify-between pr-6">
+        <div className="flex flex-row justify-between pr-6 space-x-8">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
