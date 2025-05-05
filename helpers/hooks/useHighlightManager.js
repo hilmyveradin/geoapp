@@ -20,9 +20,9 @@ const useHighlightManager = () => {
           case "MultiPoint":
             layerType = "circle";
             paintProperties = {
-              "circle-color": "#ff0000",
+              "circle-color": "#EBA0DB",
               "circle-radius": 6,
-              "circle-stroke-color": "#ff0000",
+              "circle-stroke-color": "#EBA0DB",
               "circle-stroke-width": 2,
             };
             break;
@@ -30,7 +30,7 @@ const useHighlightManager = () => {
           case "MultiLineString":
             layerType = "line";
             paintProperties = {
-              "line-color": "#ff0000",
+              "line-color": "#EBA0DB",
               "line-width": 5,
             };
             break;
@@ -38,8 +38,8 @@ const useHighlightManager = () => {
           case "MultiPolygon":
             layerType = "fill";
             paintProperties = {
-              "fill-color": "#ff0000",
-              "fill-outline-color": "#ff0000",
+              "fill-color": "#EBA0DB",
+              "fill-outline-color": "#EBA0DB",
             };
             break;
           default:
