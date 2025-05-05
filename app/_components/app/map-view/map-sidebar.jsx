@@ -26,6 +26,7 @@ import useTableQueryStore from "@/helpers/hooks/store/use-table-query-store";
 import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
 import BaseMapContent from "./map-sidebar/basemap-content";
 import { Earth } from "lucide-react";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const MapSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -55,6 +56,8 @@ const MapSidebar = () => {
     expandedLeftSidebarContent,
     setExpandedLeftSidebarContent,
   } = useMapSidebarStore();
+
+  const { isAdmin, isEditor } = useUserStore();
 
   const handleFtsQuery = (e) => {
     // Destructure the name and value from
@@ -97,7 +100,7 @@ const MapSidebar = () => {
           }
         )}
       >
-        {mapData.mapType === "map" && (
+        {mapData.mapType === "map" && (isAdmin || isEditor) && (
           <TooltipText content="Add Layer" side="right" align="start">
             <Button
               variant="ghost"
@@ -176,22 +179,21 @@ const MapSidebar = () => {
 
         <Separator className="my-2" />
 
-        <SaveAlertDialog>
-          <Button
-            variant="ghost"
-            className={cn("flex justify-start text-blackHaze-500", {
-              // "text-white": selectedButton === "save",
-              "p-0 justify-center": !showLeftSidebar,
-            })}
-          >
-            <Save
-              className={cn("w-4 h-4 stroke-blackHaze-500", {
-                // "stroke-white stroke-2": selectedButton === "save",
+        {(isAdmin || isEditor) && (
+          <SaveAlertDialog>
+            <Button
+              variant="ghost"
+              className={cn("flex justify-start text-blackHaze-500", {
+                "p-0 justify-center": !showLeftSidebar,
               })}
-            />
-            {showLeftSidebar && <span className="inline-block ml-2">Save</span>}
-          </Button>
-        </SaveAlertDialog>
+            >
+              <Save className={cn("w-4 h-4 stroke-blackHaze-500", {})} />
+              {showLeftSidebar && (
+                <span className="inline-block ml-2">Save</span>
+              )}
+            </Button>
+          </SaveAlertDialog>
+        )}
 
         {/* <Menubar className="bg-transparent border-none">
           <MenubarMenu>

@@ -8,6 +8,7 @@ import MapViewLayout from "../../../layout";
 import { Loader2 } from "lucide-react";
 import MapRightSidebar from "@/app/_components/app/map-view/map-right-sidebar";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const MapView = ({ params }) => {
   const mapType = params.slug[0];
@@ -15,6 +16,8 @@ const MapView = ({ params }) => {
 
   const { mapData, mapLayers, setMapData, setSelectedLayers, setMapLayers } =
     useMapViewStore();
+
+  const { isAdmin, isEditor } = useUserStore();
 
   useEffect(() => {
     async function getLayerUid(layerUid) {
@@ -124,7 +127,7 @@ const MapView = ({ params }) => {
         <div className="pl-12 w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
-        <MapRightSidebar />
+        {(isAdmin || isEditor) && <MapRightSidebar />}
       </div>
     </div>
   );
