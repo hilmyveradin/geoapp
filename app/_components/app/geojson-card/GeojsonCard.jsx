@@ -205,9 +205,7 @@ export default function GeojsonCard() {
   return (
     <>
       {layerTitles.length > 0 && (
-        <Card
-          className="bg-nileBlue-50 rounded-md"
-        >
+        <Card className="bg-nileBlue-50 rounded-md">
           <div className="flex flex-col space-y-3 py-3">
             <div className="flex flex-row justify-between px-6">
               <Combobox
