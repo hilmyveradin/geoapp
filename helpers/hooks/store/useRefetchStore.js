@@ -12,7 +12,7 @@ const useRefetchStore = create((set) => ({
 
   setRefetchLayers: (newRefetchLayers) =>
     set(() => ({
-      refetchMaps: newRefetchLayers,
+      refetchLayers: newRefetchLayers,
     })),
 
   setRefetchMapLayers: (newRefetchMapLayers) =>

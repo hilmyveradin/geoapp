@@ -2,7 +2,7 @@
 
 import { ArrowDownWideNarrow } from "lucide-react";
 import { Search } from "lucide-react";
-import { Dropzone } from "@/components/ui/olddropzone";
+import { Dropzone } from "@/components/ui/dropzone";
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { useEffect } from "react";

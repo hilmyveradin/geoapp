@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Dropzone } from "@/components/ui/olddropzone";
+import { Dropzone } from "@/components/ui/dropzone";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
@@ -22,6 +22,7 @@ const LayersButtons = () => {
   const [uploadProgress, setUploadProgress] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const { refetchLayers, setRefetchLayers } = useRefetchStore();
+  const [progressValue, setProgressValue] = useState(0);
 
   const handleFileChange = (newState) => {
     setFiles(newState);
@@ -31,31 +32,45 @@ const LayersButtons = () => {
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
     async function postVectorData(formData) {
-      try {
-        const response = await fetch("/api/upload-vectordata", {
-          method: "POST",
-          body: formData,
-        });
+      const xhr = new XMLHttpRequest();
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+      // Set the upload progress event listener.
+      xhr.upload.addEventListener("progress", function(event) {
+        if (event.lengthComputable) {
+          setProgressValue((event.loaded / event.total) * 85);
         }
-        const temp = await response.json();
-        toast({
-          title: temp.status,
-          description: temp.msg,
-        });
-        setRefetchLayers(!refetchLayers);
-      } catch (error) {
-        console.error("Error during fetch:", error.message);
-        toast({
-          title: "ERROR",
-          description: error.message,
-        });
-      } finally {
-        setUploadProgress(false); // Reset progress on error
-        setOpenDialog(false);
+      });
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          setProgressValue(0);
+          try {
+            const responseData = JSON.parse(xhr.responseText);
+
+            console.log('Success! Status:', responseData.status);
+            console.log('Message:', responseData.msg);
+            
+            toast({
+              title: responseData.status,
+              description: responseData.msg,
+            });
+            setRefetchLayers(!refetchLayers);
+          } catch (error) {
+            console.error("Error during fetch:", error.message);
+            toast({
+              title: "ERROR",
+              description: error.message,
+            });
+          } finally {
+            setUploadProgress(false); // Reset progress on error
+            setOpenDialog(false);
+          }
+        } else {
+          console.log("not 200");
+        }
       }
+      xhr.open("POST", "/api/upload-vectordata")
+      xhr.send(formData);
     }
 
     if (files.length > 0) {
@@ -90,6 +105,7 @@ const LayersButtons = () => {
                 className="w-full"
                 fileExtension="zip"
                 progress={uploadProgress}
+                progressValue={progressValue}
               />
             </DialogHeader>
           </DialogContent>
