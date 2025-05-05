@@ -12,12 +12,13 @@ import {
 import { Dropzone } from "@/components/ui/dropzone";
 import ClientPagination from "@/app/_components/app/client-pagination";
 import { useToast } from "@/components/ui/use-toast";
+import useLayerStore from "@/helpers/hooks/useLayerStore";
 
 const LayersDashboard = () => {
   const [files, setFiles] = useState([]);
-  const [layersData, setLayersData] = useState([]);
+  const { layersData, setLayers } = useLayerStore();
   const [uploadProgress, setUploadProgress] = useState(false);
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -32,7 +33,22 @@ const LayersDashboard = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const temp = await response.json();
-        setLayersData(temp);
+
+        const mockUser = {
+          fullName: "Shadcn",
+          avatar: "https://github.com/shadcn.png",
+        };
+
+        const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
+
+        const mockLayers = temp.map((layers) => {
+          return {
+            ...layers,
+            user: mockUser,
+            thumbnail_url: `${IMAGE_BASE_URL}/gs/thumbnail/${layers.thumbnail_url}`,
+          };
+        });
+        setLayers(mockLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
@@ -61,17 +77,17 @@ const LayersDashboard = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const temp = await response.json();
-        toast ({
+        toast({
           title: temp.status,
-          description: temp.msg
-        })
+          description: temp.msg,
+        });
         setUploadProgress(false); // Set progress to 100 upon completion
       } catch (error) {
         console.error("Error during fetch:", error.message);
-        toast ({
+        toast({
           title: "ERROR",
-          description: error.message
-        })
+          description: error.message,
+        });
         setUploadProgress(false); // Reset progress on error
       }
     }
@@ -79,7 +95,7 @@ const LayersDashboard = () => {
       const formData = new FormData();
       formData.append("vector_zip", files[0]);
       postVectorData(formData);
-      setFiles([])
+      setFiles([]);
     }
   }, [files, toast]);
 

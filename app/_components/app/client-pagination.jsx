@@ -15,8 +15,6 @@ import {
 export default function ClientPagination({ data, ...props }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
-
   const postsPerPage = 6;
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
@@ -29,16 +27,12 @@ export default function ClientPagination({ data, ...props }) {
         <>
           <div class="sm:grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 flex flex-col">
             {currentPosts.map((currentPosts) => {
-              const user = {
-                fullName: currentPosts.creator,
-                avatar: currentPosts.creator,
-              };
               return (
                 <MenuCard
                   key={currentPosts.layer_id}
-                  source={`${IMAGE_BASE_URL}/gs/thumbnail/${currentPosts.thumbnail_url}`}
+                  source={currentPosts.thumbnail_url}
                   title={currentPosts.layer_title}
-                  user={user}
+                  user={currentPosts.user}
                 />
               );
             })}

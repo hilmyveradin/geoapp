@@ -12,6 +12,11 @@ const MobileHeader = () => {
   const router = useRouter();
   const [MenuOpen, setMenuOpen] = useState(false);
 
+  const mockUser = {
+    fullName: "Shadcn",
+    avatar: "https://github.com/shadcn.png",
+  };
+
   const NAVIGATION_ITEMS = [
     {
       name: "Maps",
@@ -84,7 +89,7 @@ const MobileHeader = () => {
             })}
           </div>
           <div className="mb-10">
-            <UserAvatar />
+            <UserAvatar user={mockUser} className="w-8 h-8" />
           </div>
         </div>
       </div>
