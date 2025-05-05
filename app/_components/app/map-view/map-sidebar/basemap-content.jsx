@@ -71,7 +71,7 @@ const BaseMapContent = () => {
   const mapChoices = [
     {
       name: "OpenStreetMap",
-      image: "/images/basemaps/osm.png",
+      image: "/basemaps/osm-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -93,7 +93,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Satellite",
-      image: "/images/basemaps/satellite.png",
+      image: "/basemaps/satellite-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -121,7 +121,7 @@ const BaseMapContent = () => {
 
     {
       name: "Dark",
-      image: "/images/basemaps/dark.png",
+      image: "/basemaps/dark-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -145,12 +145,12 @@ const BaseMapContent = () => {
     },
     {
       name: "3D Buildings",
-      image: "/images/basemaps/3d.png",
+      image: "/basemaps/3d-basemap.png",
       style: threeDStyle,
     },
     {
       name: "Esri World Topo",
-      image: "/images/basemaps/esri-topo.png",
+      image: "/basemaps/esri-world-topo-basemap.png",
       style: {
         version: 8,
         sources: {
@@ -171,6 +171,182 @@ const BaseMapContent = () => {
           },
         ],
       },
+    },
+    {
+      name: "Google Imagery With Rain Viewer",
+      image: "/basemaps/rain-viewer-basemap.png",
+      style: {
+        version: 8,
+        sources: {
+          "google-satellite": {
+            type: "raster",
+            tiles: ["https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"],
+            tileSize: 256,
+            attribution: "© Google",
+          },
+          "rain-viewer": {
+            type: "raster",
+            tiles: [
+              "https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/2/1_1.png",
+            ],
+            tileSize: 256,
+            attribution: "© RainViewer",
+          },
+        },
+        layers: [
+          {
+            id: "google-satellite",
+            type: "raster",
+            source: "google-satellite",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+          {
+            id: "rain-viewer",
+            type: "raster",
+            source: "rain-viewer",
+            paint: {
+              "raster-opacity": 0.7,
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "Google Maps",
+      image: "/basemaps/google-maps-basemap.png",
+      style: {
+        version: 8,
+        sources: {
+          "google-maps": {
+            type: "raster",
+            tiles: ["https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"],
+            tileSize: 256,
+            attribution: "© Google",
+          },
+        },
+        layers: [
+          {
+            id: "google-maps",
+            type: "raster",
+            source: "google-maps",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Google Terrain",
+      image: "/basemaps/google-maps-terrain-basemap.png",
+      style: {
+        version: 8,
+        sources: {
+          "google-terrain": {
+            type: "raster",
+            tiles: ["https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"],
+            tileSize: 256,
+            attribution: "© Google",
+          },
+        },
+        layers: [
+          {
+            id: "google-terrain",
+            type: "raster",
+            source: "google-terrain",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Dark Gray Canvas",
+      image: "/basemaps/dark-canvas-basemap.png",
+      style: `https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json`,
+    },
+    {
+      name: "Bing Map Aerial",
+      image: "/basemaps/bing-basemap.png",
+      style: {
+        version: 8,
+        sources: {
+          "bing-aerial": {
+            type: "raster",
+            tiles: [
+              "https://ecn.t3.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=1",
+            ],
+            tileSize: 256,
+            attribution: "© Microsoft",
+          },
+        },
+        layers: [
+          {
+            id: "bing-aerial",
+            type: "raster",
+            source: "bing-aerial",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Bing Map Hybrid",
+      image: "/basemaps/bing-map-hybrid-basemap.png",
+      style: {
+        version: 8,
+        sources: {
+          "bing-hybrid": {
+            type: "raster",
+            tiles: [
+              "https://ecn.t3.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1",
+            ],
+            tileSize: 256,
+            attribution: "© Microsoft",
+          },
+        },
+        layers: [
+          {
+            id: "bing-hybrid",
+            type: "raster",
+            source: "bing-hybrid",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Bing Map Road",
+      image: "/basemaps/bing-road-basemap.png",
+      style: {
+        version: 8,
+        sources: {
+          "bing-road": {
+            type: "raster",
+            tiles: [
+              "https://ecn.t3.tiles.virtualearth.net/tiles/r{quadkey}.jpeg?g=1",
+            ],
+            tileSize: 256,
+            attribution: "© Microsoft",
+          },
+        },
+        layers: [
+          {
+            id: "bing-road",
+            type: "raster",
+            source: "bing-road",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Oceans",
+      image: "/basemaps/ocean-basemap.png",
+      style: `https://api.maptiler.com/maps/ocean/style.json?key=${MAPTILER_KEY}`,
     },
   ];
 
@@ -196,13 +372,13 @@ const BaseMapCard = ({ name, image, onClick }) => {
       className="flex items-center gap-2 p-2 bg-white rounded-md shadow cursor-pointer hover:bg-gray-100"
       onClick={onClick}
     >
-      {/* <Image
+      <Image
         src={image}
         alt={name}
-        width={50}
-        height={50}
+        width={100}
+        height={80}
         className="rounded-md"
-      /> */}
+      />
       <span className="font-medium">{name}</span>
     </div>
   );
