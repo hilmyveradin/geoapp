@@ -5,9 +5,9 @@ const useRefetchStore = create((set) => ({
   refetchLayers: true,
   refetchMapLayers: true,
 
-  setRefetchMaps: (newRefetchMaps) =>
-    set(() => ({
-      refetchMaps: newRefetchMaps,
+  toggleRefetchMaps: () =>
+    set((state) => ({
+      refetchMaps: !state.refetchMaps,
     })),
 
   setRefetchLayers: (newRefetchLayers) =>

@@ -4,6 +4,7 @@ import ClientPagination from "@/app/_components/app/client-pagination";
 import MapsButtons from "@/app/_components/app/map-buttons";
 import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import ReusableAlertDialog from "@/app/_components/shared/DestructiveDialog";
+import { useToast } from "@/components/ui/use-toast";
 import useCardStore from "@/helpers/hooks/store/useCardStore";
 import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 import { X } from "lucide-react";
@@ -15,9 +16,10 @@ import { useEffect, useState } from "react";
 const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [mapsData, setMapsData] = useState([]);
-  const { refetchMaps } = useRefetchStore();
+  const { refetchMaps, toggleRefetchMaps } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
     useCardStore();
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -42,10 +44,6 @@ const MapsDashboard = () => {
   useEffect(() => {
     return clearSelection();
   }, [clearSelection]);
-
-  useEffect(() => {
-    console.log("SELECTED CARDS: ", selectedCards);
-  }, [selectedCards]);
 
   useEffect(() => {
     // Define function to get layers API
@@ -86,6 +84,28 @@ const MapsDashboard = () => {
       .catch(console.error);
   }, [refetchMaps]);
 
+  const deleteMaps = async () => {
+    const mapUids = selectedCards.map((e) => ({ map_uid: e }));
+    debugger;
+    try {
+      const response = await fetch("/api/delete-map", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mapUids: mapUids }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast({ title: "Success deleting maps", variant: "success" });
+      toggleRefetchMaps();
+      clearSelection();
+    } catch (error) {
+      console.error("Error during fetch:", error.message);
+    }
+  };
+
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-96">
@@ -111,7 +131,7 @@ const MapsDashboard = () => {
               title="Are you sure you want to delete these maps?"
               description="This action cannot be undone"
               actionText="Yes, I'm sure"
-              action={() => console.log("delete action clicked")}
+              action={() => deleteMaps()}
             >
               <Trash2 className="w-4 h-4 cursor-pointer" />
             </DestructiveDialog>

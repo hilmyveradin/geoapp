@@ -30,7 +30,7 @@ import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 const ComposeMapDialog = (props) => {
   const { children } = props;
   const { toast } = useToast();
-  const { refetchMaps, setRefetchMaps } = useRefetchStore();
+  const { toggleRefetchMaps } = useRefetchStore();
 
   const [layersData, setLayersData] = useState();
 
@@ -187,7 +187,7 @@ const ComposeMapDialog = (props) => {
         setSearchInput("");
         setOpenSearchCommand(false);
         toast({ title: "Success Creating Map Layer", variant: "success" });
-        setRefetchMaps(!refetchMaps);
+        toggleRefetchMaps();
         setTimeout(() => {
           setOpenDialog(false);
         }, 1000);

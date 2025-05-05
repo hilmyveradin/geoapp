@@ -5,11 +5,42 @@ import ClientPagination from "@/app/_components/app/client-pagination";
 import LayersButtons from "@/app/_components/app/layer-buttons";
 import { Loader2 } from "lucide-react";
 import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useCardStore from "@/helpers/hooks/store/useCardStore";
+import { Share2Icon } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
+import { X } from "lucide-react";
 
 const LayersDashboard = () => {
   const [layersData, setLayers] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const { refetchLayers } = useRefetchStore();
+  const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
+    useCardStore();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey) setIsCtrlPressed(true);
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === "Control" || e.key === "Meta") {
+        setIsCtrlPressed(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [setIsCtrlPressed]);
+
+  useEffect(() => {
+    return clearSelection();
+  }, [clearSelection]);
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -59,7 +90,29 @@ const LayersDashboard = () => {
   return (
     <div className="w-full h-full px-8 mt-4">
       <div className="mb-4">
-        <LayersButtons />
+        {selectedCards.length > 0 ? (
+          <div className="flex items-center w-full gap-3 h-9">
+            <X
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => clearSelection()}
+            />{" "}
+            <div className="flex items-center gap-2">
+              <p>{selectedCards.length}</p>
+              <p> selected </p>
+            </div>
+            <DestructiveDialog
+              title="Are you sure you want to delete these layers?"
+              description="This action cannot be undone"
+              actionText="Yes, I'm sure"
+              action={() => console.log("delete action clicked")}
+            >
+              <Trash2 className="w-4 h-4 cursor-pointer" />
+            </DestructiveDialog>
+            <Share2Icon className="w-4 h-4 cursor-pointer" />
+          </div>
+        ) : (
+          <LayersButtons />
+        )}
       </div>
       {/* Pagination */}
       {layersData.length > 0 ? (
