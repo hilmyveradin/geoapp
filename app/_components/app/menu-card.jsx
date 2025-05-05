@@ -32,7 +32,9 @@ const MenuCard = (props) => {
               <UserAvatar user={cardData.creator} />
               <p> {cardData.creator.fullName} </p>
             </div>
-            <Link href={`/app/map-view/${cardData.cardUid}`}>
+            <Link
+              href={`/app/map-view/${cardData.cardType}/${cardData.cardUid}`}
+            >
               <Button className="bg-gableGreen-500 hover:bg-gableGreen-400">
                 View
               </Button>
