@@ -165,7 +165,7 @@ const MapMain = () => {
 
   return (
     <div ref={mapContainerRef} className="w-full h-full">
-      <div className="fixed z-20 top-20 right-5 bg-white p-2 rounded shadow">
+      {/* <div className="fixed z-20 top-20 right-5 bg-white p-2 rounded shadow">
         <label className="flex items-center cursor-pointer">
           <div className="relative">
             <input
@@ -183,7 +183,7 @@ const MapMain = () => {
           </div>
           <div className="ml-3 text-gray-700 font-medium">3D Mode</div>
         </label>
-      </div>
+      </div> */}
       {mapClicked && (
         <Draggable handle=".handle" bounds={bounds}>
           <div

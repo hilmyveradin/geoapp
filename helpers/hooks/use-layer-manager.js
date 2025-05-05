@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 
 const useLayerManager = () => {
   const { data: session } = useSession();
+  const MAPTILER_KEY = "OFfSxrBgH19zr7dfnSMK";
 
   const {
     mapLoaded,
@@ -93,6 +94,52 @@ const useLayerManager = () => {
           }
         });
       };
+
+      if (!map.getSource("openmaptiles")) {
+        map.addSource("openmaptiles", {
+          url: `https://api.maptiler.com/tiles/v3/tiles.json?key=${MAPTILER_KEY}`,
+          type: "vector",
+        });
+      }
+
+      if (!map.getLayer("3d-buildings")) {
+        map.addLayer({
+          id: "3d-buildings",
+          source: "openmaptiles",
+          "source-layer": "building",
+          type: "fill-extrusion",
+          minzoom: 15,
+          paint: {
+            "fill-extrusion-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "render_height"],
+              0,
+              "lightgray",
+              200,
+              "royalblue",
+              400,
+              "lightblue",
+            ],
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              15,
+              0,
+              16,
+              ["get", "render_height"],
+            ],
+            "fill-extrusion-base": [
+              "case",
+              [">=", ["get", "zoom"], 16],
+              ["get", "render_min_height"],
+              0,
+            ],
+            "fill-extrusion-opacity": 0.6,
+          },
+        });
+      }
 
       if (mapLayers.length === 0) {
         // Optionally clear layers if no selection

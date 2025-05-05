@@ -1,22 +1,7 @@
 // @/helpers/hooks/use-3d-layer-manager.js
-import { useEffect, useRef, useState } from "react";
-import useMapViewStore from "./store/use-map-view-store";
-import authOptions from "@/app/api/auth/[...nextauth]/options";
-import { getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const use3DLayerManager = (mapRef, MAPTILER_KEY, is3DMode) => {
-  const { data: session } = useSession();
-
-  const {
-    mapLoaded,
-    map,
-    mapData,
-    mapLayers,
-    refreshLayerOrder,
-    addedLayerUids,
-  } = useMapViewStore();
-
   useEffect(() => {
     if (!mapRef.current) return;
 
