@@ -198,6 +198,8 @@ const OptionsSection = ({ data }) => {
     setTableLoaded,
     layerInfo,
     setLayerInfo,
+    mapData,
+    layersData,
   } = useMapViewStore();
   const id = data.layerUid;
   const deleteLayerAction = () => {
