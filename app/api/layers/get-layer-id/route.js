@@ -9,7 +9,7 @@ export async function GET(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${layerUid}/info`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/${layerUid}/info`,
       {
         method: "GET",
         headers: {

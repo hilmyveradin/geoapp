@@ -46,8 +46,8 @@ const AddLayersContent = () => {
         const tempLayers = temp.data.map((data) => {
           return {
             ...data,
-            thumbnailUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-            legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
+            thumbnailUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/${data.layerUid}/legend`,
             isShown: true,
           };
         });

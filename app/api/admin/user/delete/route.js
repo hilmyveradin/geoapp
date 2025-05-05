@@ -9,7 +9,7 @@ export async function POST(request) {
     const { userUid } = body;
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/be/adm/user/delete`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/adm/user/delete`,
       {
         method: "POST",
         headers: {

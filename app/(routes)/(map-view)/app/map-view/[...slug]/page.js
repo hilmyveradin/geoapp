@@ -34,8 +34,8 @@ const MapView = ({ params }) => {
       const modifiedDatas = datas.data.map((data) => {
         return {
           ...data,
-          imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
-          legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
+          imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+          legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/${data.layerUid}/legend`,
           isShown: true,
         };
       });
@@ -92,8 +92,8 @@ const MapView = ({ params }) => {
             ...data,
             mapBbox: data.layerBbox,
             mapTitle: data.layerTitle,
-            imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
-            legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
+            imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+            legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/${data.layerUid}/legend`,
             mapType: mapType,
             mapUid: mapUid,
             isShown: true,

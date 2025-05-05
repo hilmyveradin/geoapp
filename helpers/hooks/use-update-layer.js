@@ -22,8 +22,8 @@ const useUpdateLayer = () => {
       const modifiedDatas = datas.data.map((data) => {
         return {
           ...data,
-          imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-          legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/legend/${data.layerUid}`,
+          imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+          legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/legend/${data.layerUid}`,
         };
       });
 

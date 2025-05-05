@@ -33,11 +33,11 @@ const MapOverview = ({ params }) => {
             ? {
                 ...data.data[0],
                 tags: data.data[0].layerTags,
-                imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.data[0].thumbnailUrl}`,
+                imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/thumbnail/${data.data[0].thumbnailUrl}`,
               }
             : {
                 ...data.data,
-                imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.data.thumbnailUrl}`,
+                imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/thumbnail/${data.data.thumbnailUrl}`,
               };
 
         setOverviewData(modifiedData);
