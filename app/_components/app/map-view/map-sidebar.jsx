@@ -1,8 +1,10 @@
 "use client";
 
+import Image from 'next/image'
 import { cn } from "@/lib/utils";
 import {
   ChevronLeft,
+  ChevronRight,
   PlusCircle,
   Layers3,
   Sheet,
@@ -19,10 +21,13 @@ import TablesContent from "./map-sidebar/tables-content";
 import SaveContent from "./map-sidebar/save-content";
 import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
-
+import { DataTableDemo } from '../layer-table/layer-table';
+import { ButtonSidebar } from '@/components/ui/button-sidebar';
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
+  const [showButtonSidebar, setShowButtonSidebar] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
+  const [showSidebarRight, setShowSidebarRight] = useState(true);
 
   // Button data
   const BUTTONS_CONSTANTS = [
@@ -110,7 +115,7 @@ const MapSidebar = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="">
       <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gableGreen-500 w-[48px] text-white",
@@ -150,7 +155,7 @@ const MapSidebar = () => {
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-gray-500",
             {
-              "left-12 w-fit": showSidebar,
+              "left-12 w-60": showSidebar,
               "left-40 w-60": !showSidebar,
             }
           )}
@@ -158,6 +163,46 @@ const MapSidebar = () => {
           {BUTTON_CONTENT[selectedButton]}
         </div>
       )}
+      <div
+        className = {cn(
+          "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 overflow-x-auto",
+          {
+            "left-[300px] w-[calc(100vw-300px-60px)]": !showButtonSidebar && showSidebar,
+            "left-[172px] w-[calc(100vw-172px-60px)]": showButtonSidebar && !showSidebar,
+            "left-[412px] w-[calc(100vw-412px-60px)]": !showButtonSidebar && !showSidebar,
+            "left-[60px] w-[calc(100vw-60px-60px)]": showButtonSidebar && showSidebar && showSidebarRight,
+            "left-[60px] w-[calc(100vw-60px-192px)]": showButtonSidebar && showSidebar && !showSidebarRight,
+          }
+        )}>
+          <DataTableDemo></DataTableDemo>
+      </div>
+      <div
+        className={cn(
+          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
+          {
+            "w-[180px]": !showSidebarRight,
+          },
+        )}
+      >
+        <ButtonSidebar variant="ghostLeft">
+          <Image
+            className={cn("w-4 h-4")}
+            src="/app/style-icon.svg"
+            alt="style icon"
+            width={16}
+            height={16}
+          />
+          {!showSidebarRight && <span className="ml-2 inline-block">Style</span>}
+        </ButtonSidebar>
+        <ButtonSidebar variant="ghostLeft" onClick={() => setShowSidebarRight((prev) => !prev)}>
+          <ChevronRight
+            className={cn("w-4 h-4", {
+              "-rotate-180": showSidebarRight,
+            })}
+          />
+          {!showSidebarRight && <span className="ml-2 inline-block">Collapse</span>}
+        </ButtonSidebar>
+      </div>
     </div>
   );
 };
