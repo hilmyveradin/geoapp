@@ -49,6 +49,13 @@ jobs:
             source ~/.bashrc || source ~/.profile
             cd /home/***/var/www/geoportal/geoportal-webapp
 
+            # Check for conflicts in pnpm-lock.yaml and resolve them
+            if git diff --name-only --diff-filter=U | grep -q "pnpm-lock.yaml"; then
+              echo "pnpm-lock.yaml has unresolved conflicts. Attempting to resolve."
+              git merge --abort || true
+              git reset --hard HEAD
+            fi
+
             # Stash all changes including pnpm-lock.yaml
             git stash push -m "Stash local changes"
 
@@ -59,10 +66,9 @@ jobs:
             # Apply stashed changes
             git stash pop
 
-            # Check for conflicts in pnpm-lock.yaml
+            # Check for conflicts again and resolve them
             if git diff --name-only --diff-filter=U | grep -q "pnpm-lock.yaml"; then
               echo "pnpm-lock.yaml has unresolved conflicts. Please resolve them."
-              # Automatically attempt to resolve conflicts by overwriting with the local stash
               git checkout --theirs pnpm-lock.yaml
               git add pnpm-lock.yaml
               git commit -m "Resolve conflicts in pnpm-lock.yaml"
