@@ -10,6 +10,7 @@ import UserAvatar from "./shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import MenuCardDropdown from "./menu-card-dropdown";
 import Link from "next/link";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const MenuCard = (props) => {
   const { key, cardData } = props;
@@ -20,7 +21,13 @@ const MenuCard = (props) => {
         className="px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100"
       >
         <CardContent className="relative flex items-center justify-center p-0">
-          <img src={cardData.thumbnailUrl} alt="Thumbnail" className="w-full" />
+          <AspectRatio ratio={450 / 200}>
+            <img
+              src={cardData.thumbnailUrl}
+              alt="Thumbnail"
+              className="w-full"
+            />
+          </AspectRatio>
           <MenuCardDropdown>
             <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
           </MenuCardDropdown>
