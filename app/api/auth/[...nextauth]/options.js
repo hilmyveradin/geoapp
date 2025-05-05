@@ -48,7 +48,7 @@ const authOptions = {
       }
 
       // If the token expired, refresh it
-      return refreshAccessToken(token);
+      return await refreshAccessToken(token);
     },
 
     async session({ session, token }) {
@@ -68,21 +68,19 @@ const authOptions = {
 async function refreshAccessToken(token) {
   try {
     const refreshedTokens = await fetch(
-      `${process.env.API_BASE_URL}/iam/refresh_token`,
+      `${process.env.API_BASE_URL}/iam/refresh`,
       {
         method: "POST",
-        body: JSON.stringify({ token: token.refreshToken }),
+        body: JSON.stringify({ refresh_token: token.refreshToken }),
         headers: { "Content-Type": "application/json" },
       }
     ).then((res) => res.json());
 
-    console.log("REFRESH TOKEN: ", refreshedTokens);
-
     if (!refreshedTokens.error) {
       return {
         ...token,
-        accessToken: refreshedTokens.accessToken,
-        refreshToken: refreshedTokens.refreshToken,
+        accessToken: refreshedTokens.access_token,
+        refreshToken: refreshedTokens.refresh_token,
         accessTokenExpires: dayjs().add(1, "week").toDate().getTime(),
       };
     }
