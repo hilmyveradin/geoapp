@@ -11,7 +11,7 @@ const useMapViewStore = create((set) => ({
     layerTitle: null,
   },
   selectedLayerTableUid: null,
-  tableLoaded: false,
+  tableLoaded: true,
   zoomedLayerBbox: null,
 
   setMap: (data) => set(() => ({ map: data })),
