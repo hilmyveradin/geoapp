@@ -2,6 +2,7 @@
 
 import ClientPagination from "@/app/_components/app/client-pagination";
 import MapsButtons from "@/app/_components/app/map-buttons";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const MapsDashboard = () => {
@@ -45,7 +46,11 @@ const MapsDashboard = () => {
   }, []);
 
   if (mapsData.length === 0) {
-    return <div> loading </div>;
+    return (
+      <div className="flex items-center justify-center w-full h-96">
+        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+      </div>
+    );
   }
 
   return (

@@ -81,7 +81,7 @@ async function refreshAccessToken(token) {
         ...token,
         accessToken: refreshedTokens.access_token,
         refreshToken: refreshedTokens.refresh_token,
-        accessTokenExpires: dayjs().add(1, "week").toDate().getTime(),
+        accessTokenExpires: dayjs().add(1, "day").toDate().getTime(),
       };
     }
 

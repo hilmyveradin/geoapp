@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ClientPagination from "@/app/_components/app/client-pagination";
 import LayersButtons from "@/app/_components/app/layer-buttons";
+import { Loader2 } from "lucide-react";
 
 const LayersDashboard = () => {
   const [layersData, setLayers] = useState([]);
@@ -42,7 +43,11 @@ const LayersDashboard = () => {
   }, []);
 
   if (layersData.length === 0) {
-    return <div> loading </div>;
+    return (
+      <div className="flex items-center justify-center w-full h-96">
+        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+      </div>
+    );
   }
 
   return (

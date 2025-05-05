@@ -3,6 +3,7 @@
 import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
+import { Loader2 } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { Map } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -87,10 +88,15 @@ const MapOverview = ({ params }) => {
 
   console.log(overviewData);
 
-  if (!overviewData) return <div>Loading...</div>;
+  if (!overviewData)
+    return (
+      <div className="flex items-center justify-center w-full h-96">
+        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+      </div>
+    );
 
   return (
-    <div className="flex w-full h-full gap-16 p-10 bg-blue-100">
+    <div className="flex w-full h-full gap-16 p-10">
       <img
         src={overviewData.imageUrl}
         alt="map image"
@@ -102,7 +108,7 @@ const MapOverview = ({ params }) => {
             <Button
               onClick={item.action}
               key={`button-${item.title}`}
-              className="w-full gap-4 bg-gn-500"
+              className="w-full gap-4 bg-gableGreen-500"
             >
               {item.title}
             </Button>
@@ -116,7 +122,7 @@ const MapOverview = ({ params }) => {
           <div className="flex justify-between space-x-2 ">
             <p>Owner</p>
             <button
-              className="flex items-center space-x-2 text-gn-500 stroke-gn-500"
+              className="flex items-center space-x-2 text-gableGreen-500 stroke-gableGreen-500"
               onClick={handleChangeOwner}
             >
               <UserRound className="w-7 h-7" />

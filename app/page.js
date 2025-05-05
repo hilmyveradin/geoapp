@@ -1,9 +1,5 @@
-"use client";
 import Header from "@/app/_components/home/header";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import Footer from "./_components/home/footer";
-import { useSession } from "next-auth/react";
 
 const Home = () => {
   return (
