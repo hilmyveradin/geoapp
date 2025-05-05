@@ -6,6 +6,10 @@ const useMapViewStore = create((set) => ({
   selectedLayers: null,
   mapData: null,
   layersData: null,
+  layerInfo: {
+    layerUid: null,
+    layerTitle: null,
+  },
   selectedLayerTableUid: null,
   tableLoaded: false,
   zoomedLayerBbox: null,
@@ -45,6 +49,11 @@ const useMapViewStore = create((set) => ({
   removeSelectedLayers: (data) =>
     set((state) => ({
       selectedLayers: state.selectedLayers.filter((layer) => layer !== data),
+    })),
+
+  setLayerInfo: (layerUid, layerTitle) =>
+    set((state) => ({
+      layerInfo: { layerUid, layerTitle },
     })),
 
   setSelectedLayerTableUid: (data) =>

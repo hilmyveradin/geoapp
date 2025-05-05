@@ -178,7 +178,7 @@ const LayersCard = ({ data }) => {
 };
 
 const OptionsSection = ({ data }) => {
-  const { setZoomedLayerBbox, selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded } = useMapViewStore();
+  const { setZoomedLayerBbox, selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded, layerInfo, setLayerInfo } = useMapViewStore();
   const id = data.layerUid
   const buttonLists = [
     {
@@ -206,12 +206,15 @@ const OptionsSection = ({ data }) => {
   ];
 
   const handleTableButtonClick = (key) => {
-    if (key == selectedLayerTableUid) {
+    if (key == layerInfo.layerUid) {
       setTableLoaded(!tableLoaded)
     } else {
-      setTableLoaded(true)
-    } 
-    setSelectedLayerTableUid(key);
+      setTableLoaded(false)
+      setTimeout(() => {
+        setTableLoaded(true);
+      }, 100);
+    }
+    setLayerInfo(key, data.layerTitle);
   };
   
   return (

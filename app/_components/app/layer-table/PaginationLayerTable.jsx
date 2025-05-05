@@ -11,11 +11,11 @@ export default function PaginationLayerTable() {
   const [pageNumber, setPageNumber] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
   const [columnDefs, setColumnDefs] = useState([]);
-  const { selectedLayerTableUid, setTableLoaded } = useMapViewStore();
-
+  const [showTable, setShowTable] = useState(true);
+  const { layerInfo} = useMapViewStore();
   const getRows = async (numRows, startRow) => {
     try {
-      const response = await fetch(`/api/get-layer-table-data?layerUid=${selectedLayerTableUid}&offset=${startRow}&length=${numRows}`, {
+      const response = await fetch(`/api/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -35,17 +35,27 @@ export default function PaginationLayerTable() {
     }
   }
   return (
-    <ControlledTable
-      rows={rows}
-      columnDefs={columnDefs}
-      getRows={getRows}
-      totalCount={totalRows}
-      onChange={setRows}
-      onPageNumberChange={setPageNumber}
-      pageSize={ROWS_PER_PAGE}
-      pageNumber={pageNumber}
-      pagination={true}
-      getRowNodeId={(data) => data?.name || data?.index}
-    />
-  )
+      <>
+        <div className="flex justify-between bg-white px-2 pt-1">
+          <Label className="flex text-sm justify-center font-bold">
+            {layerInfo.layerTitle}
+          </Label>
+          {/* <Button size="sm">
+            <X />
+          </Button> */}
+        </div>
+        <ControlledTable
+          rows={rows}
+          columnDefs={columnDefs}
+          getRows={getRows}
+          totalCount={totalRows}
+          onChange={setRows}
+          onPageNumberChange={setPageNumber}
+          pageSize={ROWS_PER_PAGE}
+          pageNumber={pageNumber}
+          pagination={true}
+          getRowNodeId={(data) => data?.name || data?.index}
+        />
+      </>
+    )
 }
