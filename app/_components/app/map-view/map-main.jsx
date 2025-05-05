@@ -9,7 +9,7 @@ const MapMain = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
-  const { layersData } = useMapViewStore();
+  const { selectedLayers } = useMapViewStore();
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
