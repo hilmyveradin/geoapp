@@ -1,24 +1,24 @@
 import { create } from "zustand";
 
 const useTableQueryStore = create((set) => ({
-	ftsQuery: null,
-	reloadTable: false,
-	searchSubmit: false,
+  ftsQuery: null,
+  reloadTable: false,
+  searchSubmit: false,
 
-	setFtsQuery: (query) =>
-		set(() => ({
-			ftsQuery: query,
-		})),
+  setFtsQuery: (query) =>
+    set(() => ({
+      ftsQuery: query,
+    })),
 
-	setReloadTable: (data) =>
-		set(() => ({
-			reloadTable: data,
-		})), 
+  setReloadTable: (data) =>
+    set(() => ({
+      reloadTable: data,
+    })),
 
-	setSearchSubmit: (data) =>
-		set(() => ({
-			searchSubmit: data,
-		}))
+  setSearchSubmit: (data) =>
+    set(() => ({
+      searchSubmit: data,
+    })),
 }));
 
 export default useTableQueryStore;

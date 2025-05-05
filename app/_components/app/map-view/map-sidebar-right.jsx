@@ -7,9 +7,10 @@ import { ChevronLeft } from "lucide-react";
 import { Shapes } from "lucide-react";
 import { FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
-import FieldAliasContent from "./map-right-sidebar/edit-popup-attributes";
+import FieldAliasContent from "./map-right-sidebar/field-alias-content";
 import StyleContent from "./map-right-sidebar/style-content";
 import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
+import FilterContent from "./map-right-sidebar/filter-content";
 
 const MapSidebarRight = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -17,15 +18,21 @@ const MapSidebarRight = () => {
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(false);
 
   // Agar bisa diakses di map-sidebar.jsx
-  const {showRightSidebar, setShowRightSidebar, setExpandedRightSidebarButtons} = useMapRightSidebar();
+  const {
+    showRightSidebar,
+    setShowRightSidebar,
+    setExpandedRightSidebarButtons,
+  } = useMapRightSidebar();
 
   // Define content for each button
   const BUTTON_CONTENT = {
-    FieldAliasContent: <FieldAliasContent />,
+    fieldAliasContent: <FieldAliasContent />,
     styleContent: <StyleContent />,
+    filterContent: <FilterContent />,
   };
 
   const handleButtonClick = (buttonName) => {
+    debugger;
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
     if (selectedButton == buttonName) {
       setExpandedSidebarButtons(false);
@@ -65,6 +72,7 @@ const MapSidebarRight = () => {
           className={cn("flex justify-end", {
             "p-0 justify-center": !showSidebar,
           })}
+          onClick={() => handleButtonClick("filterContent")}
         >
           <Filter
             className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
@@ -78,7 +86,7 @@ const MapSidebarRight = () => {
           className={cn("flex justify-end", {
             "p-0 justify-center": !showSidebar,
           })}
-          onClick={() => handleButtonClick("FieldAliasContent")}
+          onClick={() => handleButtonClick("fieldAliasContent")}
         >
           <FilePenLine
             className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
@@ -137,7 +145,8 @@ const MapSidebarRight = () => {
       </Tabs> */}
       </div>
       {(selectedButton === "FieldAliasContent" ||
-        selectedButton === "styleContent") && (
+        selectedButton === "styleContent" ||
+        selectedButton === "filterContent") && (
         <div
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",

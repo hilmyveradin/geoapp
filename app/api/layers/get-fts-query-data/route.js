@@ -27,7 +27,7 @@ export async function POST(request) {
         await res.text()
       );
       // Instead of throwing an error, we are returning a NextResponse object with a status code
-      return new NextResponse(layerUid, offset, length, { status: res.status });
+      return new NextResponse(layerUid, { status: res.status });
     }
 
     const data = await res.json();
