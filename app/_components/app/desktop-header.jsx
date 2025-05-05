@@ -4,11 +4,11 @@ import UserAvatar from "./user-avatar";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const AppTopBar = () => {
+const DesktopHeader = () => {
   const pathName = usePathname();
   const router = useRouter();
 
-  const RightItems = [
+  const NAVIGATION_ITEMS = [
     {
       name: "Maps",
       path: "/app/maps",
@@ -33,7 +33,7 @@ const AppTopBar = () => {
         <img src="/geoportal-logo.svg" alt="logo" />
       </div>
       <div className="flex items-center justify-center gap-6">
-        {RightItems.map((item, index) => {
+        {NAVIGATION_ITEMS.map((item, index) => {
           return (
             <button
               key={`topbar-item-${index}`}
@@ -54,4 +54,4 @@ const AppTopBar = () => {
   );
 };
 
-export default AppTopBar;
+export default DesktopHeader;
