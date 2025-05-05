@@ -8,7 +8,7 @@ export async function POST(request) {
     const body = await request.json();
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/map/create`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/cms/map/create`,
       {
         method: "POST",
         headers: {

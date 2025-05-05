@@ -7,7 +7,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/adm/user/list`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/adm/user/list`,
       {
         method: "GET",
         headers: {

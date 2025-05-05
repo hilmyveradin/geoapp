@@ -21,7 +21,7 @@ const authOptions = {
 
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/iam/login`,
+            `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/iam/login`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -82,7 +82,7 @@ const authOptions = {
 async function refreshAccessToken(token) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/iam/refresh`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/iam/refresh`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

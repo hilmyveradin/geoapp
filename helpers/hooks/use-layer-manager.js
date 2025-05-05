@@ -72,7 +72,7 @@ const useLayerManager = () => {
             return;
           }
 
-          const url = `${process.env.NEXT_PUBLIC_BASE_URL}/geoserver/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true&token=${session.accessToken}`;
+          const url = `${process.env.NEXT_PUBLIC_GEOSERVER_URL}/geoserver/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true&token=${session.accessToken}`;
 
           // Add or update existing layer
           if (!map.getSource(layerId)) {

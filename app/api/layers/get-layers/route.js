@@ -2,18 +2,23 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import authOptions from "../../auth/[...nextauth]/options";
 
-export async function GET() {
+export async function POST() {
+  // Replace the request body with the specific layer_data_model format
+  const requestBody = {
+    layer_data_model: "Vector Layer",
+  };
   try {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/layer/list`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/cms/layer/list`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
+        body: JSON.stringify(requestBody),
       }
     );
 

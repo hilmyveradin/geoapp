@@ -10,7 +10,7 @@ export async function POST(request) {
     const { layer_uid, coord, zoomLevel } = body;
     const session = await getServerSession(authOptions);
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/map/${mapUid}/object_info`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/cms/map/${mapUid}/object_info`,
       {
         method: "POST",
         headers: {

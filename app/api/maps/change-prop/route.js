@@ -9,7 +9,7 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/cms/map/${mapUid}/changeprop`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/cms/map/${mapUid}/changeprop`,
       {
         method: "POST",
         headers: {

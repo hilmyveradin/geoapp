@@ -10,7 +10,7 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/be/adm/group/${groupUid}/del_user`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/adm/group/${groupUid}/del_user`,
       {
         method: "POST",
         headers: {
