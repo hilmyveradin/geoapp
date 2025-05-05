@@ -1,5 +1,6 @@
 "use client";
 
+import LayersButtons from "@/app/_components/app/layer-buttons";
 import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
@@ -8,34 +9,68 @@ import { Map } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const LayerOverview = ({ params }) => {
-  const [layerData, setLayerData] = useState(null);
-  const layerUid = params.slug;
+const MapOverview = ({ params }) => {
+  const [overviewData, setOverviewData] = useState(null);
+  const overviewType = params.slug[0];
+  const overviewUid = params.slug[1];
   const router = useRouter();
 
   useEffect(() => {
     async function loadLayerData() {
-      if (layerUid) {
-        try {
-          const response = await fetch(
-            `/api/get-layer-id?layerUid=${layerUid}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const data = await response.json();
-          setLayerData(data.data[0]);
-        } catch (error) {
-          console.log(error);
-        }
+      try {
+        const response = await fetch(
+          `/api/get-layer-id?layerUid=${overviewUid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const datas = await response.json();
+        const modifiedDatas = datas.data.map((data) => {
+          return {
+            tags: data.layerTags,
+            ...data,
+          };
+        });
+        debugger;
+        setOverviewData(modifiedDatas[0]);
+      } catch (error) {
+        console.log(error);
       }
     }
 
-    loadLayerData();
-  }, [layerUid]);
+    async function loadMapData() {
+      try {
+        const response = await fetch(
+          `/api/get-layer-id?mapUid=${overviewUid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const datas = await response.json();
+        const modifiedDatas = datas.data.map((data) => {
+          return {
+            tags: data.layerTags,
+            ...data,
+          };
+        });
+        debugger;
+        setOverviewData(modifiedDatas[0]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (overviewType === "layer") {
+      loadLayerData();
+    } else {
+    }
+  }, [overviewUid, overviewType]);
 
   const handleOpenMapViewer = () => {
     router.push(`/app/map-view/${layerUid}`);
@@ -56,7 +91,9 @@ const LayerOverview = ({ params }) => {
 
   const handleChangeOwner = () => {};
 
-  if (!layerData) return <div>Loading...</div>;
+  console.log(overviewData);
+
+  if (!overviewData) return <div>Loading...</div>;
 
   return (
     <div className="flex w-full h-full gap-16 p-10 bg-blue-100">
@@ -93,8 +130,8 @@ const LayerOverview = ({ params }) => {
             </button>
           </div>
           <div className="flex items-center space-x-2">
-            <UserAvatar user={layerData.creator} />
-            <p>{layerData.creator.fullName}</p>
+            <UserAvatar user={overviewData.creator} />
+            <p>{overviewData.creator.fullName}</p>
           </div>
         </div>
 
@@ -102,12 +139,12 @@ const LayerOverview = ({ params }) => {
           <p> Date</p>
           <div className="flex items-center justify-between">
             <p>Item created</p>
-            <p>{dayjs(layerData.createdAt).format("MMM, DD, YYYY")}</p>
+            <p>{dayjs(overviewData.createdAt).format("MMM, DD, YYYY")}</p>
           </div>
           <div className="flex items-center justify-between">
             <p>Item updated</p>
-            {layerData.updatedAt ? (
-              <p>{dayjs(layerData.updatedAt).format("MMM, DD, YYYY")}</p>
+            {overviewData.updatedAt ? (
+              <p>{dayjs(overviewData.updatedAt).format("MMM, DD, YYYY")}</p>
             ) : (
               <p>-</p>
             )}
@@ -116,8 +153,8 @@ const LayerOverview = ({ params }) => {
         <div className="flex flex-col gap-4">
           <p>Tags</p>
           <div className="flex items-center justify-between">
-            {layerData.layerTags ? (
-              <p>{layerData.layerTags}</p>
+            {overviewData.tags ? (
+              <p>{overviewData.tags}</p>
             ) : (
               <p>This items has no tags</p>
             )}
@@ -128,4 +165,4 @@ const LayerOverview = ({ params }) => {
   );
 };
 
-export default LayerOverview;
+export default MapOverview;

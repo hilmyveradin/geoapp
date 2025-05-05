@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ClientPagination from "@/app/_components/app/client-pagination";
-import useLayerStore from "@/helpers/hooks/useLayerStore";
 import LayersButtons from "@/app/_components/app/layer-buttons";
 
 const LayersDashboard = () => {
-  const { layersData, setLayers } = useLayerStore();
+  const [layersData, setLayers] = useState([]);
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -22,14 +21,15 @@ const LayersDashboard = () => {
         }
         const temp = await response.json();
 
-        const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
-
-        const tempLayers = temp.data.map((layers) => {
+        const tempLayers = temp.data.map((data) => {
           return {
-            ...layers,
-            thumbnailUrl: `${IMAGE_BASE_URL}/cms/layer/thumbnail/${layers.thumbnailUrl}`,
+            cardType: "layer",
+            cardTitle: data.layerTitle,
+            cardUid: data.layerUid,
+            ...data,
           };
         });
+
         setLayers(tempLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
@@ -40,9 +40,15 @@ const LayersDashboard = () => {
       .catch(console.error);
   }, []);
 
+  if (layersData.length === 0) {
+    return <div> loading </div>;
+  }
+
   return (
     <div className="w-full h-full px-8 mt-4">
-      <LayersButtons />
+      <div className="mb-4">
+        <LayersButtons />
+      </div>
       {/* Pagination */}
       <ClientPagination data={layersData} />
     </div>
