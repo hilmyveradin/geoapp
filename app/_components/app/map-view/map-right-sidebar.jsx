@@ -79,7 +79,7 @@ const MapRightSidebar = () => {
             )}
           </Button>
         </TooltipText>
-        <TooltipText content="Filter layer" side="left" align="start">
+        {/* <TooltipText content="Filter layer" side="left" align="start">
           <Button
             variant="ghost"
             className={cn("flex justify-center", {
@@ -119,7 +119,7 @@ const MapRightSidebar = () => {
               <span className="inline-block ml-2">Fields</span>
             )}
           </Button>
-        </TooltipText>
+        </TooltipText> */}
 
         {/* Additional empty div for spacing, pushing the Collapse button to the bottom */}
         <div className="flex-grow" />
