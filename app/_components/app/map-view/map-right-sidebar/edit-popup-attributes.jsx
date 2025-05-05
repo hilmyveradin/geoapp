@@ -42,12 +42,9 @@ const EditPopupAttributes = () => {
 
         try {
           const response = await fetch(
-            `/api/get-layer-id?layerUid=${selectedPopupLayer.layerUid}`,
+            `/api/layers/get-layer-id?layerUid=${selectedPopupLayer.layerUid}`,
             {
               method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
             }
           );
           const responseData = await response.json();
@@ -76,7 +73,6 @@ const EditPopupAttributes = () => {
 
   const setSelectedFieldAliasValue = (newField) => {
     if (newField && newField.fieldAlias) {
-      debugger;
       // Replace the field in layerFields that has the same fieldAlias as newField
       setLayerFields(
         layerFields.map((f) =>
@@ -85,7 +81,6 @@ const EditPopupAttributes = () => {
       );
       setSelectedFieldForEdit(null); // Clear the edit state more explicitly
     } else {
-      debugger;
       setSelectedFieldForEdit(null); // Just reset the edit state if no newField is provided
     }
   };
