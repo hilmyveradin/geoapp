@@ -52,7 +52,7 @@ const MapsDashboard = () => {
     async function getMapsData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}//api/maps/get-maps`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/get-maps`,
           {
             method: "GET",
           }

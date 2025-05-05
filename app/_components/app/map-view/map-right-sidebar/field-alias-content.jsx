@@ -72,7 +72,7 @@ const FieldAliasContent = () => {
         [field.fieldName]: field.fieldAlias,
       };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/set-field-alias?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/set-field-alias?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

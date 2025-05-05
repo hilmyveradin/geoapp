@@ -240,7 +240,7 @@ const StyleContent = () => {
           formData.append("uploadFile", pointImageData);
 
           return fetch(
-            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/save-point-image?layerUid=${selectedLayer.layerUid}`,
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-point-image?layerUid=${selectedLayer.layerUid}`,
             {
               method: "POST",
               headers: { "Content-Type": "multipart/form-data" },
@@ -259,7 +259,7 @@ const StyleContent = () => {
       };
 
       return fetch(
-        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/save-line?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-line?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
