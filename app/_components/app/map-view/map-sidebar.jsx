@@ -91,18 +91,14 @@ const MapSidebar = () => {
     <div className="">
       <div
         className={cn(
-          "flex flex-col fixed top-14 h-[calc(100vh-56px)] left-0 bottom-10 z-50 bg-nileBlue-900 w-12 text-white text-xs p-1",
+          "flex flex-col fixed top-[58px] h-[calc(100vh-58px)] left-0 bottom-10 z-50 bg-nileBlue-900 w-12 text-white text-xs p-1",
           {
             "w-[160px]": showLeftSidebar,
           }
         )}
       >
         {mapData.mapType === "map" && (
-          <TooltipText
-            content="Add Layer"
-            side="right"
-            align="start"
-          >
+          <TooltipText content="Add Layer" side="right" align="start">
             <Button
               variant="ghost"
               onClick={() => handleButtonClick("addLayer")}
@@ -123,11 +119,7 @@ const MapSidebar = () => {
           </TooltipText>
         )}
 
-        <TooltipText
-          content="Layers"
-          side="right"
-          align="start"
-        >
+        <TooltipText content="Layers" side="right" align="start">
           <Button
             variant="ghost"
             onClick={() => handleButtonClick("layers")}
@@ -141,15 +133,13 @@ const MapSidebar = () => {
                 "stroke-white stroke-2": selectedButton === "layers",
               })}
             />
-            {showLeftSidebar && <span className="inline-block ml-2">Layers</span>}
+            {showLeftSidebar && (
+              <span className="inline-block ml-2">Layers</span>
+            )}
           </Button>
         </TooltipText>
 
-        <TooltipText
-          content="Basemap"
-          side="right"
-          align="start"
-        >
+        <TooltipText content="Basemap" side="right" align="start">
           <Button
             variant="ghost"
             onClick={() => handleButtonClick("basemap")}

@@ -52,17 +52,13 @@ const MapRightSidebar = () => {
     <div>
       <div
         className={cn(
-          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-50 bg-nileBlue-50 w-12 justify-end p-1 text-xs",
+          "flex flex-col fixed top-[58px] h-[calc(100vh-58px)] right-0 bottom-10 z-50 bg-nileBlue-50 w-12 justify-end p-1 text-xs",
           {
             "w-28": showRightSidebar,
           }
         )}
       >
-        <TooltipText
-          content="Edit style"
-          side="left"
-          align="start"
-        >
+        <TooltipText content="Edit style" side="left" align="start">
           <Button
             variant="ghost"
             className={cn("flex justify-center", {
@@ -83,11 +79,7 @@ const MapRightSidebar = () => {
             )}
           </Button>
         </TooltipText>
-        <TooltipText
-          content="Filter layer"
-          side="left"
-          align="start"
-        >
+        <TooltipText content="Filter layer" side="left" align="start">
           <Button
             variant="ghost"
             className={cn("flex justify-center", {
@@ -108,11 +100,7 @@ const MapRightSidebar = () => {
             )}
           </Button>
         </TooltipText>
-        <TooltipText
-          content="Edit field alias"
-          side="left"
-          align="start"
-        >
+        <TooltipText content="Edit field alias" side="left" align="start">
           <Button
             variant="ghost"
             className={cn("flex justify-center", {
