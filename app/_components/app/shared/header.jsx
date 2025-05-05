@@ -212,7 +212,7 @@ const AppHeader = () => {
                   User
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 className={cn(
                   pathName.includes("/app/groups")
                     ? "text-nileBlue-700 font-bold"
@@ -221,7 +221,7 @@ const AppHeader = () => {
                 onClick={handleGroupView}
               >
                 Group
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-red-500 font-semibold hover:text-red-400"

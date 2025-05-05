@@ -177,9 +177,9 @@ const MapSidebar = () => {
           {!showLeftSidebar && <span className="inline-block ml-2">Tables</span>}
         </Button> */}
 
-        {(isAdmin || isEditor) && <Separator className="my-2" />}
+        {/* {(isAdmin || isEditor) && <Separator className="my-2" />} */}
 
-        {(isAdmin || isEditor) && (
+        {/* {(isAdmin || isEditor) && (
           <SaveAlertDialog>
             <Button
               variant="ghost"
@@ -193,7 +193,7 @@ const MapSidebar = () => {
               )}
             </Button>
           </SaveAlertDialog>
-        )}
+        )} */}
 
         {/* <Menubar className="bg-transparent border-none">
           <MenubarMenu>
@@ -224,9 +224,9 @@ const MapSidebar = () => {
           </MenubarMenu>
         </Menubar> */}
 
-        <Separator className="my-2" />
+        {/* <Separator className="my-2" /> */}
 
-        <ShareDialog>
+        {/* <ShareDialog>
           <Button
             variant="ghost"
             className={cn("flex justify-start text-blackHaze-500", {
@@ -240,7 +240,7 @@ const MapSidebar = () => {
               <span className="inline-block ml-2">Share</span>
             )}
           </Button>
-        </ShareDialog>
+        </ShareDialog> */}
         {/* Additional empty div for spacing, pushing the Collapse button to the bottom */}
         <div className="flex-grow" />
 

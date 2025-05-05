@@ -134,30 +134,7 @@ const LayersDashboard = () => {
 
   return (
     <div className="w-full h-full px-8 mt-4">
-      <div className="mb-4">
-        {selectedCards.length > 0 ? (
-          <div className="flex items-center w-full gap-3 h-9">
-            <X
-              className="w-4 h-4 cursor-pointer"
-              onClick={() => clearSelection()}
-            />{" "}
-            <div className="flex items-center gap-2">
-              <p>{selectedCards.length}</p>
-              <p> selected </p>
-            </div>
-            <DestructiveDialog
-              title="Are you sure you want to delete these layers?"
-              actionText="Yes, I'm sure"
-              action={() => deleteLayers()}
-            >
-              <Trash2 className="w-4 h-4 cursor-pointer" />
-            </DestructiveDialog>
-            <Share2Icon className="w-4 h-4 cursor-pointer" />
-          </div>
-        ) : (
-          <LayersButtons />
-        )}
-      </div>
+      <div className="mb-4"></div>
       {/* Pagination */}
       {filteredLayers.length > 0 ? (
         <ClientPagination data={filteredLayers} />

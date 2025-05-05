@@ -101,9 +101,9 @@ const MapOverview = ({ params }) => {
             >
               Open in map viewer
             </Button>
-            <ShareDialog>
+            {/* <ShareDialog>
               <Button className="w-full">Share</Button>
-            </ShareDialog>
+            </ShareDialog> */}
           </div>
           <div className="flex items-center space-x-2">
             <Map className="w-6 h-6 sm:w-7 sm:h-7" />

@@ -137,7 +137,7 @@ const MapsDashboard = () => {
   return (
     <div className="w-full h-full px-4 md:px-8 mt-2 md:mt-4">
       <div className="mb-2 md:mb-4">
-        {selectedCards.length > 0 ? (
+        {/* {selectedCards.length > 0 ? (
           <div className="flex items-center w-full gap-2 md:gap-3 h-8 md:h-9">
             <X
               className="w-4 h-4 cursor-pointer"
@@ -161,7 +161,7 @@ const MapsDashboard = () => {
           <div className="w-full overflow-x-auto">
             <MapsButtons />
           </div>
-        )}
+        )} */}
       </div>
       {/* Pagination */}
       {filteredMaps.length > 0 ? (
