@@ -11,6 +11,7 @@ import { Share2Icon } from "lucide-react";
 import { Trash2 } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
 
 const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
@@ -18,6 +19,7 @@ const MapsDashboard = () => {
   const { refetchMaps, toggleRefetchMaps } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
     useCardStore();
+  const { searchedMapTitle, setSearchedMapTitle } = useSearchQueryStore();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -85,6 +87,12 @@ const MapsDashboard = () => {
       .catch(console.error);
   }, [refetchMaps]);
 
+  useEffect(() => {
+    return () => {
+      setSearchedMapTitle("")
+    }
+  }, [setSearchedMapTitle]);
+
   const deleteMaps = async () => {
     // const mapUids = selectedCards.map((e) => ({ mapUid: e }));
     selectedCards.forEach(async (mapUid) => {
@@ -115,6 +123,10 @@ const MapsDashboard = () => {
     );
   }
 
+  const filteredMaps = mapsData.filter((map) =>
+    map.mapTitle.toLowerCase().includes(searchedMapTitle.toLowerCase())
+  );
+
   return (
     <div className="w-full h-full px-8 mt-4">
       <div className="mb-4">
@@ -143,8 +155,8 @@ const MapsDashboard = () => {
         )}
       </div>
       {/* Pagination */}
-      {mapsData.length > 0 ? (
-        <ClientPagination data={mapsData} />
+      {filteredMaps.length > 0 ? (
+        <ClientPagination data={filteredMaps} />
       ) : (
         <div className="flex items-center justify-center w-full h-96">
           <p> You do not have any maps. Add a new one! </p>
