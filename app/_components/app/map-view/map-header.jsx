@@ -1,7 +1,7 @@
 "use client";
 
 const MapHeader = () => {
-  return <div>map header</div>;
+  return <div className="h-16">map header</div>;
 };
 
 export default MapHeader;
