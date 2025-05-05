@@ -170,15 +170,16 @@ const GroupOverviewPage = ({ groupUid }) => {
                 <TableRow key={index} className="hover:bg-gray-50">
                   <TableCell className="font-medium">{user}</TableCell>
                   <TableCell className="p-2">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        index === 0
-                          ? "bg-green-100 text-green-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {index === 0 ? "Owner" : "Member"}
-                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {user.roles.map((role) => (
+                        <span
+                          key={role.roleUid}
+                          className="px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800"
+                        >
+                          {role.roleName}
+                        </span>
+                      ))}
+                    </div>
                   </TableCell>
                   <TableCell>
                     {index !== 0 && (

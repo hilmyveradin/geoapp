@@ -49,18 +49,22 @@ const GruopsDashboard = () => {
         const responseData = await response.json();
         const data = responseData.data;
 
-        // Create an array of promises
-        const groupDataPromises = data.map((groupAttributes) =>
-          getGroupInfo(groupAttributes.groupUid)
-        );
+        setGroupsData(data);
 
-        // Wait for all promises to resolve
-        const resolvedGroupData = await Promise.all(groupDataPromises);
+        // // Create an array of promises
+        // const groupDataPromises = data.map((groupAttributes) =>
+        //   getGroupInfo(groupAttributes.groupUid)
+        // );
 
-        // Flatten the array of arrays (if necessary) and set the state
-        const groupData = resolvedGroupData.flat(); // Use .flat() if each promise resolves to an array
+        // // Wait for all promises to resolve
+        // const resolvedGroupData = await Promise.all(groupDataPromises);
 
-        setGroupsData(groupData);
+        // // Flatten the array of arrays (if necessary) and set the state
+        // const groupData = resolvedGroupData.flat(); // Use .flat() if each promise resolves to an array
+
+        // console.log("GROUP DATA: ", groupData);
+
+        // setGroupsData(groupData);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       } finally {
@@ -73,9 +77,13 @@ const GruopsDashboard = () => {
       .catch(console.error);
   }, [refetchGroups]);
 
-  const filteredGroups = groupsData.filter((group) =>
-    group.groupName.toLowerCase().includes(searchedGroupTitle.toLowerCase())
-  );
+  // debugger;
+  const filteredGroups = groupsData.filter((group) => {
+    console.log(group);
+    return group.groupName
+      .toLowerCase()
+      .includes(searchedGroupTitle.toLowerCase());
+  });
 
   if (pageLoading) {
     return (
