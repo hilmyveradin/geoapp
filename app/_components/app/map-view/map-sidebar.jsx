@@ -19,20 +19,11 @@ import PaginationLayerTable from "../layer-table/PaginationLayerTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import TooltipText from "@/app/_components/shared/tooltipText";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
 import SaveAlertDialog from "../shared/save-alert-dialog";
-import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
-import GeojsonCard from "@/app/_components/app/geojson-card/GeojsonCard";
 import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
+import ShareDialog from "../shared/share-dialog";
 
 const MapSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -202,23 +193,23 @@ const MapSidebar = () => {
           </MenubarMenu>
         </Menubar> */}
 
-        {/* TODO: Uncomment this if share is ready <Button
-          variant="ghost"
-          onClick={() => console.log("Share click")}
-          className={cn("flex justify-start text-blackHaze-500", {
-            "text-white": selectedButton === "share",
-          })}
-        >
-          <Share2
-            className={cn("w-4 h-4 stroke-blackHaze-500", {
-              "stroke-white stroke-2": selectedButton === "share",
-            })}
-          />
-          {!showLeftSidebar && <span className="inline-block ml-2">Share</span>}
-        </Button> */}
-
         <Separator className="my-2" />
 
+        <ShareDialog>
+          <Button
+            variant="ghost"
+            className={cn("flex justify-start text-blackHaze-500", {
+              "p-0 justify-center": !showLeftSidebar,
+            })}
+          >
+            <Share2
+              className={cn("w-4 h-4 stroke-blackHaze-500 transition-all", {})}
+            />
+            {showLeftSidebar && (
+              <span className="inline-block ml-2">Share</span>
+            )}
+          </Button>
+        </ShareDialog>
         {/* Additional empty div for spacing, pushing the Collapse button to the bottom */}
         <div className="flex-grow" />
 

@@ -212,7 +212,7 @@ const ComposeMapDialog = (props) => {
 
     return (
       <>
-        <div className="flex gap-2 mt-1 ml-2">
+        <div className="flex flex-wrap max-w-full gap-2 mt-1 ml-2">
           {selectedTags.map((data, index) => (
             <SelectedTagPills
               key={`${data}|${index}`}
@@ -274,13 +274,10 @@ const ComposeMapDialog = (props) => {
           <div className="flex flex-wrap items-center w-full border rounded-lg">
             {selectedTagsDisplay()}
             <Input
-              className={cn(
-                "flex-grow border-none w-fit focus-visible:ring-0",
-                {
-                  "flex-grow": selectedTags.length < 1,
-                  "w-min": selectedTags.length > 0,
-                }
-              )}
+              className={cn("border-none focus-visible:ring-0", {
+                "flex-grow": selectedTags.length < 1,
+                "w-auto": selectedTags.length > 0,
+              })}
               placeholder="Enter Tags"
               onKeyDown={handleTagsKeyDown}
               onChange={handleTagsChange}
