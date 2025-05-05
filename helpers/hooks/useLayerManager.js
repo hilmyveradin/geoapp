@@ -9,7 +9,7 @@ const useLayerManager = () => {
   const [firstRender, setFirstRender] = useState(true);
 
   useEffect(() => {
-    if (mapLoaded && map && selectedLayers.length) {
+    if (mapLoaded && map && map !== undefined && selectedLayers.length) {
       // // Iterate over the currentLayers to remove layers not in selectedLayers
       currentLayersRef.current.forEach((layerId) => {
         if (!selectedLayers.some((layer) => layer.layerUid === layerId)) {
