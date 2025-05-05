@@ -1,4 +1,7 @@
 export const getUserNameInitial = (name) => {
+  if (name == null) {
+    return;
+  }
   const names = name?.split(" ");
   let initials = names[0]?.substring(0, 1).toUpperCase();
   if (names.length > 1) {
