@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import authOptions from "../../auth/[...nextauth]/options";
 
-export async function POST(request) {
+export async function GET(request) {
   try {
     const layerUid = request.nextUrl.searchParams.get("layerUid");
     const session = await getServerSession(authOptions);
@@ -10,7 +10,7 @@ export async function POST(request) {
     const res = await fetch(
       `${process.env.API_BASE_URL}/cms/layer/${layerUid}/shared_to`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
