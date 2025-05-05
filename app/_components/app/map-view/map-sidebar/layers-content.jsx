@@ -274,9 +274,9 @@ const OptionsSection = ({ data }) => {
     if (key == layerInfo.layerUid) {
       setTableLoaded(!tableLoaded);
     } else {
-      setTableLoaded(false);
+      setTableLoaded(true);
       setTimeout(() => {
-        setTableLoaded(true);
+        setTableLoaded(false);
       }, 100);
     }
     setLayerInfo(key, data.layerTitle);
