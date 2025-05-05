@@ -290,12 +290,16 @@ const StyleContent = () => {
     const saveAdvancedSymbolStyle = async () => {};
 
     const saveAdvancedLineStyle = async () => {
+      let parsedAdvancedJson;
+      if (typeof advancedJson === "string") {
+        parsedAdvancedJson = JSON.parse(advancedJson);
+      }
       return fetch(
         `/api/layers/save-line-advanced?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(advancedJson),
+          body: JSON.stringify(parsedAdvancedJson),
         }
       );
     };
@@ -306,7 +310,7 @@ const StyleContent = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(advancedJson),
+          body: JSON.stringify(JSON.parse(advancedJson)),
         }
       );
     };
