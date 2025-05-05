@@ -4,18 +4,19 @@ import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { layerUids } = body;
+    const layerUid = request.nextUrl.searchParams.get("layerUid");
     const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/layer/delete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify({ layers: layerUids }),
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/delete`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       console.error(
