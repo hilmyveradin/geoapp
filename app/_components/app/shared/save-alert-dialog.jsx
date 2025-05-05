@@ -38,8 +38,6 @@ const SaveAlertDialog = ({ children }) => {
     if (!addedLayerUids || addedLayerUids?.length === 0) {
       return Promise.resolve();
     }
-
-    debugger;
     return fetch(`/api/maps/add-layer?mapUid=${mapData.mapUid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

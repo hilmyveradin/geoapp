@@ -405,11 +405,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
     removeMapLayers,
   } = useMapViewStore();
 
-  const {
-    reloadTable, 
-    setReloadTable,
-    setFtsQuery,
-  } = useTableQueryStore();
+  const { reloadTable, setReloadTable, setFtsQuery } = useTableQueryStore();
 
   const id = layer.layerUid;
 
@@ -418,6 +414,8 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
     addDeletedLayerUids(layer.layerUid);
     removeMapLayers(layer);
   };
+
+  const highlightLayerAction = async () => {};
 
   const buttonLists = [
     {
