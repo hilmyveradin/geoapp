@@ -48,17 +48,13 @@ const DesktopHeader = () => {
         },
       });
 
-      console.log(response);
-
-      debugger;
-
       if (!response.ok) {
         const error = new Error(response.statusText || "Unknown error");
         error.status = response.status;
         throw error;
       }
 
-      signOut();
+      signOut({ callbackUrl: "/login" });
     } catch {
       const { title, description } = handleErrorMessage(error.status);
       toast({
