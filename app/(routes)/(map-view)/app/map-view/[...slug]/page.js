@@ -3,7 +3,6 @@
 import MapHeader from "@/app/_components/app/map-view/map-header";
 import MapMain from "@/app/_components/app/map-view/map-main";
 import MapSidebar from "@/app/_components/app/map-view/map-sidebar";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import MapViewLayout from "../../../layout";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
@@ -82,6 +81,7 @@ const MapView = ({ params }) => {
             imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
             mapType: mapType,
+            mapUid: mapUid,
           };
         });
         setSelectedLayers(modifiedDatas);

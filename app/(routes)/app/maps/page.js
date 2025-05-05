@@ -27,7 +27,6 @@ const MapsDashboard = () => {
 
         const tempData = temp.data
           .map((data) => {
-            //TODO: Change this maptitle to camelCase
             return {
               ...data,
               cardType: "map",

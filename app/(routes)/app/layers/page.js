@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import ClientPagination from "@/app/_components/app/client-pagination";
 import LayersButtons from "@/app/_components/app/layer-buttons";
 import { Loader2 } from "lucide-react";
+import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 
 const LayersDashboard = () => {
   const [layersData, setLayers] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
+  const { refetchLayers } = useRefetchStore();
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -23,15 +25,17 @@ const LayersDashboard = () => {
         }
         const temp = await response.json();
 
-        const tempLayers = temp.data.map((data) => {
-          return {
-            ...data,
-            cardType: "layer",
-            cardTitle: data.layerTitle,
-            cardUid: data.layerUid,
-            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-          };
-        });
+        const tempLayers = temp.data
+          .map((data) => {
+            return {
+              ...data,
+              cardType: "layer",
+              cardTitle: data.layerTitle,
+              cardUid: data.layerUid,
+              thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            };
+          })
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         setLayers(tempLayers);
       } catch (error) {
@@ -40,10 +44,9 @@ const LayersDashboard = () => {
         setPageLoading(false);
       }
     }
-    getLayersData()
-      // make sure to catch any error
-      .catch(console.error);
-  }, []);
+
+    getLayersData();
+  }, [refetchLayers]);
 
   if (pageLoading) {
     return (

@@ -25,6 +25,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 const LayersContent = () => {
   const { layersData, setLayersData, mapData } = useMapViewStore();
@@ -192,24 +194,29 @@ const LayersCard = ({ data }) => {
 const OptionsSection = ({ data }) => {
   const {
     setZoomedLayerBbox,
-    selectedLayerTableUid,
-    setSelectedLayerTableUid,
     tableLoaded,
     setTableLoaded,
     layerInfo,
     setLayerInfo,
     mapData,
     layersData,
+    removeSelectedLayers,
+    removeLayersData,
   } = useMapViewStore();
   const id = data.layerUid;
-  const deleteLayerAction = () => {
-    async function refetchLayerData() {}
 
-    async function deleteLayer() {
-      const body = {
-        layers: [{ layer_uid: data.layerUid }],
-      };
+  const [removeLayerLoading, setRemoveLayerLoading] = useState(false);
+  const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const { toast } = useToast();
+  const deleteLayerAction = () => {
+    async function removeLayerContent() {
+      setRemoveLayerLoading(true);
       try {
+        const body = {
+          layers: [{ layer_uid: data.layerUid }],
+          mapUid: mapData.mapUid,
+        };
+
         const response = await fetch("/api/remove-layer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -220,16 +227,27 @@ const OptionsSection = ({ data }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const result = await response();
-
-        if (result) {
-        }
+        removeSelectedLayers(data);
+        removeLayersData(data);
+        toast({ title: "Success Removing Layer", variant: "success" });
+        setTimeout(() => {
+          setOpenAlertDialog(false);
+        }, 500);
+        debugger;
       } catch (error) {
+        debugger;
+        toast({
+          title: "Error removing layer",
+          description: "Please try again",
+          variant: "destructive",
+        });
         console.error("Error during fetch:", error.message);
+      } finally {
+        setRemoveLayerLoading(false);
       }
     }
 
-    deleteLayer();
+    removeLayerContent();
   };
 
   const buttonLists = [
@@ -245,11 +263,11 @@ const OptionsSection = ({ data }) => {
       name: "Show Table",
       onClick: (e) => handleTableButtonClick(e.currentTarget.name),
     },
-    {
-      icon: <PencilIcon className="w-3 h-3 stroke-2" />,
-      name: "Rename",
-      onClick: null,
-    },
+    // { // TODO: Fix this rename if the functionality exists
+    //   icon: <PencilIcon className="w-3 h-3 stroke-2" />,
+    //   name: "Rename",
+    //   onClick: null,
+    // },
   ];
 
   const handleTableButtonClick = (key) => {
@@ -279,7 +297,7 @@ const OptionsSection = ({ data }) => {
       ))}
 
       {mapData.mapType === "map" && layersData.length > 0 && (
-        <AlertDialog>
+        <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
           <AlertDialogTrigger asChild>
             <button className="flex items-center justify-start gap-2 p-1">
               <span>
@@ -305,7 +323,11 @@ const OptionsSection = ({ data }) => {
                 className="bg-red-500 hover:bg-red-400"
                 onClick={deleteLayerAction}
               >
-                Continue
+                {removeLayerLoading ? (
+                  <Loader2 className="w-4 h-4 stroke-blackHaze-500 animate-spin" />
+                ) : (
+                  <span> Continue </span>
+                )}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

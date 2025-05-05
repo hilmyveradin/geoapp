@@ -9,14 +9,12 @@ import {
   Save,
   Share2,
 } from "lucide-react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
 import AddLayersContent from "./map-sidebar/add-layer-content";
 import { Separator } from "@/components/ui/separator";
-import { ButtonSidebar } from '@/components/ui/button-sidebar';
-import PaginationLayerTable from '../layer-table/PaginationLayerTable';
-import SaveAlertDialog from "../shared/save-alert-dialog";
+import PaginationLayerTable from "../layer-table/PaginationLayerTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import {
   Menubar,
@@ -25,72 +23,19 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import SaveAlertDialog from "../shared/save-alert-dialog";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
-  const { tableLoaded } = useMapViewStore();
-
-  // Button data
-  const BUTTONS_CONSTANTS = [
-    {
-      buttonKey: "addLayer",
-      icon: PlusCircle,
-      label: "Add Layer",
-      onClick: () => handleButtonClick("addLayer"),
-    },
-    {
-      buttonKey: "layers",
-      icon: Layers3,
-      label: "Layers",
-      onClick: () => handleButtonClick("layers"),
-    },
-    {
-      buttonKey: "tables",
-      icon: Sheet,
-      label: "Tables",
-      onClick: null, //TODO: Add layer function to this tables
-    },
-    {
-      buttonKey: "save",
-      icon: Save,
-      label: "Save",
-      onClick: () => console.log("foobar"),
-    },
-    {
-      buttonKey: "share",
-      icon: Share2,
-      label: "Share",
-      onClick: null,
-    },
-  ];
+  const { tableLoaded, mapData } = useMapViewStore();
 
   // Define content for each button
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
     layers: <LayersContent />,
-  };
-
-  // Reusable Button component
-  const SidebarButton = ({ buttonKey, icon: Icon, label, onClick }) => {
-    return (
-      <Button
-        variant="ghost"
-        onClick={onClick ? onClick : null}
-        className={cn("flex justify-start text-blackHaze-500", {
-          "text-white": selectedButton === buttonKey,
-        })}
-      >
-        <Icon
-          className={cn("w-4 h-4 stroke-blackHaze-500", {
-            "stroke-white stroke-2": selectedButton === buttonKey,
-          })}
-        />
-        {!showSidebar && <span className="inline-block ml-2">{label}</span>}
-      </Button>
-    );
   };
 
   const handleButtonClick = (buttonName) => {
@@ -99,32 +44,6 @@ const MapSidebar = () => {
       setExpandedSidebarButtons(true);
     } else {
       setExpandedSidebarButtons(false);
-    }
-  };
-
-  const generateSidebarButton = (data) => {
-    if (data.buttonKey === "save") {
-      return (
-        <SaveAlertDialog>
-          <SidebarButton {...data} />
-        </SaveAlertDialog>
-      );
-    } else if (data.buttonKey === "share") {
-      return (
-        <Menubar>
-          <MenubarMenu>
-            <MenubarTrigger asChild>
-              <SidebarButton {...data} />
-            </MenubarTrigger>
-            <MenubarContent side="right">
-              <MenubarItem>Foobar</MenubarItem>
-              <MenubarItem>Print</MenubarItem>
-            </MenubarContent>
-          </MenubarMenu>
-        </Menubar>
-      );
-    } else {
-      return <SidebarButton {...data} />;
     }
   };
 
@@ -138,20 +57,24 @@ const MapSidebar = () => {
           }
         )}
       >
-        <Button
-          variant="ghost"
-          onClick={() => handleButtonClick("addLayer")}
-          className={cn("flex justify-start text-blackHaze-500", {
-            "text-white": selectedButton === "addLayer",
-          })}
-        >
-          <PlusCircle
-            className={cn("w-4 h-4 stroke-blackHaze-500", {
-              "stroke-white stroke-2": selectedButton === "addLayer",
+        {mapData.mapType === "map" && (
+          <Button
+            variant="ghost"
+            onClick={() => handleButtonClick("addLayer")}
+            className={cn("flex justify-start text-blackHaze-500", {
+              "text-white": selectedButton === "addLayer",
             })}
-          />
-          {!showSidebar && <span className="inline-block ml-2">Add Layer</span>}
-        </Button>
+          >
+            <PlusCircle
+              className={cn("w-4 h-4 stroke-blackHaze-500", {
+                "stroke-white stroke-2": selectedButton === "addLayer",
+              })}
+            />
+            {!showSidebar && (
+              <span className="inline-block ml-2">Add Layer</span>
+            )}
+          </Button>
+        )}
 
         <Button
           variant="ghost"
@@ -185,7 +108,23 @@ const MapSidebar = () => {
 
         <Separator className="my-2" />
 
-        <Menubar className="bg-transparent border-none">
+        <SaveAlertDialog>
+          <Button
+            variant="ghost"
+            className={cn("flex justify-start text-blackHaze-500", {
+              // "text-white": selectedButton === "save",
+            })}
+          >
+            <Save
+              className={cn("w-4 h-4 stroke-blackHaze-500", {
+                // "stroke-white stroke-2": selectedButton === "save",
+              })}
+            />
+            {!showSidebar && <span className="inline-block ml-2">Save</span>}
+          </Button>
+        </SaveAlertDialog>
+
+        {/* <Menubar className="bg-transparent border-none">
           <MenubarMenu>
             <MenubarTrigger
               asChild
@@ -212,9 +151,9 @@ const MapSidebar = () => {
               <MenubarItem>Save as</MenubarItem>
             </MenubarContent>
           </MenubarMenu>
-        </Menubar>
+        </Menubar> */}
 
-        <Button
+        {/* TODO: Uncomment this if share is ready <Button
           variant="ghost"
           onClick={() => console.log("Share click")}
           className={cn("flex justify-start text-blackHaze-500", {
@@ -227,7 +166,7 @@ const MapSidebar = () => {
             })}
           />
           {!showSidebar && <span className="inline-block ml-2">Share</span>}
-        </Button>
+        </Button> */}
 
         <Separator className="my-2" />
 
@@ -279,7 +218,7 @@ const MapSidebar = () => {
           }
         )}
       >
-        {tableLoaded && <PaginationLayerTable/>}
+        {tableLoaded && <PaginationLayerTable />}
       </div>
       {/* TODO: Add this sidebar div <div
         className={cn(

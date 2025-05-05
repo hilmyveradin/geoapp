@@ -11,8 +11,12 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import TooltipText from "@/app/_components/shared/tooltipText";
 import { useToast } from "@/components/ui/use-toast";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useUpdateLayer from "@/helpers/hooks/useUpdateLayer";
 
 const LayersContent = ({ layers }) => {
+  useUpdateLayer();
+
   return (
     <div className="flex flex-col gap-4">
       {layers.map((item) => (
@@ -23,6 +27,54 @@ const LayersContent = ({ layers }) => {
 };
 
 const AddLayerCard = ({ data }) => {
+  const { mapData, addSelectedLayers, addLayersData } = useMapViewStore();
+  // const { addSelectedLayers, addLayersData } = useRefetchStore();
+  const [addingLayerLoading, setAddingLayerLoading] = useState(false);
+  const { toast } = useToast();
+  const addLayerContent = () => {
+    // Define function to get layers API
+    async function addLayerContent() {
+      setAddingLayerLoading(true);
+      try {
+        const body = {
+          layers: [{ layer_uid: data.layerUid }],
+          mapUid: mapData.mapUid,
+        };
+
+        const response = await fetch("/api/add-map-layer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const modifiedData = {
+          ...data,
+          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
+        };
+
+        addSelectedLayers(modifiedData);
+        addLayersData(modifiedData);
+        toast({ title: "Success Adding Layer", variant: "success" });
+        // setRefetchMapLayers(!refetchMapLayers);
+      } catch (error) {
+        toast({
+          title: "Error adding layer",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        console.error("Error during fetch:", error.message);
+      } finally {
+        setAddingLayerLoading(false);
+      }
+    }
+
+    addLayerContent();
+  };
+
   const generateDate = () => {
     if (data?.updatedAt) {
       return `Updated: ${dayjs(data.updatedAt).format("DD/MM/YYYY")}`;
@@ -51,7 +103,14 @@ const AddLayerCard = ({ data }) => {
         </div>
       </div>
       <div className="flex justify-end">
-        <PlusCircle className="w-4 h-4 cursor-pointer" />
+        {addingLayerLoading ? (
+          <Loader2 className="w-4 h-4 stroke-blackHaze-500 animate-spin" />
+        ) : (
+          <PlusCircle
+            className="w-4 h-4 cursor-pointer"
+            onClick={addLayerContent}
+          />
+        )}
       </div>
     </div>
   );
@@ -64,6 +123,8 @@ const AddLayersContent = () => {
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [refetchLayers, setRefetchLayers] = useState(false);
+  const [searchedTitle, setSearchedTitle] = useState(""); // Added state for search term
+  const { layersData } = useMapViewStore();
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -86,7 +147,14 @@ const AddLayersContent = () => {
           };
         });
 
-        setLayers(tempLayers);
+        const filtered = tempLayers.filter(
+          (localLayer) =>
+            !layersData.some(
+              (layerData) => layerData.layerUid === localLayer.layerUid
+            )
+        );
+
+        setLayers(filtered);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       } finally {
@@ -95,7 +163,7 @@ const AddLayersContent = () => {
     }
 
     getLayersData().catch(console.error);
-  }, [refetchLayers]);
+  }, [refetchLayers, layersData]);
 
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
@@ -113,12 +181,14 @@ const AddLayersContent = () => {
         toast({
           title: temp.status,
           description: temp.msg,
+          variant: "success",
         });
       } catch (error) {
         console.error("Error during fetch:", error.message);
         toast({
           title: "ERROR",
           description: error.message,
+          variant: "destructive",
         });
       } finally {
         setRefetchLayers((prev) => !prev);
@@ -138,6 +208,12 @@ const AddLayersContent = () => {
     setFiles(newState);
     setUploadProgress(true);
   };
+
+  const filteredLayers = layers.filter((layer) =>
+    layer.layerTitle.toLowerCase().includes(searchedTitle.toLowerCase())
+  );
+
+  layersData;
 
   if (contentLoading) {
     return (
@@ -165,15 +241,17 @@ const AddLayersContent = () => {
         <input
           placeholder="Search for layers"
           className="w-full border-none outline-none"
+          value={searchedTitle}
+          onChange={(e) => setSearchedTitle(e.target.value)}
         />
       </div>
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
-          <p>Items: {layers.length}</p>
+          <p>Items: {filteredLayers.length}</p>
         </div>
-        <ArrowDownWideNarrow className="w-4 h-4" />
+        {/* <ArrowDownWideNarrow className="w-4 h-4" /> */}
       </div>
-      <LayersContent layers={layers} />
+      <LayersContent layers={filteredLayers} />
     </div>
   );
 };
