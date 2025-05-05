@@ -12,6 +12,10 @@
     padding-bottom: 0.375rem/* 6px */;
  }
 
+.ag-header.ag-header{
+    font-weight: bold;
+}
+
 .ag-theme-quartz-custom.ag-theme-quartz-custom {
     --ag-background-color: #fff;
     --ag-foreground-color: #181d1f;

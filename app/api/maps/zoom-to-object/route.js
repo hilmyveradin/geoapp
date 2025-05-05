@@ -8,7 +8,7 @@ export async function POST(request) {
     const { objectid, layerUid } = body;
     const session = await getServerSession(authOptions);
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/layer/zoom_to_object/${layerUid}`,
+      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/zoom_to_object`,
       {
         method: "POST",
         headers: {

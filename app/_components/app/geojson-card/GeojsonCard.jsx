@@ -127,6 +127,14 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
       defaultMinWidth: 100,
     };
   }, []);
+
+  // disable sorting on all columns
+  const defaultColDef = useMemo(() => { 
+    return {
+          sortable: false
+      };
+  }, []);
+
   return (
     <div
       className={"ag-theme-quartz-custom"} // applying the grid theme
@@ -138,6 +146,7 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
         autoSizeStrategy={autoSizeStrategy}
         tooltipShowDelay={0}
         tooltipHideDelay={2000}
+        defaultColDef={defaultColDef}
       />
     </div>
   )
