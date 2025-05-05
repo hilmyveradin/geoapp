@@ -168,6 +168,21 @@ const MapSidebar = () => {
           {!showSidebar && <span className="inline-block ml-2">Layers</span>}
         </Button>
 
+        {/* <Button
+          variant="ghost"
+          onClick={() => console.log("Tables click")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "text-white": selectedButton === "tables",
+          })}
+        >
+          <Sheet
+            className={cn("w-4 h-4 stroke-blackHaze-500", {
+              "stroke-white stroke-2": selectedButton === "tables",
+            })}
+          />
+          {!showSidebar && <span className="inline-block ml-2">Tables</span>}
+        </Button> */}
+
         <Separator className="my-2" />
 
         <Menubar className="bg-transparent border-none">
