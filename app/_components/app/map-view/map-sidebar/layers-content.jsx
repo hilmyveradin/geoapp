@@ -14,6 +14,18 @@ import { MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 const LayersContent = () => {
   const { layersData, setLayersData, mapData } = useMapViewStore();
 
@@ -110,7 +122,7 @@ const LayersCard = ({ data }) => {
     <div>
       <TooltipText content={data.layerTitle} side="top" align="start">
         <div
-          className="relative flex items-center justify-center h-10 gap-2 px-2 bg-white border rounded-md shadow-md cursor-pointer w-54"
+          className="relative flex items-center h-10 gap-2 px-2 bg-white border rounded-md shadow-md cursor-pointer w-54"
           onClick={() => {
             if (collapsibleContent === "layer") {
               setCollapsibleContent(null);
@@ -129,7 +141,7 @@ const LayersCard = ({ data }) => {
             )}
           />
 
-          <p className="px-2 pr-2 text-xs truncate max-w-20">
+          <p className="flex-grow w-20 px-2 pr-2 text-xs truncate">
             {data.layerTitle}
           </p>
           <button
@@ -146,7 +158,7 @@ const LayersCard = ({ data }) => {
           </button>
 
           <MoreHorizontal
-            className="justify-end w-8 h-8 ml-auto stroke-2" // Added ml-auto here
+            className="justify-end w-5 h-5 ml-auto stroke-2" // Added ml-auto here
             onClick={(e) => {
               e.stopPropagation();
               if (collapsibleContent === "options") {
@@ -178,8 +190,46 @@ const LayersCard = ({ data }) => {
 };
 
 const OptionsSection = ({ data }) => {
-  const { setZoomedLayerBbox, selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded, layerInfo, setLayerInfo } = useMapViewStore();
-  const id = data.layerUid
+  const {
+    setZoomedLayerBbox,
+    selectedLayerTableUid,
+    setSelectedLayerTableUid,
+    tableLoaded,
+    setTableLoaded,
+    layerInfo,
+    setLayerInfo,
+  } = useMapViewStore();
+  const id = data.layerUid;
+  const deleteLayerAction = () => {
+    async function refetchLayerData() {}
+
+    async function deleteLayer() {
+      const body = {
+        layers: [{ layer_uid: data.layerUid }],
+      };
+      try {
+        const response = await fetch("/api/remove-layer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response();
+
+        if (result) {
+        }
+      } catch (error) {
+        console.error("Error during fetch:", error.message);
+      }
+    }
+
+    deleteLayer();
+  };
+
   const buttonLists = [
     {
       icon: <ZoomIn className="w-3 h-3 stroke-2" />,
@@ -198,25 +248,20 @@ const OptionsSection = ({ data }) => {
       name: "Rename",
       onClick: null,
     },
-    {
-      icon: <Trash className="w-3 h-3 stroke-2" />,
-      name: "Remove",
-      onClick: null,
-    },
   ];
 
   const handleTableButtonClick = (key) => {
     if (key == layerInfo.layerUid) {
-      setTableLoaded(!tableLoaded)
+      setTableLoaded(!tableLoaded);
     } else {
-      setTableLoaded(false)
+      setTableLoaded(false);
       setTimeout(() => {
         setTableLoaded(true);
       }, 100);
     }
     setLayerInfo(key, data.layerTitle);
   };
-  
+
   return (
     <div className="flex flex-col gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
       {buttonLists.map((item, index) => (
@@ -230,7 +275,40 @@ const OptionsSection = ({ data }) => {
           {item.name}
         </button>
       ))}
+
+      {mapData.mapType === "map" && layersData.length > 0 && (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button className="flex items-center justify-start gap-2 p-1">
+              <span>
+                <Trash className="w-3 h-3 stroke-2" />
+              </span>
+              Remove
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure want delete this layer?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="hover:bg-transparent hover:text-black">
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-red-500 hover:bg-red-400"
+                onClick={deleteLayerAction}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 };
-

@@ -2,12 +2,14 @@
 
 import ClientPagination from "@/app/_components/app/client-pagination";
 import MapsButtons from "@/app/_components/app/map-buttons";
+import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [mapsData, setMapsData] = useState([]);
+  const { refetchMaps } = useRefetchStore();
 
   useEffect(() => {
     // Define function to get layers API
@@ -23,16 +25,18 @@ const MapsDashboard = () => {
 
         const temp = await response.json();
 
-        const tempData = temp.data.map((data) => {
-          //TODO: Change this maptitle to camelCase
-          return {
-            ...data,
-            cardType: "map",
-            cardTitle: data.mapTitle,
-            cardUid: data.mapUid,
-            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
-          };
-        });
+        const tempData = temp.data
+          .map((data) => {
+            //TODO: Change this maptitle to camelCase
+            return {
+              ...data,
+              cardType: "map",
+              cardTitle: data.mapTitle,
+              cardUid: data.mapUid,
+              thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
+            };
+          })
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         setMapsData(tempData);
       } catch (error) {
@@ -45,7 +49,7 @@ const MapsDashboard = () => {
     getMapsData()
       // make sure to catch any error
       .catch(console.error);
-  }, []);
+  }, [refetchMaps]);
 
   if (pageLoading) {
     return (

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import ComposeMapDialog from "./compose-map-dialog";
 import { Filter } from "lucide-react";
 import { Plus } from "lucide-react";
 import { ArrowDownWideNarrow } from "lucide-react";

@@ -46,7 +46,7 @@ const MapView = ({ params }) => {
         });
 
         const responseData = await response.json();
-        const data = responseData.data;
+        const data = { ...responseData.data, mapType: mapType };
         // Create an array of promises
         const layerDataPromises = data.mapLayerUid.map((layerUid) =>
           getLayerUid(layerUid)
@@ -81,6 +81,7 @@ const MapView = ({ params }) => {
             mapTitle: data.layerTitle,
             imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
+            mapType: mapType,
           };
         });
         setSelectedLayers(modifiedDatas);
