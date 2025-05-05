@@ -23,6 +23,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import SaveAlertDialog from "../shared/save-alert-dialog";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -86,7 +87,7 @@ const MapSidebar = () => {
           {!showSidebar && <span className="inline-block ml-2">Layers</span>}
         </Button>
 
-        <Button
+        {/* TODO: Uncomment this table button <Button
           variant="ghost"
           onClick={() => console.log("Tables click")}
           className={cn("flex justify-start text-blackHaze-500", {
@@ -99,11 +100,27 @@ const MapSidebar = () => {
             })}
           />
           {!showSidebar && <span className="inline-block ml-2">Tables</span>}
-        </Button>
+        </Button> */}
 
         <Separator className="my-2" />
 
-        <Menubar className="bg-transparent border-none">
+        <SaveAlertDialog>
+          <Button
+            variant="ghost"
+            className={cn("flex justify-start text-blackHaze-500", {
+              // "text-white": selectedButton === "save",
+            })}
+          >
+            <Save
+              className={cn("w-4 h-4 stroke-blackHaze-500", {
+                // "stroke-white stroke-2": selectedButton === "save",
+              })}
+            />
+            {!showSidebar && <span className="inline-block ml-2">Save</span>}
+          </Button>
+        </SaveAlertDialog>
+
+        {/* <Menubar className="bg-transparent border-none">
           <MenubarMenu>
             <MenubarTrigger
               asChild
@@ -130,9 +147,9 @@ const MapSidebar = () => {
               <MenubarItem>Save as</MenubarItem>
             </MenubarContent>
           </MenubarMenu>
-        </Menubar>
+        </Menubar> */}
 
-        <Button
+        {/* TODO: Uncomment this if share is ready <Button
           variant="ghost"
           onClick={() => console.log("Share click")}
           className={cn("flex justify-start text-blackHaze-500", {
@@ -145,7 +162,7 @@ const MapSidebar = () => {
             })}
           />
           {!showSidebar && <span className="inline-block ml-2">Share</span>}
-        </Button>
+        </Button> */}
 
         <Separator className="my-2" />
 

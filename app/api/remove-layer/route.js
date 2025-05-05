@@ -4,17 +4,21 @@ import { getServerSession } from "next-auth";
 
 export async function POST(request) {
   try {
-    const session = await getServerSession(authOptions);
     const body = await request.json();
+    const { layers, mapUid } = body;
+    const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/del_layer`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify(body),
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/cms/map/del_layer/${mapUid}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: JSON.stringify({ layers: layers }),
+      }
+    );
 
     if (!res.ok) {
       console.error(
