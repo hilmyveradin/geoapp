@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -11,7 +12,7 @@ const authOptions = {
       },
       async authorize(credentials) {
         try {
-          const user = await fetch(`${process.env.API_BASE_URL}/iam/login`, {
+          const res = await fetch(`${process.env.API_BASE_URL}/iam/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -20,15 +21,18 @@ const authOptions = {
               username: credentials.username,
               password: credentials.password,
             }),
-          }).then((res) => res.json());
+          });
 
-          if (user) {
+          const user = await res.json();
+
+          if (res.status === 200 && user) {
             return user;
           }
+
+          throw new Error("Check your credentials");
         } catch (error) {
-          // console.log(error);
+          console.log(error);
         }
-        return null;
       },
     }),
   ],

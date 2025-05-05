@@ -1,6 +1,7 @@
 "use client";
 
 import UserAvatar from "@/app/_components/app/shared/user-avatar";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
@@ -96,13 +97,17 @@ const MapOverview = ({ params }) => {
     );
 
   return (
-    <div className="flex w-full h-full gap-16 p-10">
-      <img
-        src={overviewData.imageUrl}
-        alt="map image"
-        className="w-3/4 max-h-full"
-      />
-      <div className="flex flex-col !w-1/4 gap-12">
+    <div className="flex gap-16 p-10">
+      <div className="w-[1700px]">
+        <AspectRatio ratio={450 / 200}>
+          <img
+            src={overviewData.imageUrl}
+            alt="map image"
+            className="w-[1700px]"
+          />
+        </AspectRatio>
+      </div>
+      <div className="flex flex-col gap-12 !w-1/4">
         <div className="flex flex-col gap-6">
           {BUTTON_CONSTANTS.map((item) => (
             <Button

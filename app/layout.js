@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "./_components/home/auth-provider";
 import "./globals.css";
 
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
       <AuthProvider>
         <body>{children}</body>
       </AuthProvider>
+      <Toaster />
     </html>
   );
 }
