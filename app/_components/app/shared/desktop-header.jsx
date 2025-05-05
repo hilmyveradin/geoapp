@@ -8,6 +8,11 @@ const DesktopHeader = () => {
   const pathName = usePathname();
   const router = useRouter();
 
+  const mockUser = {
+    fullName: "Shadcn",
+    avatar: "https://github.com/shadcn.png",
+  };
+
   const NAVIGATION_ITEMS = [
     {
       name: "Maps",
@@ -47,7 +52,7 @@ const DesktopHeader = () => {
           );
         })}
         <div className="ml-10">
-          <UserAvatar />
+          <UserAvatar user={mockUser} className="w-8 h-8" />
         </div>
       </div>
     </div>

@@ -39,10 +39,13 @@ const LayersDashboard = () => {
           avatar: "https://github.com/shadcn.png",
         };
 
+        const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
+
         const mockLayers = temp.map((layers) => {
           return {
             ...layers,
             user: mockUser,
+            thumbnail_url: `${IMAGE_BASE_URL}/gs/thumbnail/${layers.thumbnail_url}`,
           };
         });
         setLayers(mockLayers);
