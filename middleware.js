@@ -22,9 +22,9 @@ export function middleware(request) {
 
   // Set the accessToken in the headers if it exists
   if (accessToken) {
-    response.headers.set("Authorization", `Bearer ${accessToken}`);
+    response.headers.set("Authorization", `Bearer ${accessToken.value}`);
     // User is authenticated, redirect to dashboard
-  } else if (url.pathname.startsWith("/app/") && !accessToken) {
+  } else if (url.pathname.startsWith("/app/") && !accessToken.value) {
     url.pathname = "/";
     return NextResponse.redirect(url);
   }

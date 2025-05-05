@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
+import { cookies } from 'next/headers';
 
 export async function GET() {
   try {
+    const cookieStore = cookies()
+    const token = cookieStore.get('accessToken')
+
     const res = await fetch(`${process.env.API_BASE_URL}/gs/layers`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token.value}`
       },
     });
 
