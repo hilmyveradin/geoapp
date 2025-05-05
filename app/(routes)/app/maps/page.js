@@ -86,7 +86,6 @@ const MapsDashboard = () => {
 
   const deleteMaps = async () => {
     const mapUids = selectedCards.map((e) => ({ map_uid: e }));
-    debugger;
     try {
       const response = await fetch("/api/delete-map", {
         method: "POST",

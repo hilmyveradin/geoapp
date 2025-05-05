@@ -120,6 +120,10 @@ const LayersCard = ({ data }) => {
     setIsChecked(!isChecked);
   };
 
+  const resetCollapsibleContent = () => {
+    setCollapsibleContent("layer");
+  };
+
   return (
     <div>
       <TooltipText content={data.layerTitle} side="top" align="start">
@@ -186,12 +190,17 @@ const LayersCard = ({ data }) => {
           />
         </div>
       )}
-      {collapsibleContent === "options" && <OptionsSection data={data} />}
+      {collapsibleContent === "options" && (
+        <OptionsSection
+          data={data}
+          resetCollapsibleContent={resetCollapsibleContent}
+        />
+      )}
     </div>
   );
 };
 
-const OptionsSection = ({ data }) => {
+const OptionsSection = ({ data, resetCollapsibleContent }) => {
   const {
     setZoomedLayerBbox,
     tableLoaded,
@@ -233,9 +242,8 @@ const OptionsSection = ({ data }) => {
         setTimeout(() => {
           setOpenAlertDialog(false);
         }, 500);
-        debugger;
+        resetCollapsibleContent();
       } catch (error) {
-        debugger;
         toast({
           title: "Error removing layer",
           description: "Please try again",
@@ -256,12 +264,16 @@ const OptionsSection = ({ data }) => {
       name: "Zoom to",
       onClick: () => {
         setZoomedLayerBbox(data.layerBbox);
+        resetCollapsibleContent();
       },
     },
     {
       icon: <Table className="w-3 h-3 stroke-2" />,
       name: "Show Table",
-      onClick: (e) => handleTableButtonClick(e.currentTarget.name),
+      onClick: (e) => {
+        resetCollapsibleContent();
+        handleTableButtonClick(e.currentTarget.name);
+      },
     },
     // { // TODO: Fix this rename if the functionality exists
     //   icon: <PencilIcon className="w-3 h-3 stroke-2" />,

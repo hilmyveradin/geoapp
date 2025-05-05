@@ -83,7 +83,6 @@ const LayersDashboard = () => {
 
   const deleteLayers = async () => {
     const layerUids = selectedCards.map((e) => ({ layer_uid: e }));
-    debugger;
     try {
       const response = await fetch("/api/delete-layer", {
         method: "POST",
