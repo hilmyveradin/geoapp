@@ -39,11 +39,14 @@ const SaveAlertDialog = ({ children }) => {
     if (!addedLayerUids || addedLayerUids?.length === 0) {
       return Promise.resolve();
     }
-    return fetch(`/api/maps/add-layer?mapUid=${mapData.mapUid}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ addedLayerUids }),
-    })
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/add-layer?mapUid=${mapData.mapUid}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ addedLayerUids }),
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -67,11 +70,14 @@ const SaveAlertDialog = ({ children }) => {
       return Promise.resolve();
     }
 
-    return fetch(`/api/maps/delete-layer?mapUid=${mapData.mapUid}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deletedLayerUids }),
-    })
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/delete-layer?mapUid=${mapData.mapUid}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deletedLayerUids }),
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -101,11 +107,14 @@ const SaveAlertDialog = ({ children }) => {
       return layer.layerUid;
     });
 
-    return fetch(`/api/maps/reorder-layer?mapUid=${mapData.mapUid}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reorderedLayerUids }),
-    })
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/reorder-layer?mapUid=${mapData.mapUid}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reorderedLayerUids }),
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -130,11 +139,14 @@ const SaveAlertDialog = ({ children }) => {
     }
 
     const changeMapProp = () =>
-      fetch(`/api/maps/change-prop?mapUid=${mapData.mapUid}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ view_bbox: currentViewBbox }),
-      }).then((response) => {
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/change-prop?mapUid=${mapData.mapUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ view_bbox: currentViewBbox }),
+        }
+      ).then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -144,11 +156,14 @@ const SaveAlertDialog = ({ children }) => {
       });
 
     const changeLayerProp = () =>
-      fetch(`/api/layers/change-prop?layerUid=${mapData.mapUid}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ view_bbox: currentViewBbox }),
-      }).then((response) => {
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/change-prop?layerUid=${mapData.mapUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ view_bbox: currentViewBbox }),
+        }
+      ).then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -199,11 +214,7 @@ const SaveAlertDialog = ({ children }) => {
 
   return (
     <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
-      <TooltipText
-        content="Save Map"
-        side="right"
-        align="start"
-      >
+      <TooltipText content="Save Map" side="right" align="start">
         <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       </TooltipText>
       <AlertDialogContent>

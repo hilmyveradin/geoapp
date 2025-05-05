@@ -84,7 +84,7 @@ const ChangePropDialog = ({
 
       try {
         const response = await fetch(
-          `/api/maps/change-prop?mapUid=${objectUid}`,
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/change-prop?mapUid=${objectUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -131,7 +131,7 @@ const ChangePropDialog = ({
 
       try {
         const response = await fetch(
-          `/api/layers/change-prop?layerUid=${objectUid}`,
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/change-prop?layerUid=${objectUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

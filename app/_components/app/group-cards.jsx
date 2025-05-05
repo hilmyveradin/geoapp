@@ -17,7 +17,7 @@ const GroupCards = (props) => {
   const deleteGroup = async (groupUid) => {
     try {
       const response = await fetch(
-        `/api/groups/delete-group?groupUid=${groupUid}`,
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/delete-group?groupUid=${groupUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

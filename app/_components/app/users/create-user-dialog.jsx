@@ -34,7 +34,9 @@ const CreateUserDialog = ({ children }) => {
 
   const fetchRoles = useCallback(async () => {
     try {
-      const response = await fetch("/api/admin/roles");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/admin/roles`
+      );
       if (!response.ok) throw new Error("Failed to fetch roles");
       const responseJson = await response.json();
       const rolesData = responseJson.data;
@@ -70,11 +72,14 @@ const CreateUserDialog = ({ children }) => {
   const createUser = async () => {
     setSubmittingData(true);
     try {
-      const response = await fetch("/api/admin/user/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/admin/user/create`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to create user");
 

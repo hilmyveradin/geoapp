@@ -10,7 +10,7 @@ const useUpdateLayer = () => {
   useEffect(() => {
     async function getLayerUid(layerUid) {
       const response = await fetch(
-        `/api/layers/get-layer-id?layerUid=${layerUid}`,
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${layerUid}`,
         {
           method: "GET",
           headers: {
@@ -34,7 +34,7 @@ const useUpdateLayer = () => {
     async function loadMapData() {
       try {
         const response = await fetch(
-          `/api/maps/get-map-id?mapUid=${mapData.mapUid}`,
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/get-map-id?mapUid=${mapData.mapUid}`,
           {
             method: "GET",
             headers: {

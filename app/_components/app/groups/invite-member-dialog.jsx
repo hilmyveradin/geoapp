@@ -51,7 +51,9 @@ const InviteMembersDialog = ({ groupUid, onDialogClose, children }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("/api/users/list");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`
+      );
       if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
       setAllUsers(data.data);
@@ -68,7 +70,7 @@ const InviteMembersDialog = ({ groupUid, onDialogClose, children }) => {
   const fetchGroupMembers = async () => {
     try {
       const response = await fetch(
-        `/api/groups/get-group-info?groupUid=${groupUid}`
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/get-group-info?groupUid=${groupUid}`
       );
       if (!response.ok) throw new Error("Failed to fetch group members");
       const data = await response.json();
@@ -102,7 +104,7 @@ const InviteMembersDialog = ({ groupUid, onDialogClose, children }) => {
   const handleAddMembers = async () => {
     try {
       const response = await fetch(
-        `/api/groups/add-group-user?groupUid=${groupUid}`,
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/add-group-user?groupUid=${groupUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

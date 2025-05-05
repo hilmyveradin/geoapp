@@ -50,9 +50,12 @@ const CreateGroupDialog = (props) => {
   useEffect(() => {
     async function getUsersData() {
       try {
-        const response = await fetch("/api/users/list", {
-          method: "GET",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -150,11 +153,14 @@ const CreateGroupDialog = (props) => {
 
       setSubmittingData(true);
       try {
-        const response = await fetch("/api/groups/create-group", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/create-group`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

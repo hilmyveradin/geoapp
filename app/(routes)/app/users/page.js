@@ -27,9 +27,12 @@ const UsersDashboard = () => {
   useEffect(() => {
     async function getUsers() {
       try {
-        const response = await fetch("/api/users/list", {
-          method: "GET",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -49,11 +52,14 @@ const UsersDashboard = () => {
 
   const deleteUser = async (userUid) => {
     try {
-      const response = await fetch(`/api/admin/user/delete`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userUid: userUid }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/admin/user/delete`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userUid: userUid }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
