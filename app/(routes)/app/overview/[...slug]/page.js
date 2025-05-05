@@ -1,6 +1,5 @@
 "use client";
 
-import LayersButtons from "@/app/_components/app/layer-buttons";
 import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
@@ -35,7 +34,6 @@ const MapOverview = ({ params }) => {
             imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
           };
         });
-        debugger;
         setOverviewData(modifiedDatas[0]);
       } catch (error) {
         console.log(error);
@@ -55,7 +53,6 @@ const MapOverview = ({ params }) => {
         modifiedDatas[
           "imageUrl"
         ] = `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${modifiedDatas.thumbnailUrl}`;
-        debugger;
         setOverviewData(modifiedDatas);
       } catch (error) {
         console.log(error);

@@ -10,6 +10,11 @@ const useMapViewStore = create((set) => ({
       mapData: data,
     })),
 
+  addLayersData: (data) =>
+    set((state) => ({
+      layersData: [...(state.layersData || []), data],
+    })),
+
   setLayersData: (data) =>
     set(() => ({
       layersData: data,
@@ -18,6 +23,16 @@ const useMapViewStore = create((set) => ({
   setSelectedLayers: (data) =>
     set(() => ({
       selectedLayers: data,
+    })),
+
+  addSelectedLayers: (data) =>
+    set((state) => ({
+      selectedLayers: [...(state.selectedLayers || []), data],
+    })),
+
+  removeSelectedLayers: (data) =>
+    set((state) => ({
+      selectedLayers: state.selectedLayers.filter((layer) => layer !== data),
     })),
 }));
 

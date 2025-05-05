@@ -27,9 +27,9 @@ const MapsDashboard = () => {
           return {
             ...data,
             cardType: "map",
-            cardTitle: data.maptitle,
-            cardUid: data.mapuid,
-            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailurl}`,
+            cardTitle: data.mapTitle,
+            cardUid: data.mapUid,
+            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
           };
         });
 
