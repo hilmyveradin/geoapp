@@ -14,12 +14,14 @@ import {
 import { Dropzone } from "@/components/ui/dropzone";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
+import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 
 const LayersButtons = () => {
   const { toast } = useToast();
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const { refetchLayers, setRefetchLayers } = useRefetchStore();
 
   const handleFileChange = (newState) => {
     setFiles(newState);
@@ -43,6 +45,7 @@ const LayersButtons = () => {
           title: temp.status,
           description: temp.msg,
         });
+        setRefetchLayers(!refetchLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
         toast({

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [mapsData, setMapsData] = useState([]);
-  const { refetchMapLayers } = useRefetchStore();
+  const { refetchMaps } = useRefetchStore();
 
   useEffect(() => {
     // Define function to get layers API
@@ -27,7 +27,6 @@ const MapsDashboard = () => {
 
         const tempData = temp.data
           .map((data) => {
-            //TODO: Change this maptitle to camelCase
             return {
               ...data,
               cardType: "map",
@@ -49,7 +48,7 @@ const MapsDashboard = () => {
     getMapsData()
       // make sure to catch any error
       .catch(console.error);
-  }, []);
+  }, [refetchMaps]);
 
   if (pageLoading) {
     return (

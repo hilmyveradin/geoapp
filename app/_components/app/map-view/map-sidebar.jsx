@@ -30,7 +30,7 @@ const MapSidebar = () => {
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
-  const { tableLoaded } = useMapViewStore();
+  const { tableLoaded, mapData } = useMapViewStore();
 
   // Define content for each button
   const BUTTON_CONTENT = {
@@ -57,20 +57,24 @@ const MapSidebar = () => {
           }
         )}
       >
-        <Button
-          variant="ghost"
-          onClick={() => handleButtonClick("addLayer")}
-          className={cn("flex justify-start text-blackHaze-500", {
-            "text-white": selectedButton === "addLayer",
-          })}
-        >
-          <PlusCircle
-            className={cn("w-4 h-4 stroke-blackHaze-500", {
-              "stroke-white stroke-2": selectedButton === "addLayer",
+        {mapData.mapType === "map" && (
+          <Button
+            variant="ghost"
+            onClick={() => handleButtonClick("addLayer")}
+            className={cn("flex justify-start text-blackHaze-500", {
+              "text-white": selectedButton === "addLayer",
             })}
-          />
-          {!showSidebar && <span className="inline-block ml-2">Add Layer</span>}
-        </Button>
+          >
+            <PlusCircle
+              className={cn("w-4 h-4 stroke-blackHaze-500", {
+                "stroke-white stroke-2": selectedButton === "addLayer",
+              })}
+            />
+            {!showSidebar && (
+              <span className="inline-block ml-2">Add Layer</span>
+            )}
+          </Button>
+        )}
 
         <Button
           variant="ghost"

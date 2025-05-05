@@ -13,7 +13,6 @@ import TooltipText from "@/app/_components/shared/tooltipText";
 import { useToast } from "@/components/ui/use-toast";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useUpdateLayer from "@/helpers/hooks/useUpdateLayer";
-import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 
 const LayersContent = ({ layers }) => {
   useUpdateLayer();
