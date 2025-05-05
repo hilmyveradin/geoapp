@@ -11,16 +11,28 @@ import {
 } from "@/components/ui/card"
 import Image from 'next/image'
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { Dropzone } from '@/components/ui/dropzone';
 
 const MapsDashboard = () => {
   const [layersData, setLayersData] = useState([])
+  const [files, setFiles] = useState([]);
 
   // Define image url since it is a public link
   // If we use fetch, there will be too many
   // Async handling, and the thumbnail image is public
   const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be"
-  const numOfThumbnailsPerPage = 6
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -46,11 +58,37 @@ const MapsDashboard = () => {
   }, [])
 
   // TODO: Create upload layer function handler
-  
+  // Function to handle the change in uploaded files
+  const handleFileChange = (newState) => {
+    setFiles(newState);
+  };
+
+  // remove this useEffect hook if you don't need to do anything with the uploaded files
+  useEffect(() => {
+    console.log(files);
+  }, [files]);
+
   return (
-    <div>
+    <div className="ml-20">
       {/* TODO: Add Upload Layers Button */}
-      <div className="grid grid-rows-2 grid-cols-3 gap-x-2 gap-y-3 ml-20">
+      <div className="py-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="default">+ New Item</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="pb-2">New Item</DialogTitle>
+              <Dropzone
+                onChange={handleFileChange}
+                className="w-full"
+                fileExtension="zip"
+              />
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="grid grid-rows-2 grid-cols-3 gap-x-2 gap-y-3 ">
         {/* Create a loop to render every thumbnail image */}
         {/* TODO: Add Pagination Handling */}
         {layersData.slice(0, 6).map((layersData) => (
