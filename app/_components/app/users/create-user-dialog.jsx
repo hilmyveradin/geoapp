@@ -17,11 +17,13 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 
 const CreateUserDialog = ({ children }) => {
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [submittingData, setSubmittingData] = useState(false);
+  const { refetchUsers, toggleRefetchUsers } = useRefetchStore();
   const [roles, setRoles] = useState([]);
 
   const [userData, setUserData] = useState({
@@ -66,18 +68,31 @@ const CreateUserDialog = ({ children }) => {
   };
 
   const handleRoleChange = (selectedRoles) => {
-    setUserData({ ...userData, role_uid: selectedRoles });
+    // Ensure selectedRoles is an array
+    const roleArray = Array.isArray(selectedRoles)
+      ? selectedRoles
+      : [selectedRoles];
+    setUserData({ ...userData, role_uid: roleArray });
   };
 
   const createUser = async () => {
     setSubmittingData(true);
+
+    const dataToSend = {
+      ...userData,
+      role_uid: Array.isArray(userData.role_uid)
+        ? userData.role_uid
+        : [userData.role_uid],
+    };
+
+    console.log(dataToSend);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/admin/user/create`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userData),
+          body: JSON.stringify(dataToSend),
         }
       );
 
@@ -92,6 +107,7 @@ const CreateUserDialog = ({ children }) => {
         password: "",
         role_uid: [],
       });
+      toggleRefetchUsers(!toggleRefetchUsers);
     } catch (error) {
       toast({
         title: "Error creating user",
@@ -102,8 +118,6 @@ const CreateUserDialog = ({ children }) => {
       setSubmittingData(false);
     }
   };
-
-  console.log(roles);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>

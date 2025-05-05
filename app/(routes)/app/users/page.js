@@ -15,6 +15,7 @@ import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
 import UsersButtons from "@/app/_components/app/users-buttons";
 import useUserStore from "@/helpers/hooks/store/use-user-store";
 import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
+import { useToast } from "@/components/ui/use-toast";
 
 const UsersDashboard = () => {
   const { isAdmin } = useUserStore();
@@ -23,6 +24,8 @@ const UsersDashboard = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const { refetchUsers, toggleRefetchUsers } = useRefetchStore();
+
+  const { toast } = useToast();
 
   useEffect(() => {
     async function getUsers() {
@@ -149,13 +152,13 @@ const UsersDashboard = () => {
                 </TableCell>
                 {isAdmin && (
                   <TableCell className="text-right">
-                    <Button
+                    {/* <Button
                       variant="ghost"
                       size="sm"
                       className="mr-2 hover:bg-gray-200"
                     >
                       <UserCog className="h-4 w-4" />
-                    </Button>
+                    </Button> */}
                     <DestructiveDialog
                       title="Are you sure you want to remove this user?"
                       description="This action cannot be undone"
