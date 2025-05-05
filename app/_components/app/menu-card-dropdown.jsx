@@ -13,10 +13,12 @@ import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 import { Trash2 } from "lucide-react";
 import { handleErrorMessage } from "@/helpers/string-helpers";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 const MenuCardDropdown = ({ children, cardData }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const { toggleRefetchLayers, toggleRefetchMaps } = useRefetchStore();
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleDropdownClick = (e) => {
     // Stop the click event from propagating up to parent elements
@@ -104,7 +106,15 @@ const MenuCardDropdown = ({ children, cardData }) => {
     <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent align="start" onClick={handleDropdownClick}>
-        <DropdownMenuItem asChild onClick={handleDropdownClick}>
+        <DropdownMenuItem
+          asChild
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(
+              `/app/overview/${cardData.cardType}/${cardData.cardUid}`
+            );
+          }}
+        >
           <button className="flex w-full">
             <img
               src="/app/item-details-icon.svg"
