@@ -24,14 +24,14 @@ const LayersDashboard = () => {
 
         const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
 
-        const mockLayers = temp.data.map((layers) => {
+        const tempLayers = temp.data.map((layers) => {
           return {
             ...layers,
             user: mockUser,
             thumbnail_url: `${IMAGE_BASE_URL}/cms/layer/thumbnail/${layers.thumbnail_url}`,
           };
         });
-        setLayers(mockLayers);
+        setLayers(tempLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }

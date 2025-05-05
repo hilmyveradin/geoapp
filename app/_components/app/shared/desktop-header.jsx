@@ -11,6 +11,7 @@ const DesktopHeader = () => {
 
   const { data: session, status } = useSession();
 
+  console.log(session);
   const NAVIGATION_ITEMS = [
     {
       name: "Maps",

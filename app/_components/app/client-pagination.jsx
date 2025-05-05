@@ -31,9 +31,10 @@ export default function ClientPagination({ data, ...props }) {
             {currentPosts.map((currentPosts) => {
               return (
                 <MenuCard
-                  key={currentPosts.layer_id}
-                  source={currentPosts.thumbnail_url}
-                  title={currentPosts.layer_title}
+                  layerUid={currentPosts.layerUid}
+                  key={currentPosts.layerUid}
+                  source={currentPosts.thumbnailUrl}
+                  title={currentPosts.layerTitle}
                   user={currentPosts.creator}
                 />
               );

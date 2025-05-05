@@ -4,8 +4,38 @@ import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import { UserRound } from "lucide-react";
 import { Map } from "lucide-react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-const MapOverview = () => {
+const LayerOverview = ({ params }) => {
+  const [layerData, setLayerData] = useState(null);
+
+  useEffect(() => {
+    async function loadUserData() {
+      if (params.slug) {
+        try {
+          const response = await fetch(
+            `/api/get-layer-id?layerUid=${params.slug}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+          setLayerData(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    loadUserData();
+  }, [params.slug]);
+
+  console.log(layerData);
+
   const handleOpenMapViewer = () => {};
 
   const handleShareMap = () => {};
@@ -27,6 +57,9 @@ const MapOverview = () => {
     fullName: "Foobar",
     avatar: null,
   };
+
+  if (!layerData) return <div>Loading...</div>;
+
   return (
     <div className="flex w-full h-full gap-16 p-10 bg-blue-100">
       <img
@@ -89,4 +122,4 @@ const MapOverview = () => {
   );
 };
 
-export default MapOverview;
+export default LayerOverview;

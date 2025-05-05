@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions = {
@@ -77,10 +76,13 @@ async function refreshAccessToken(token) {
       }
     ).then((res) => res.json());
 
+    console.log("REFRESH TOKEN: ", refreshedTokens);
+
     if (!refreshedTokens.error) {
       return {
         ...token,
-        accessToken: refreshedTokens.token,
+        accessToken: refreshedTokens.accessToken,
+        refreshToken: refreshedTokens.refreshToken,
         accessTokenExpires: dayjs().add(1, "week").toDate().getTime(),
       };
     }
