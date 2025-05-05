@@ -20,9 +20,7 @@ import TablesContent from "./map-sidebar/tables-content";
 import SaveContent from "./map-sidebar/save-content";
 import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
-import { DataTableDemo } from '../layer-table/layer-table';
 import { ButtonSidebar } from '@/components/ui/button-sidebar';
-import { GridExample } from '@/app/_components/app/layer-table/ag-grid-react';
 import DemoPaginationTable from '../layer-table/dummydata';
 
 const MapSidebar = () => {
