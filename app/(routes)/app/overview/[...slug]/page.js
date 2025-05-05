@@ -30,8 +30,9 @@ const MapOverview = ({ params }) => {
         const datas = await response.json();
         const modifiedDatas = datas.data.map((data) => {
           return {
-            tags: data.layerTags,
             ...data,
+            tags: data.layerTags,
+            imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
           };
         });
         debugger;
@@ -43,24 +44,19 @@ const MapOverview = ({ params }) => {
 
     async function loadMapData() {
       try {
-        const response = await fetch(
-          `/api/get-layer-id?mapUid=${overviewUid}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const datas = await response.json();
-        const modifiedDatas = datas.data.map((data) => {
-          return {
-            tags: data.layerTags,
-            ...data,
-          };
+        const response = await fetch(`/api/get-map-id?mapUid=${overviewUid}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
+        const datas = await response.json();
+        const modifiedDatas = datas.data;
+        modifiedDatas[
+          "imageUrl"
+        ] = `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${modifiedDatas.thumbnailUrl}`;
         debugger;
-        setOverviewData(modifiedDatas[0]);
+        setOverviewData(modifiedDatas);
       } catch (error) {
         console.log(error);
       }
@@ -69,6 +65,7 @@ const MapOverview = ({ params }) => {
     if (overviewType === "layer") {
       loadLayerData();
     } else {
+      loadMapData();
     }
   }, [overviewUid, overviewType]);
 
@@ -98,11 +95,11 @@ const MapOverview = ({ params }) => {
   return (
     <div className="flex w-full h-full gap-16 p-10 bg-blue-100">
       <img
-        src="https://github.com/shadcn.png"
+        src={overviewData.imageUrl}
         alt="map image"
-        className="w-full max-h-full"
+        className="w-3/4 max-h-full"
       />
-      <div className="flex flex-col w-1/4 gap-12">
+      <div className="flex flex-col !w-1/4 gap-12">
         <div className="flex flex-col gap-6">
           {BUTTON_CONSTANTS.map((item) => (
             <Button

@@ -23,10 +23,11 @@ const LayersDashboard = () => {
 
         const tempLayers = temp.data.map((data) => {
           return {
+            ...data,
             cardType: "layer",
             cardTitle: data.layerTitle,
             cardUid: data.layerUid,
-            ...data,
+            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
           };
         });
 
