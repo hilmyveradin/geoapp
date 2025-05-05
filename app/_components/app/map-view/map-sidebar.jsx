@@ -1,29 +1,22 @@
 "use client";
 
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
   ChevronLeft,
-  ChevronRight,
   PlusCircle,
   Layers3,
   Sheet,
   Save,
   Share2,
-  List,
 } from "lucide-react";
 import { Fragment, useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
-import AddLayerContent from "./map-sidebar/add-layer-content";
+import AddLayersContent from "./map-sidebar/add-layer-content";
 import TablesContent from "./map-sidebar/tables-content";
-import SaveContent from "./map-sidebar/save-content";
-import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
-import { DataTableDemo } from '../layer-table/layer-table';
-import { ButtonSidebar } from '@/components/ui/button-sidebar';
-import { GridExample } from '@/app/_components/app/layer-table/ag-grid-react';
-import DemoPaginationTable from '../layer-table/dummydata';
+import DemoPaginationTable from "../layer-table/dummydata";
+import SaveAlertDialog from "../shared/save-alert-dialog";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -55,23 +48,21 @@ const MapSidebar = () => {
       buttonKey: "save",
       icon: Save,
       label: "Save",
-      onClick: () => handleButtonClick("save"),
+      onClick: null,
     },
     {
       buttonKey: "share",
       icon: Share2,
       label: "Share",
-      onClick: () => handleButtonClick("share"),
+      onClick: null,
     },
   ];
 
   // Define content for each button
   const BUTTON_CONTENT = {
-    addLayer: <AddLayerContent />,
+    addLayer: <AddLayersContent />,
     layers: <LayersContent />,
     tables: <TablesContent />,
-    save: <SaveContent />,
-    share: <ShareContent />,
   };
 
   // Reusable Button component
@@ -103,6 +94,20 @@ const MapSidebar = () => {
     }
   };
 
+  const generateSidebarButton = (data) => {
+    if (data.buttonKey === "save") {
+      return (
+        <SaveAlertDialog>
+          <SidebarButton {...data} />
+        </SaveAlertDialog>
+      );
+    } else if (data.buttonKey === "share") {
+      return <SidebarButton {...data} />;
+    } else {
+      return <SidebarButton {...data} />;
+    }
+  };
+
   return (
     <div className="">
       <div
@@ -121,7 +126,8 @@ const MapSidebar = () => {
 
           return (
             <Fragment key={data.buttonKey}>
-              <SidebarButton {...data} />
+              {/* <SidebarButton {...data} /> */}
+              {generateSidebarButton(data)}
 
               {/* Insert a separator after certain buttons */}
               {["tables", "share"].includes(data.buttonKey) && (
@@ -161,26 +167,27 @@ const MapSidebar = () => {
           {BUTTON_CONTENT[selectedButton]}
         </div>
       )}
-      {/* TODO: Fix this grid views */}
+      {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
       <div
         className={cn(
-          "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2",
+          "fixed rounded-md border bottom-6 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
           {
-            "left-[300px] w-[calc(100vw-300px-60px)]":
+            "left-[300px] w-[calc(100vw-300px-60px+48px)]":
               !expandedSidebarButtons && showSidebar,
-            "left-[172px] w-[calc(100vw-172px-60px)]":
+            "left-[172px] w-[calc(100vw-172px-60px+48px)]":
               expandedSidebarButtons && !showSidebar,
-            "left-[412px] w-[calc(100vw-412px-60px)]":
+            "left-[412px] w-[calc(100vw-412px-60px+48px)]":
               !expandedSidebarButtons && !showSidebar,
-            "left-[60px] w-[calc(100vw-60px-60px)]":
+            "left-[60px] w-[calc(100vw-60px-60px+48px)]":
               expandedSidebarButtons && showSidebar && showSidebarRight,
-            "left-[60px] w-[calc(100vw-60px-192px)]":
+            "left-[60px] w-[calc(100vw-60px-192px+48px)]":
               expandedSidebarButtons && showSidebar && !showSidebarRight,
           }
-        )}>
-          <DemoPaginationTable></DemoPaginationTable>
+        )}
+      >
+        <DemoPaginationTable></DemoPaginationTable>
       </div>
-      <div
+      {/* TODO: Add this sidebar div <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
           {
@@ -213,7 +220,7 @@ const MapSidebar = () => {
             <span className="inline-block ml-2">Collapse</span>
           )}
         </ButtonSidebar>
-      </div>
+      </div> */}
     </div>
   );
 };

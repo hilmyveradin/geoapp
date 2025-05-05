@@ -70,7 +70,7 @@ const MapView = ({ params }) => {
   if (!mapData && !layersData)
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+        <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
       </div>
     );
 
@@ -79,7 +79,8 @@ const MapView = ({ params }) => {
       <MapHeader />
       <div className="flex items-center justify-center">
         <MapSidebar />
-        <div className="px-12 w-screen h-[calc(100vh-56px)]">
+        {/* adjust this paddign if there's a style sidebar*/}
+        <div className="pl-12 w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
       </div>

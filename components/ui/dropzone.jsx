@@ -1,12 +1,24 @@
-import React, { useRef, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { TailSpin } from "react-loader-spinner";
+import React, { useRef, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
-export function Dropzone({ onChange, className, fileExtension, progress, ...props }) {
+export function Dropzone({
+  onChange,
+  className,
+  fileExtension,
+  progress,
+  resetView,
+  ...props
+}) {
   const fileInputRef = useRef(null);
   const [fileInfo, setFileInfo] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setFileInfo(null);
+    setError(null);
+  }, [resetView]);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -43,6 +55,7 @@ export function Dropzone({ onChange, className, fileExtension, progress, ...prop
   };
 
   const handleButtonClick = () => {
+    debugger;
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -50,24 +63,27 @@ export function Dropzone({ onChange, className, fileExtension, progress, ...prop
 
   return (
     <Card
-      className={`border-2 border-dashed bg-muted hover:cursor-pointer hover:border-muted-foreground/50 ${className}`}
+      className={`border-2 border-dashed bg-muted hover:border-muted-foreground/50 ${className}`}
       {...props}
     >
       <CardContent
-        className="flex flex-col items-center justify-center space-y-2 px-2 py-4 text-xs"
+        className="flex flex-col items-center justify-center px-2 py-4 space-y-2 text-xs"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
         <div className="flex items-center justify-center text-muted-foreground">
-          <span className="font-medium">Drag Files to Upload or</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="ml-auto flex h-8 space-x-2 px-0 pl-1 text-xs"
-            onClick={handleButtonClick}
-          >
-            Click Here
-          </Button>
+          <span className="font-medium">
+            Drag Files to Upload or{" "}
+            <span
+              variant="ghost"
+              size="sm"
+              className="text-xs font-bold cursor-pointer"
+              onClick={handleButtonClick}
+            >
+              Click Here
+            </span>
+          </span>
+
           <input
             ref={fileInputRef}
             type="file"
@@ -77,16 +93,7 @@ export function Dropzone({ onChange, className, fileExtension, progress, ...prop
           />
         </div>
         {progress && (
-          <TailSpin
-            visible={true}
-            height="80"
-            width="80"
-            color="#4fa94d"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
+          <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
         )}
         {fileInfo && <p className="text-muted-foreground">{fileInfo}</p>}
         {error && <span className="text-red-500">{error}</span>}

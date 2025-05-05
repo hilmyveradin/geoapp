@@ -48,7 +48,7 @@ const LayersDashboard = () => {
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-96">
-        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+        <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
       </div>
     );
   }

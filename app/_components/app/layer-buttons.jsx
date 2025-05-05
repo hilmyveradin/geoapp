@@ -20,6 +20,7 @@ const LayersButtons = () => {
   const { toast } = useToast();
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleFileChange = (newState) => {
     setFiles(newState);
@@ -43,16 +44,18 @@ const LayersButtons = () => {
           title: temp.status,
           description: temp.msg,
         });
-        setUploadProgress(false); // Set progress to 100 upon completion
       } catch (error) {
         console.error("Error during fetch:", error.message);
         toast({
           title: "ERROR",
           description: error.message,
         });
+      } finally {
         setUploadProgress(false); // Reset progress on error
+        setOpenDialog(false);
       }
     }
+
     if (files.length > 0) {
       const formData = new FormData();
       formData.append("vector_zip", files[0]);
@@ -68,14 +71,13 @@ const LayersButtons = () => {
         Filter
       </Button>
       <div className="flex items-center justify-center gap-4">
-        <Dialog>
+        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger asChild>
-            <Button className="flex gap-2">
+            <Button className="flex gap-2" onClick={() => setOpenDialog(true)}>
               <Plus className="w-5 h-5 stroke-[4px]" fill="white" />
               Add Layers
             </Button>
           </DialogTrigger>
-          {/* Conditionally render Dropzone based on fileUploaded state */}
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="pb-2">Upload new layer</DialogTitle>

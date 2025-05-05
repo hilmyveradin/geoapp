@@ -42,7 +42,7 @@ const useLayerManager = () => {
           currentLayersRef.current.push(layer.layerUid); // Track the layer being added
           const url = `http://dev3.webgis.co.id/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.pgTableName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`;
 
-          if (!map.getSource(layer.layerUid)) {
+          if (!map?.getSource(layer.layerUid)) {
             map.addSource(layer.layerUid, {
               type: "raster",
               tiles: [url],
