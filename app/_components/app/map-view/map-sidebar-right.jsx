@@ -7,7 +7,7 @@ import { ChevronLeft } from "lucide-react";
 import { Shapes } from "lucide-react";
 import { FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
-import EditPopupAttributes from "./map-right-sidebar/edit-popup-attributes";
+import FieldAliasContent from "./map-right-sidebar/edit-popup-attributes";
 import StyleContent from "./map-right-sidebar/style-content";
 import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
 
@@ -21,7 +21,7 @@ const MapSidebarRight = () => {
 
   // Define content for each button
   const BUTTON_CONTENT = {
-    editPopupAttributes: <EditPopupAttributes />,
+    FieldAliasContent: <FieldAliasContent />,
     styleContent: <StyleContent />,
   };
 
@@ -78,7 +78,7 @@ const MapSidebarRight = () => {
           className={cn("flex justify-end", {
             "p-0 justify-center": !showSidebar,
           })}
-          onClick={() => handleButtonClick("editPopupAttributes")}
+          onClick={() => handleButtonClick("FieldAliasContent")}
         >
           <FilePenLine
             className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
@@ -136,7 +136,7 @@ const MapSidebarRight = () => {
         <LegendContent />
       </Tabs> */}
       </div>
-      {(selectedButton === "editPopupAttributes" ||
+      {(selectedButton === "FieldAliasContent" ||
         selectedButton === "styleContent") && (
         <div
           className={cn(

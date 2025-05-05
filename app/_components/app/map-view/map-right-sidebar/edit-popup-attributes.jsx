@@ -19,9 +19,13 @@ import { Loader2 } from "lucide-react";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const EditPopupAttributes = () => {
-  const { mapLayers, selectedPopupLayer, setSelectedPopupLayer } =
-    useMapViewStore();
+const FieldAliasContent = () => {
+  const {
+    mapLayers,
+    selectedPopupLayer,
+    setSelectedPopupLayer,
+    setMapClicked,
+  } = useMapViewStore();
 
   const [layerFields, setLayerFields] = useState(); // Responsible for all of the fields available
   const [selectedFields, setSelectedFields] = useState([]); // Responsible for checked array
@@ -54,14 +58,40 @@ const EditPopupAttributes = () => {
         } catch (error) {
           console.error("Failed to fetch layer data:", error);
           // Optionally handle error state
+        } finally {
+          setIsFetching(false);
         }
-
-        setIsFetching(false);
       }
 
       fetchLayerData();
     }
   }, [selectedPopupLayer]); // Make sure to include all dependencies here
+
+  const saveFieldAliases = async (field, action) => {
+    try {
+      const body = {
+        [field.fieldName]: field.fieldAlias,
+      };
+      const response = await fetch(
+        `/api/layers/set-field-alias?layerUid=${selectedPopupLayer.layerUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (action) {
+        action();
+      }
+    } catch (error) {
+      console.error("Failed to fetch layer data:", error);
+    }
+  };
 
   const toggleFieldSelected = (field) => {
     if (selectedFields.includes(field)) {
@@ -73,13 +103,15 @@ const EditPopupAttributes = () => {
 
   const setSelectedFieldAliasValue = (newField) => {
     if (newField && newField.fieldAlias) {
-      // Replace the field in layerFields that has the same fieldAlias as newField
-      setLayerFields(
-        layerFields.map((f) =>
-          f.fieldName === newField.fieldName ? newField : f
-        )
-      );
-      setSelectedFieldForEdit(null); // Clear the edit state more explicitly
+      saveFieldAliases(newField, () => {
+        // Replace the field in layerFields that has the same fieldAlias as newField
+        setLayerFields(
+          layerFields.map((f) =>
+            f.fieldName === newField.fieldName ? newField : f
+          )
+        );
+        setSelectedFieldForEdit(null); // Clear the edit state more explicitly
+      });
     } else {
       setSelectedFieldForEdit(null); // Just reset the edit state if no newField is provided
     }
@@ -158,9 +190,20 @@ const EditPopupAttributes = () => {
                     align="end"
                     className="text-white bg-nileBlue-900"
                   >
-                    <DropdownMenuItem> Show field in popup </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => setSelectedFieldForEdit(field)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMapClicked(true);
+                      }}
+                    >
+                      {" "}
+                      Show field in popup{" "}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFieldForEdit(field);
+                      }}
                     >
                       {" "}
                       Edit field alias{" "}
@@ -205,8 +248,7 @@ const EditFieldPopup = (props) => {
   return (
     <div
       className={cn(
-        "w-72 rounded-md shadow-sm z-10 fixed top-28 right-[296px] bg-red-500 flex flex-col gap-3 p-2",
-        {}
+        "w-72 rounded-md shadow-sm z-10 fixed top-28 right-[296px] flex flex-col gap-3 p-2 bg-white"
       )}
     >
       <div className="flex justify-between">
@@ -233,4 +275,4 @@ const EditFieldPopup = (props) => {
   );
 };
 
-export default EditPopupAttributes;
+export default FieldAliasContent;
