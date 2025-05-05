@@ -13,7 +13,6 @@ import { Fragment, useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
 import AddLayersContent from "./map-sidebar/add-layer-content";
-import TablesContent from "./map-sidebar/tables-content";
 import { Separator } from "@/components/ui/separator";
 import DemoPaginationTable from "../layer-table/dummydata";
 import SaveAlertDialog from "../shared/save-alert-dialog";
@@ -42,7 +41,7 @@ const MapSidebar = () => {
       buttonKey: "tables",
       icon: Sheet,
       label: "Tables",
-      onClick: () => handleButtonClick("tables"),
+      onClick: null, //TODO: Add layer function to this tables
     },
     {
       buttonKey: "save",
@@ -62,7 +61,6 @@ const MapSidebar = () => {
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
     layers: <LayersContent />,
-    tables: <TablesContent />,
   };
 
   // Reusable Button component
@@ -168,25 +166,29 @@ const MapSidebar = () => {
         </div>
       )}
       {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
-      <div
-        className={cn(
-          "fixed rounded-md border bottom-6 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
-          {
-            "left-[300px] w-[calc(100vw-300px-60px+48px)]":
-              !expandedSidebarButtons && showSidebar,
-            "left-[172px] w-[calc(100vw-172px-60px+48px)]":
-              expandedSidebarButtons && !showSidebar,
-            "left-[412px] w-[calc(100vw-412px-60px+48px)]":
-              !expandedSidebarButtons && !showSidebar,
-            "left-[60px] w-[calc(100vw-60px-60px+48px)]":
-              expandedSidebarButtons && showSidebar && showSidebarRight,
-            "left-[60px] w-[calc(100vw-60px-192px+48px)]":
-              expandedSidebarButtons && showSidebar && !showSidebarRight,
-          }
-        )}
-      >
-        <DemoPaginationTable></DemoPaginationTable>
-      </div>
+      {/* TODO: Show this sidebar based on state */}
+      {false && (
+        <div
+          className={cn(
+            "fixed rounded-md border bottom-6 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
+            {
+              "left-[300px] w-[calc(100vw-300px-60px+48px)]":
+                !expandedSidebarButtons && showSidebar,
+              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
+                expandedSidebarButtons && !showSidebar,
+              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
+                !expandedSidebarButtons && !showSidebar,
+              "left-[60px] w-[calc(100vw-60px-60px+48px)]":
+                expandedSidebarButtons && showSidebar && showSidebarRight,
+              "left-[60px] w-[calc(100vw-60px-192px+48px)]":
+                expandedSidebarButtons && showSidebar && !showSidebarRight,
+            }
+          )}
+        >
+          <DemoPaginationTable></DemoPaginationTable>
+        </div>
+      )}
+
       {/* TODO: Add this sidebar div <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
