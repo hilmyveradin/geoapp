@@ -29,7 +29,7 @@ import { X } from "lucide-react";
 import GeojsonCard from "@/app/_components/app/geojson-card/GeojsonCard";
 
 const MapSidebar = () => {
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
@@ -58,9 +58,9 @@ const MapSidebar = () => {
     <div className="">
       <div
         className={cn(
-          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-nileBlue-900 w-[48px] text-white text-xs",
+          "flex flex-col fixed top-14 h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-nileBlue-900 w-12 text-white text-xs p-1",
           {
-            "w-[160px]": !showSidebar,
+            "w-[160px]": showSidebar,
           }
         )}
       >
@@ -70,6 +70,7 @@ const MapSidebar = () => {
             onClick={() => handleButtonClick("addLayer")}
             className={cn("flex justify-start text-blackHaze-500", {
               "text-white": selectedButton === "addLayer",
+              "p-0 justify-center": !showSidebar,
             })}
           >
             <PlusCircle
@@ -77,7 +78,7 @@ const MapSidebar = () => {
                 "stroke-white stroke-2": selectedButton === "addLayer",
               })}
             />
-            {!showSidebar && (
+            {showSidebar && (
               <span className="inline-block ml-2">Add Layer</span>
             )}
           </Button>
@@ -88,6 +89,7 @@ const MapSidebar = () => {
           onClick={() => handleButtonClick("layers")}
           className={cn("flex justify-start text-blackHaze-500", {
             "text-white": selectedButton === "layers",
+            "p-0 justify-center": !showSidebar,
           })}
         >
           <Layers3
@@ -95,7 +97,7 @@ const MapSidebar = () => {
               "stroke-white stroke-2": selectedButton === "layers",
             })}
           />
-          {!showSidebar && <span className="inline-block ml-2">Layers</span>}
+          {showSidebar && <span className="inline-block ml-2">Layers</span>}
         </Button>
 
         {/* <Button
@@ -120,6 +122,7 @@ const MapSidebar = () => {
             variant="ghost"
             className={cn("flex justify-start text-blackHaze-500", {
               // "text-white": selectedButton === "save",
+              "p-0 justify-center": !showSidebar,
             })}
           >
             <Save
@@ -127,7 +130,7 @@ const MapSidebar = () => {
                 // "stroke-white stroke-2": selectedButton === "save",
               })}
             />
-            {!showSidebar && <span className="inline-block ml-2">Save</span>}
+            {showSidebar && <span className="inline-block ml-2">Save</span>}
           </Button>
         </SaveAlertDialog>
 
@@ -183,15 +186,17 @@ const MapSidebar = () => {
         <Button
           variant="ghost"
           onClick={() => setShowSidebar((prev) => !prev)}
-          className={cn("flex justify-start text-blackHaze-500")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "p-0 justify-center": !showSidebar,
+          })}
         >
           <ChevronLeft
-            className={cn("w-4 h-4 stroke-blackHaze-500  transition-all", {
-              "rotate-0": !showSidebar,
-              "rotate-180": showSidebar,
+            className={cn("w-4 h-4 stroke-blackHaze-500 transition-all", {
+              "rotate-0": showSidebar,
+              "rotate-180": !showSidebar,
             })}
           />
-          {!showSidebar && <span className="inline-block ml-2">Collapse</span>}
+          {showSidebar && <span className="inline-block ml-2">Collapse</span>}
         </Button>
       </div>
       {(selectedButton === "addLayer" || selectedButton === "layers") && (
@@ -199,8 +204,8 @@ const MapSidebar = () => {
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",
             {
-              "left-12 w-60": showSidebar,
-              "left-40 w-60": !showSidebar,
+              "left-12 w-60": !showSidebar,
+              "left-40 w-60": showSidebar,
             }
           )}
         >
@@ -214,15 +219,15 @@ const MapSidebar = () => {
             "fixed rounded-md top-[60vh] h-[calc(100vh-60vh-24px)] pb-8 z-10",
             {
               "left-[300px] w-[calc(100vw-300px-60px+48px)]":
-                !expandedSidebarButtons && showSidebar,
-              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
-                expandedSidebarButtons && !showSidebar,
-              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
                 !expandedSidebarButtons && !showSidebar,
+              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
+                expandedSidebarButtons && showSidebar,
+              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
+                !expandedSidebarButtons && showSidebar,
               "left-[60px] w-[calc(100vw-60px-60px+48px)]":
-                expandedSidebarButtons && showSidebar && showSidebarRight,
+                expandedSidebarButtons && !showSidebar && showSidebarRight,
               "left-[60px] w-[calc(100vw-60px-192px+48px)]":
-                expandedSidebarButtons && showSidebar && !showSidebarRight,
+                expandedSidebarButtons && !showSidebar && !showSidebarRight,
             }
           )}
         >

@@ -44,7 +44,9 @@ const MapMain = () => {
     });
 
     setMap(mapRef.current);
-    mapRef.current.addControl(new maplibregl.NavigationControl());
+    const navControl = new maplibregl.NavigationControl();
+    navControl._container.className += " absolute right-12"; // Tailwind class for right 100px
+    mapRef.current.addControl(navControl, "top-right");
     mapRef.current.on("load", () => {
       setMapLoaded(true);
       mapRef.current.getCanvas().style.cursor = "crosshair"; // Set the cursor to crosshair
