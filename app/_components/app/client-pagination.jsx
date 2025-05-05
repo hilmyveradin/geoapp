@@ -39,7 +39,7 @@ export default function ClientPagination({ data, ...props }) {
               );
             })}
           </div>
-          <div className="mt-6">
+          <div className="my-6">
             <PaginationSection
               totalPosts={data.length}
               postsPerPage={postsPerPage}
@@ -92,10 +92,12 @@ function PaginationSection({
       <PaginationItem
         key={idx}
         className={
-          currentPage === page ? "bg-neutral-100 rounded-md cursor-pointer" : ""
+          currentPage === page ? "bg-nileBlue-700 rounded-md cursor-pointer" : ""
         }
       >
-        <PaginationLink onClick={() => setCurrentPage(page)}>
+        <PaginationLink 
+          onClick={() => setCurrentPage(page)}
+          className="hover:bg-nileBlue-300">
           {page}
         </PaginationLink>
       </PaginationItem>
@@ -107,6 +109,7 @@ function PaginationSection({
         <PaginationEllipsis
           key="ellipsis-start"
           onClick={() => setCurrentPage(activePages[0] - 1)}
+          className="hover:bg-nileBlue-300 rounded-md"
         />
       );
     }
@@ -119,6 +122,7 @@ function PaginationSection({
           onClick={() =>
             setCurrentPage(activePages[activePages.length - 1] + 1)
           }
+          className="hover:bg-nileBlue-300 rounded-md"
         />
       );
     }
@@ -130,13 +134,19 @@ function PaginationSection({
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious onClick={handlePrevPage} />
+            <PaginationPrevious 
+              onClick={handlePrevPage}
+              className="hover:bg-nileBlue-300" 
+            />
           </PaginationItem>
 
           {renderPages()}
 
           <PaginationItem>
-            <PaginationNext onClick={handleNextPage} />
+            <PaginationNext 
+              onClick={handleNextPage}
+              className="hover:bg-nileBlue-300" 
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
