@@ -76,7 +76,7 @@ const Login = () => {
         </CardContent>
         <CardFooter>
           <Button className="w-full" onClick={() => handleLogin()}>
-            Loginn
+            Login
           </Button>
         </CardFooter>
       </Card>
