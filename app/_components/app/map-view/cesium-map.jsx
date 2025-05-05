@@ -58,7 +58,6 @@ const CesiumMap = () => {
             );
           },
         },
-        outlinecol,
       });
 
       // Get the bounding sphere
