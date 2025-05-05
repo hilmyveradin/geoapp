@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { Progress } from "./progress";
 
 export function Dropzone({
   onChange,
@@ -9,6 +10,7 @@ export function Dropzone({
   fileExtension,
   progress,
   resetView,
+  progressValue,
   ...props
 }) {
   const fileInputRef = useRef(null);
@@ -92,7 +94,7 @@ export function Dropzone({
           />
         </div>
         {progress && (
-          <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
+          <Progress value={progressValue} className="w-[60%]" />
         )}
         {fileInfo && <p className="text-muted-foreground">{fileInfo}</p>}
         {error && <span className="text-red-500">{error}</span>}
