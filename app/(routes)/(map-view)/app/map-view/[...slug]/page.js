@@ -142,7 +142,7 @@ const MapView = ({ params }) => {
         <div className="pl-12 w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
-        {(isAdmin || isEditor) && <MapRightSidebar />}
+        {/* {(isAdmin || isEditor) && <MapRightSidebar />} */}
       </div>
     </div>
   );

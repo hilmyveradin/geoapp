@@ -20,9 +20,9 @@ const useMapControlManager = () => {
           /absolute right-\d+/,
           ""
         );
-      navControlRef.current._container.className += showRightSidebar
-        ? " absolute right-28" // Tailwind class for right 100px
-        : " absolute right-12";
+      // navControlRef.current._container.className += showRightSidebar
+      //   ? " absolute right-28" // Tailwind class for right 100px
+      //   : " absolute right-12";
     }
   }, [map, showRightSidebar]);
 };
