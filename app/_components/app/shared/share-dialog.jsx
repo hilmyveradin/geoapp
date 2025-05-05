@@ -43,6 +43,10 @@ const ShareDialog = ({ children }) => {
 
   // Function to memoize colors for users and groups
   const useColorMemo = (items) => {
+    if (items === undefined) {
+      return;
+    }
+
     const memoizedColors = useMemo(() => {
       const colors = {};
       items.forEach((item) => {
@@ -108,7 +112,10 @@ const ShareDialog = ({ children }) => {
       ]);
 
       setUserList(usersData.data);
-      setGroupList(groupsData.data);
+      if (groupsData.data) {
+        setGroupList(groupsData.data);
+      }
+
       setOwner(mapsData.data.owner);
       setSharedGroupList(mapsData.data.groups);
       setSharedUserList(mapsData.data.users);
@@ -472,23 +479,26 @@ const ShareDialog = ({ children }) => {
               />
               <Search className="w-5 h-5" />
             </div>
-            {groupList
-              .filter((group) =>
-                group.groupName
-                  .toLowerCase()
-                  .includes(searchGroupInput.toLowerCase())
-              )
-              .map((group) => {
-                return (
-                  <GroupCard
-                    key={group.groupUid}
-                    group={group}
-                    isChecked={isGroupSelected(group.groupUid)}
-                    onCheckedChange={() => handleGroupSelection(group.groupUid)}
-                    color={groupColors[group.groupUid]}
-                  />
-                );
-              })}
+            {groupList &&
+              groupList
+                .filter((group) =>
+                  group.groupName
+                    .toLowerCase()
+                    .includes(searchGroupInput.toLowerCase())
+                )
+                .map((group) => {
+                  return (
+                    <GroupCard
+                      key={group.groupUid}
+                      group={group}
+                      isChecked={isGroupSelected(group.groupUid)}
+                      onCheckedChange={() =>
+                        handleGroupSelection(group.groupUid)
+                      }
+                      color={groupColors[group.groupUid]}
+                    />
+                  );
+                })}
           </div>
         </>
       );
