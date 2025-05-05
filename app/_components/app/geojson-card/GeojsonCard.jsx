@@ -33,29 +33,6 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
-
 const objects = ["obj1", "obj2"];
 
 export function ComboboxDemo({layerTitles}) {
@@ -69,11 +46,17 @@ export function ComboboxDemo({layerTitles}) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[100%] justify-between"
-        >
-          {value
+          className="w-[100%] flex justify-between"
+          title={value
             ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
-            : "Select layer title..."}
+            : "Select layer title"}
+        >
+          <div className="w-[90%] flex items-center">
+            <span className="text-ellipsis overflow-hidden truncate">{value
+              ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+              : "Select layer title"}
+            </span>
+          </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -97,7 +80,9 @@ export function ComboboxDemo({layerTitles}) {
                     value === layerTitle.value ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {layerTitle.label}
+                <span className="w-[80%] text-ellipsis overflow-hidden truncate">
+                  {layerTitle.label}
+                </span>
               </CommandItem>
             ))}
           </CommandGroup>
@@ -145,7 +130,7 @@ export default function GeojsonCard() {
   const { objectInfoData } = useMapViewStore();
   console.log(objectInfoData.data);
   const layerTitles = objectInfoData.data.map((layer) => ({
-    value: layer.layerUid,
+    value: layer.layerTitle.toLowerCase(),
     label: layer.layerTitle,
   }));
   console.log(layerTitles);
