@@ -15,6 +15,8 @@ import {
 import { useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { ButtonSidebar } from "@/components/ui/button-sidebar";
+import { DataTableDemo } from '../layer-table/layer-table';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -108,7 +110,7 @@ const MapSidebar = () => {
   ];
   console.log(showButtonSidebar)
   return (
-    <div className="flex flex-row">
+    <div className="">
       <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gableGreen-500 w-[48px]",
@@ -137,16 +139,16 @@ const MapSidebar = () => {
       )}
       <div
         className = {cn(
-          "fixed bottom-6 z-10 bg-black top-[65vh] h-[calc(100vh-65vh-24px)]",
+          "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 overflow-x-auto",
           {
-            "left-[292px] w-[calc(100vw-292px-52px)]": !showButtonSidebar && showSidebar,
-            "left-[164px] w-[calc(100vw-164px-52px)]": showButtonSidebar && !showSidebar,
-            "left-[404px] w-[calc(100vw-404px-52px)]": !showButtonSidebar && !showSidebar,
-            "left-[52px] w-[calc(100vw-52px-52px)]": showButtonSidebar && showSidebar && showSidebarRight,
-            "left-[52px] w-[calc(100vw-52px-184px)]": showButtonSidebar && showSidebar && !showSidebarRight,
+            "left-[300px] w-[calc(100vw-300px-60px)]": !showButtonSidebar && showSidebar,
+            "left-[172px] w-[calc(100vw-172px-60px)]": showButtonSidebar && !showSidebar,
+            "left-[412px] w-[calc(100vw-412px-60px)]": !showButtonSidebar && !showSidebar,
+            "left-[60px] w-[calc(100vw-60px-60px)]": showButtonSidebar && showSidebar && showSidebarRight,
+            "left-[60px] w-[calc(100vw-60px-192px)]": showButtonSidebar && showSidebar && !showSidebarRight,
           }
         )}>
-
+          <DataTableDemo></DataTableDemo>
       </div>
       <div
         className={cn(

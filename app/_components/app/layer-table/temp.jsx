@@ -152,7 +152,7 @@ export function DataTableDemo() {
 
   return (
     <div className="w-full">
-      <div className="rounded-md shadow-md border top-2">
+      <div className="rounded-md relative shadow-md border top-2 overflow-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -172,8 +172,7 @@ export function DataTableDemo() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="grid auto-rows-max">
-          <ScrollArea className="max-h-[200px]">
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -200,7 +199,6 @@ export function DataTableDemo() {
                 </TableCell>
               </TableRow>
             )}
-            </ScrollArea>
           </TableBody>
         </Table>
       </div>
