@@ -1,20 +1,23 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import authOptions from "../auth/[...nextauth]/options";
+import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    const formData = await request.formData()
-    console.log(formData.get('vector_zip'))
+    const formData = await request.formData();
+    console.log(formData.get("vector_zip"));
     const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/gs/upload_vectordata`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: formData
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/gs/upload_vectordata`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: formData,
+      }
+    );
 
     if (!res.ok) {
       console.error(

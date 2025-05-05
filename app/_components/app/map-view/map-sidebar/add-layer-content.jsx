@@ -41,7 +41,7 @@ const AddLayerCard = ({ data }) => {
           mapUid: mapData.mapUid,
         };
 
-        const response = await fetch("/api/add-map-layer", {
+        const response = await fetch("/api/maps/add-map-layer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -134,7 +134,7 @@ const AddLayersContent = () => {
     // Define function to get layers API
     async function getLayersData() {
       try {
-        const response = await fetch("/api/get-layers", {
+        const response = await fetch("/api/layers/get-layers", {
           method: "GET",
         });
 
@@ -217,7 +217,7 @@ const AddLayersContent = () => {
           });
         }
       };
-      xhr.open("POST", "/api/upload-vectordata");
+      xhr.open("POST", "/api/layers/upload-vectordata");
       xhr.send(formData);
     }
 

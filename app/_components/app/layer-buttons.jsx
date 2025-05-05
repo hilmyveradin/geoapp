@@ -35,13 +35,13 @@ const LayersButtons = () => {
       const xhr = new XMLHttpRequest();
 
       // Set the upload progress event listener.
-      xhr.upload.addEventListener("progress", function(event) {
+      xhr.upload.addEventListener("progress", function (event) {
         if (event.lengthComputable) {
           setProgressValue((event.loaded / event.total) * 85);
         }
       });
 
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (xhr.status === 200) {
           setProgressValue(0);
           try {
@@ -51,14 +51,14 @@ const LayersButtons = () => {
               toast({
                 title: responseData.status,
                 description: responseData.msg,
-                variant: "success"
+                variant: "success",
               });
             } else {
               toast({
                 title: responseData.status,
                 description: responseData.msg,
-                variant: "destructive"
-              })
+                variant: "destructive",
+              });
             }
             setRefetchLayers(!refetchLayers);
           } catch (error) {
@@ -74,8 +74,8 @@ const LayersButtons = () => {
         } else {
           console.log("not 200");
         }
-      }
-      xhr.open("POST", "/api/upload-vectordata")
+      };
+      xhr.open("POST", "/api/layers/upload-vectordata");
       xhr.send(formData);
     }
 

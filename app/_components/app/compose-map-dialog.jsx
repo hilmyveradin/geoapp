@@ -52,7 +52,7 @@ const ComposeMapDialog = (props) => {
     // Define function to get layers API
     async function getLayersData() {
       try {
-        const response = await fetch("/api/get-layers", {
+        const response = await fetch("/api/layers/get-layers", {
           method: "GET",
         });
 
@@ -168,7 +168,7 @@ const ComposeMapDialog = (props) => {
 
       setSubmittingData(true);
       try {
-        const response = await fetch("/api/compose-map", {
+        const response = await fetch("/api/maps/compose-map", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

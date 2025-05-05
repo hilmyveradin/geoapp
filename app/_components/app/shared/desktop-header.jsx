@@ -25,10 +25,10 @@ const DesktopHeader = () => {
     //   name: "Users",
     //   path: "/app/users",
     // },
-    // {
-    //   name: "Groups",
-    //   path: "/app/groups",
-    // },
+    {
+      name: "Groups",
+      path: "/app/groups",
+    },
   ];
 
   if (status === "loading") {

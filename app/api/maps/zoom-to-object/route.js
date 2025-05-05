@@ -1,24 +1,21 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import authOptions from "../auth/[...nextauth]/options";
+import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    // const mapUid = request.nextUrl.searchParams.get("mapUid");
-
     const body = await request.json();
-    const { mapLayerUid, mapUid } = body;
+    const { objectid, layerUid } = body;
     const session = await getServerSession(authOptions);
-
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/map/reorder/${mapUid}`,
+      `${process.env.API_BASE_URL}/cms/layer/zoom_to_object/${layerUid}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        body: JSON.stringify({ mapLayerUid: mapLayerUid }),
+        body: JSON.stringify({ objectid: objectid }),
       }
     );
 
@@ -33,7 +30,6 @@ export async function POST(request) {
     }
 
     const data = await res.json();
-
     // Create a new instance of NextResponse with the 'new' keyword
     const response = new NextResponse(JSON.stringify(data), {
       headers: { "Content-Type": "application/json" },

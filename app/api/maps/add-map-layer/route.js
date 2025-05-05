@@ -1,18 +1,24 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import authOptions from "../auth/[...nextauth]/options";
+import authOptions from "../../auth/[...nextauth]/options";
 
-export async function GET() {
+export async function POST(request) {
   try {
+    const body = await request.json();
+    const { layers, mapUid } = body;
     const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/cms/map/add_layer/${mapUid}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: JSON.stringify({ layers: layers }),
+      }
+    );
 
     if (!res.ok) {
       console.error(

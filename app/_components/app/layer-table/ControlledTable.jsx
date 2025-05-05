@@ -43,7 +43,7 @@ const ControlledTable = ({
   pageNumber,
   components,
   columnDefs,
-  getRowNodeId
+  getRowNodeId,
 }) => {
   const [gridApi, setGridApi] = useState();
   const [loadingBlocks, setLoadingBlocks] = useState([]);
@@ -52,10 +52,9 @@ const ControlledTable = ({
   useZoomToLayer();
   const autoSizeStrategy = useMemo(() => {
     return {
-      type: 'fitCellContents',
+      type: "fitCellContents",
     };
   }, []);
-  
 
   if (pagination) {
     paginationProps = {
@@ -74,9 +73,10 @@ const ControlledTable = ({
     return items;
   };
 
-  const isPlaceholder = useCallback((i) => !rows[i] || rows[i].placeholder, [
-    rows
-  ]);
+  const isPlaceholder = useCallback(
+    (i) => !rows[i] || rows[i].placeholder,
+    [rows]
+  );
 
   const needsLoading = useCallback(
     (startRow) => {
@@ -181,23 +181,23 @@ const ControlledTable = ({
         const body = {
           layerUid: layerInfo.layerUid,
           objectid: arrObjectId,
-        }
-        const response = await fetch("/api/zoom-to-object/", {
+        };
+        const response = await fetch("/api/maps/zoom-to-object", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
         const data = await response.json();
         setZoomedLayerBbox(data.bbox);
-    } catch (error) {
+      } catch (error) {
         console.log(error);
       }
     }
-    console.log(selectedRows)
+    console.log(selectedRows);
     if (selectedRows.length != 0) {
       zoomToSelectedObjects();
     }
-  })
+  });
   const rowHeight = 25;
   const headerHeight = 30;
   return (
@@ -207,7 +207,7 @@ const ControlledTable = ({
       className="ag-theme-material"
       style={{
         height: "100%",
-        width: "100%"
+        width: "100%",
       }}
     >
       <AgGridReact
