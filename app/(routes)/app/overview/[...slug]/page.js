@@ -91,7 +91,6 @@ const MapOverview = ({ params }) => {
   const handleChangeOwner = () => {};
 
   const generateOverviewName = () => {
-    console.log(overviewData);
     if (overviewType === "layer") {
       return (
         <p className="flex items-center pl-4 text-2xl font-bold text-white border shadow-xl text-start bg-nileBlue-600 h-14">

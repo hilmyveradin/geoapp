@@ -31,7 +31,6 @@ const Login = () => {
       redirect: false,
     });
 
-    console.log("SIGN IN RESULT: ", signInResult);
     if (signInResult?.error) {
       toast({
         variant: "destructive",
