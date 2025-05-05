@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Define hosts that have public images
     images: {
         remotePatterns: [
             {

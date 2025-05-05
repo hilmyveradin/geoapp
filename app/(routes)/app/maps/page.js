@@ -15,19 +15,12 @@ import { cn } from "@/lib/utils"
 
 const MapsDashboard = () => {
   const [layersData, setLayersData] = useState([])
-  const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be"
-  let curTotalPages = 0
-  const numOfThumbnailsPerPage = 6
 
-  const handleUploadData = async () => {
-    // try {
-    //   const response = await fetch("/api/get-layers", {
-    //     method: "GET",
-    //   })
-    // } catch (error) {
-      
-    // }
-  }
+  // Define image url since it is a public link
+  // If we use fetch, there will be too many
+  // Async handling, and the thumbnail image is public
+  const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be"
+  const numOfThumbnailsPerPage = 6
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -43,7 +36,6 @@ const MapsDashboard = () => {
         }
         const temp = await response.json()
         setLayersData(temp)
-        curTotalPages = Math.ceil(layersData.length / numOfThumbnailsPerPage)
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
@@ -53,11 +45,17 @@ const MapsDashboard = () => {
       .catch(console.error)
   }, [])
 
+  // TODO: Create upload layer function handler
+  
   return (
-    <div className>
+    <div>
+      {/* TODO: Add Upload Layers Button */}
       <div className="grid grid-rows-2 grid-cols-3 gap-x-2 gap-y-3 ml-20">
+        {/* Create a loop to render every thumbnail image */}
+        {/* TODO: Add Pagination Handling */}
         {layersData.slice(0, 6).map((layersData) => (
-          <Card>
+          // Define key so each Card has unique id
+          <Card key={layersData.layer_id}>
             <CardContent className="p-2 pt-6">
               <Image 
                 src={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
@@ -66,6 +64,7 @@ const MapsDashboard = () => {
                 alt="Thumbnail"
               />
             </CardContent>
+            {/* Card layer name and creator name */}
             <CardHeader className="p-2">
               <h3 className={cn("font-semibold overflow-x-auto")}>{layersData.layer_title}</h3>
               <CardDescription>{layersData.creator}</CardDescription>
