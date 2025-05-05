@@ -218,8 +218,8 @@ const FilterContent = () => {
                 />
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="flex flex-col gap-1 p-1 mt-1 border rounded-md border-neutral-400">
-                  {availableFtsFields.strFields.map((item, index) => (
+                <div className="flex flex-col gap-1 p-1 mt-1 border rounded-md border-input">
+                  {availableFtsFields.numFields.map((item, index) => (
                     <p
                       key={`${item}${index}`}
                       className="text-sm"
@@ -246,7 +246,7 @@ const FilterContent = () => {
                 />
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="flex flex-col gap-1 p-1 mt-1 border rounded-md border-neutral-400">
+                <div className="flex flex-col gap-1 p-1 mt-1 border rounded-md border-input">
                   {availableFtsFields.strFields.map((item, index) => (
                     <p
                       key={`${item}${index}`}
