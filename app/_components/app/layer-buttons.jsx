@@ -65,10 +65,10 @@ const LayersButtons = () => {
 
   return (
     <div className="flex items-center justify-between w-full">
-      <Button variant="secondary" className="flex gap-2">
+      {/* <Button variant="secondary" className="flex gap-2">
         <Filter className="w-5 h-5" fill="#006236" />
         Filter
-      </Button>
+      </Button> */}
       <div className="flex items-center justify-center gap-4">
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger asChild>
@@ -89,10 +89,10 @@ const LayersButtons = () => {
             </DialogHeader>
           </DialogContent>
         </Dialog>
-        <Button variant="secondary" className="flex gap-2">
+        {/* <Button variant="secondary" className="flex gap-2">
           <ArrowDownWideNarrow className="w-5 h-5" fill="#006236" />
           Sort By
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

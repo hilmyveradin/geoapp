@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const MapsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [mapsData, setMapsData] = useState([]);
-  const { refetchMaps } = useRefetchStore();
+  const { refetchMapLayers } = useRefetchStore();
 
   useEffect(() => {
     // Define function to get layers API
@@ -49,7 +49,7 @@ const MapsDashboard = () => {
     getMapsData()
       // make sure to catch any error
       .catch(console.error);
-  }, [refetchMaps]);
+  }, []);
 
   if (pageLoading) {
     return (
