@@ -10,6 +10,7 @@ import { MoreVertical } from "lucide-react";
 import { useState } from "react";
 import UserAvatar from "./user-avatar";
 import { Button } from "@/components/ui/button";
+import MenuCardDropdown from "./menu-card-dropdown";
 
 const MenuCard = (props) => {
   const { key, source, title, user, moreAction, viewAction } = props;
@@ -23,12 +24,9 @@ const MenuCard = (props) => {
     >
       <CardContent className="relative flex items-center justify-center p-0">
         <img src={source} alt="Thumbnail" className="w-full" />
-        {hovered && (
-          <MoreVertical
-            className="absolute w-5 h-5 cursor-pointer right-0 top-0.5"
-            onClick={moreAction}
-          />
-        )}
+        <MenuCardDropdown>
+          <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
+        </MenuCardDropdown>
       </CardContent>
       <CardHeader className="flex p-0 mt-2">
         <h3 className={cn("font-semibold truncate")}>{title}</h3>
