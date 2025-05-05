@@ -152,7 +152,7 @@ const ComposeMapDialog = (props) => {
         description: descriptionValue,
         tags: selectedTags,
         layers: selectedLayersData.map((layer) => ({
-          layerUid: layer.layerUid,
+          layer_uid: layer.layerUid,
         })),
       };
       console.log("BODY: ", body);
@@ -330,7 +330,6 @@ export default ComposeMapDialog;
 
 const SearchLayerPills = (props) => {
   const { data } = props;
-  // debugger;
   return (
     <div className="flex items-center w-full space-x-2">
       <img src={data.thumbnailUrl} alt="search pills" className="w-10 h-8" />
@@ -359,7 +358,7 @@ const SelectedLayerPills = (props) => {
       )}
     >
       <img
-        src={data.thumbnaillUrl}
+        src={data.thumbnailUrl}
         alt="search pills"
         className="w-10 h-8 ml-4"
       />

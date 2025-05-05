@@ -7,11 +7,11 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
     const body = await request.json();
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/new_map`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/create`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${session.accessToken}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
       },
       body: JSON.stringify(body),
     });
