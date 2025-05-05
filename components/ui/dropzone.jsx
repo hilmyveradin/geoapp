@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { TailSpin } from "react-loader-spinner";
 
-export function Dropzone({ onChange, className, fileExtension, ...props }) {
-  const fileInputRef = useRef(null); // Reference to file input element
-  const [fileInfo, setFileInfo] = useState(null); // Information about the uploaded file
-  const [error, setError] = useState(null); // Error message state
+export function Dropzone({ onChange, className, fileExtension, progress, ...props }) {
+  const fileInputRef = useRef(null);
+  const [fileInfo, setFileInfo] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -36,9 +37,7 @@ export function Dropzone({ onChange, className, fileExtension, ...props }) {
 
     const fileSizeInKB = Math.round(uploadedFile.size / 1024);
 
-    // const fileList = Array.from(files).map((file) => URL.createObjectURL(file));
     onChange((prevFiles) => [...prevFiles, ...files]);
-
     setFileInfo(`Uploaded file: ${uploadedFile.name} (${fileSizeInKB} KB)`);
     setError(null);
   };
@@ -75,9 +74,20 @@ export function Dropzone({ onChange, className, fileExtension, ...props }) {
             accept={`.${fileExtension}`}
             onChange={handleFileInputChange}
             className="hidden"
-            multiple
           />
         </div>
+        {progress && (
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        )}
         {fileInfo && <p className="text-muted-foreground">{fileInfo}</p>}
         {error && <span className="text-red-500">{error}</span>}
       </CardContent>
