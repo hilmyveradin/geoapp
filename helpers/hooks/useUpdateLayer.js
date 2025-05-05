@@ -50,7 +50,6 @@ const useUpdateLayer = () => {
         // Flatten the array of arrays (if necessary) and set the state
         const layerDatas = resolvedLayerDatas.flat(); // Use .flat() if each promise resolves to an array
 
-        debugger;
         setLayersData(layerDatas);
       } catch (error) {
         console.log(error);
