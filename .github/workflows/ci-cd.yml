@@ -47,21 +47,32 @@ jobs:
           script: |
             set -e  # Exit on any error
             source ~/.bashrc || source ~/.profile
-            cd /home/ubuntu/var/www/geoportal/geoportal-webapp
+            cd /home/***/var/www/geoportal/geoportal-webapp
 
             # Stash all changes including pnpm-lock.yaml
-            git stash push -m "Stash local changes" pnpm-lock.yaml
+            git stash push -m "Stash local changes"
 
             # Force pull changes from main
             git fetch origin main
             git reset --hard origin/main
 
-            # Pop the stash to restore changes
+            # Apply stashed changes
             git stash pop
 
-            # Install dependencies and build the project
-            /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm install
-            /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm build
+            # Check for conflicts in pnpm-lock.yaml
+            if git diff --name-only --diff-filter=U | grep -q "pnpm-lock.yaml"; then
+              echo "pnpm-lock.yaml has unresolved conflicts. Please resolve them."
+              # Automatically attempt to resolve conflicts by overwriting with the local stash
+              git checkout --theirs pnpm-lock.yaml
+              git add pnpm-lock.yaml
+              git commit -m "Resolve conflicts in pnpm-lock.yaml"
+            fi
+
+            # Ensure the lockfile is up to date
+            /home/***/.nvm/versions/node/v18.20.2/bin/pnpm install
+
+            # Build the project
+            /home/***/.nvm/versions/node/v18.20.2/bin/pnpm build
 
             # Use pm2 to manage the process
-            /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pm2 start /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm --name "geoportal" -- start || /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pm2 restart geoportal -f
+            /home/***/.nvm/versions/node/v18.20.2/bin/pm2 start /home/***/.nvm/versions/node/v18.20.2/bin/pnpm --name "geoportal" -- start || /home/***/.nvm/versions/node/v18.20.2/bin/pm2 restart geoportal -f
