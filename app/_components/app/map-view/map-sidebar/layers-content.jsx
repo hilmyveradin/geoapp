@@ -106,7 +106,7 @@ const LayersContent = () => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full pr-2 mt-2 overflow-y-auto text-xs bg-nileBlue-50">
+    <div classNamke="flex flex-col w-full h-full pr-2 mt-2 overflow-y-auto text-xs bg-nileBlue-50">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppableId">
           {(provided) => (
