@@ -71,6 +71,7 @@ const MapView = ({ params }) => {
 
         setMapLayers(layerDatas);
         setMapData(data);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -103,6 +104,7 @@ const MapView = ({ params }) => {
         // setSelectedLayers(modifiedDatas.reverse());
         setMapLayers(modifiedDatas);
         setMapData(modifiedDatas[0]);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -113,8 +115,6 @@ const MapView = ({ params }) => {
     } else {
       loadLayerData();
     }
-
-    setIsLoading(false);
   }, [mapType, mapUid, setMapLayers, setMapData, setSelectedLayers]);
 
   if ((!mapData && !mapLayers) || isLoading)
