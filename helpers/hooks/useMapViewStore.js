@@ -1,9 +1,23 @@
-const useMapViewStore = create((set) => ({
-  selectedData: null,
+import { create } from "zustand";
 
-  setSelectedData: (data) =>
+const useMapViewStore = create((set) => ({
+  selectedLayers: null,
+  mapData: null,
+  layersData: null,
+
+  setMapData: (data) =>
     set(() => ({
-      selectedData: data,
+      mapData: data,
+    })),
+
+  setLayersData: (data) =>
+    set(() => ({
+      layersData: data,
+    })),
+
+  setSelectedLayers: (data) =>
+    set(() => ({
+      selectedLayers: data,
     })),
 }));
 

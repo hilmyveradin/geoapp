@@ -2,11 +2,44 @@
 
 import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { Button } from "@/components/ui/button";
+import dayjs from "dayjs";
 import { UserRound } from "lucide-react";
 import { Map } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const MapOverview = () => {
-  const handleOpenMapViewer = () => {};
+const LayerOverview = ({ params }) => {
+  const [layerData, setLayerData] = useState(null);
+  const layerUid = params.slug;
+  const router = useRouter();
+
+  useEffect(() => {
+    async function loadLayerData() {
+      if (layerUid) {
+        try {
+          const response = await fetch(
+            `/api/get-layer-id?layerUid=${layerUid}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+          setLayerData(data.data[0]);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    loadLayerData();
+  }, [layerUid]);
+
+  const handleOpenMapViewer = () => {
+    router.push(`/app/map-view/${layerUid}`);
+  };
 
   const handleShareMap = () => {};
 
@@ -23,24 +56,22 @@ const MapOverview = () => {
 
   const handleChangeOwner = () => {};
 
-  const mockUser = {
-    fullName: "Foobar",
-    avatar: null,
-  };
+  if (!layerData) return <div>Loading...</div>;
+
   return (
     <div className="flex w-full h-full gap-16 p-10 bg-blue-100">
       <img
         src="https://github.com/shadcn.png"
         alt="map image"
         className="w-full max-h-full"
-      ></img>
+      />
       <div className="flex flex-col w-1/4 gap-12">
         <div className="flex flex-col gap-6">
           {BUTTON_CONSTANTS.map((item) => (
             <Button
-              onclick={item.action}
+              onClick={item.action}
               key={`button-${item.title}`}
-              className="w-full gap-4 bg-green-500"
+              className="w-full gap-4 bg-gn-500"
             >
               {item.title}
             </Button>
@@ -48,13 +79,13 @@ const MapOverview = () => {
         </div>
         <div className="flex items-center space-x-2">
           <Map className="w-7 h-7" />
-          <p>Map</p>
+          <p>Feature Layer</p>
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex justify-between space-x-2 ">
             <p>Owner</p>
             <button
-              className="flex items-center space-x-2 text-green-500 stroke-green-500"
+              className="flex items-center space-x-2 text-gn-500 stroke-gn-500"
               onClick={handleChangeOwner}
             >
               <UserRound className="w-7 h-7" />
@@ -62,8 +93,8 @@ const MapOverview = () => {
             </button>
           </div>
           <div className="flex items-center space-x-2">
-            <UserAvatar user={mockUser} />
-            <p>Admin</p>
+            <UserAvatar user={layerData.creator} />
+            <p>{layerData.creator.fullName}</p>
           </div>
         </div>
 
@@ -71,17 +102,25 @@ const MapOverview = () => {
           <p> Date</p>
           <div className="flex items-center justify-between">
             <p>Item created</p>
-            <p>Des 07 2023</p>
+            <p>{dayjs(layerData.createdAt).format("MMM, DD, YYYY")}</p>
           </div>
           <div className="flex items-center justify-between">
-            <p>Item created</p>
-            <p>Des 07 2023</p>
+            <p>Item updated</p>
+            {layerData.updatedAt ? (
+              <p>{dayjs(layerData.updatedAt).format("MMM, DD, YYYY")}</p>
+            ) : (
+              <p>-</p>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-4">
           <p>Tags</p>
           <div className="flex items-center justify-between">
-            <p>This items has no tags</p>
+            {layerData.layerTags ? (
+              <p>{layerData.layerTags}</p>
+            ) : (
+              <p>This items has no tags</p>
+            )}
           </div>
         </div>
       </div>
@@ -89,4 +128,4 @@ const MapOverview = () => {
   );
 };
 
-export default MapOverview;
+export default LayerOverview;

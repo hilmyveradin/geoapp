@@ -2,18 +2,11 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
-import { 
-  List,
-  Layers3,
-  Map,
-  Save,
-  Share2,
-  Printer,
-} from "lucide-react";
-import { Button } from "@/components/ui/button"
+import { List, Layers3, Map, Save, Share2, Printer } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +20,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -36,25 +29,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import useMapViewStore from "@/helpers/hooks/useMapViewStore";
 
 const MapHeader = () => {
+  const { mapData } = useMapViewStore();
   return (
     <div>
       <div className="flex w-full h-10 justify-between items-center bg-[#D9D9D93D]">
         <div className="flex flex-row justify-between pl-2 space-x-8">
           <div className="flex flex-row justify-between px-4">
-            <Input placeholder="Map Name" />
+            <Input placeholder={`${mapData.title}`} />
           </div>
         </div>
         <div className="flex flex-row justify-between pr-6">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
-              <Save className="mr-2 h-4 w-4" /> Save
+                <Save className="w-4 h-4 mr-2" /> Save
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -68,8 +63,8 @@ const MapHeader = () => {
                   <DialogHeader>
                     <DialogTitle>Save Map</DialogTitle>
                   </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
+                  <div className="grid gap-4 py-4">
+                    <div className="grid items-center grid-cols-4 gap-4">
                       <Label htmlFor="title" className="text-right">
                         Title
                       </Label>
@@ -79,14 +74,11 @@ const MapHeader = () => {
                         className="col-span-3"
                       />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid items-center grid-cols-4 gap-4">
                       <Label htmlFor="Tags" className="text-right">
                         Tags
                       </Label>
-                      <Textarea
-                        placeholder="Add Tags"
-                        className="col-span-3"
-                      />
+                      <Textarea placeholder="Add Tags" className="col-span-3" />
                     </div>
                   </div>
                   <DialogFooter>
@@ -97,12 +89,12 @@ const MapHeader = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <Button variant="ghost">
-            <Share2 className="mr-2 h-4 w-4" /> Share
+            <Share2 className="w-4 h-4 mr-2" /> Share
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
-                <Printer className="mr-2 h-4 w-4" /> Print
+                <Printer className="w-4 h-4 mr-2" /> Print
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -118,7 +110,7 @@ const MapHeader = () => {
               <DropdownMenuSeparator></DropdownMenuSeparator>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Input placeholder="Find address or place" className="w-100"/>
+          <Input placeholder="Find address or place" className="w-100" />
         </div>
       </div>
     </div>

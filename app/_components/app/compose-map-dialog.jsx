@@ -351,7 +351,7 @@ const SearchLayerPills = (props) => {
       <div className="flex flex-col space-y-2">
         <p className="max-w-full truncate">{data.layer_title}</p>
         <div className="flex items-center space-x-1">
-          <UserAvatar user={data.user} className="w-7 h-7" />
+          <UserAvatar user={data.creator} className="w-7 h-7" />
           <p>{data.user.fullName}</p>
         </div>
       </div>

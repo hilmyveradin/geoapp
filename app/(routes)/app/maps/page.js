@@ -1,9 +1,9 @@
-import TopBarAction from "@/app/_components/app/top-bar-action";
+import MapsButtons from "@/app/_components/app/map-buttons";
 
 const MapsDashboard = () => {
   return (
     <div className="w-full h-full">
-      <TopBarAction />
+      <MapsButtons />
     </div>
   );
 };

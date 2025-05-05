@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions = {
@@ -49,7 +48,7 @@ const authOptions = {
       }
 
       // If the token expired, refresh it
-      return refreshAccessToken(token);
+      return await refreshAccessToken(token);
     },
 
     async session({ session, token }) {
@@ -72,7 +71,7 @@ async function refreshAccessToken(token) {
       `${process.env.API_BASE_URL}/iam/refresh`,
       {
         method: "POST",
-        body: JSON.stringify({ token: token.refreshToken }),
+        body: JSON.stringify({ refresh_token: token.refreshToken }),
         headers: { "Content-Type": "application/json" },
       }
     ).then((res) => res.json());
@@ -80,7 +79,8 @@ async function refreshAccessToken(token) {
     if (!refreshedTokens.error) {
       return {
         ...token,
-        accessToken: refreshedTokens.token,
+        accessToken: refreshedTokens.access_token,
+        refreshToken: refreshedTokens.refresh_token,
         accessTokenExpires: dayjs().add(1, "week").toDate().getTime(),
       };
     }

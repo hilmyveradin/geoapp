@@ -11,16 +11,18 @@ import { useState } from "react";
 import UserAvatar from "./shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import MenuCardDropdown from "./menu-card-dropdown";
+import { useRouter } from "next/navigation";
 
 const MenuCard = (props) => {
-  const { key, source, title, user, moreAction, viewAction } = props;
-  const [hovered, setHovered] = useState(false);
+  const { key, source, title, user, moreAction, viewAction, layerUid } = props;
+  const router = useRouter();
   return (
     <Card
       key={key}
       className="px-2 py-3 shadow-lg hover:bg-lime-500 bg-lime-300"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onClick={() => {
+        router.push(`/app/layer-overview/${layerUid}`);
+      }}
     >
       <CardContent className="relative flex items-center justify-center p-0">
         <img src={source} alt="Thumbnail" className="w-full" />

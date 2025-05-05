@@ -20,6 +20,8 @@ export default function ClientPagination({ data, ...props }) {
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = data.slice(firstPostIndex, lastPostIndex);
 
+  console.log(data);
+
   return (
     <>
       {" "}
@@ -29,10 +31,11 @@ export default function ClientPagination({ data, ...props }) {
             {currentPosts.map((currentPosts) => {
               return (
                 <MenuCard
-                  key={currentPosts.layer_id}
-                  source={currentPosts.thumbnail_url}
-                  title={currentPosts.layer_title}
-                  user={currentPosts.user}
+                  layerUid={currentPosts.layerUid}
+                  key={currentPosts.layerUid}
+                  source={currentPosts.thumbnailUrl}
+                  title={currentPosts.layerTitle}
+                  user={currentPosts.creator}
                 />
               );
             })}

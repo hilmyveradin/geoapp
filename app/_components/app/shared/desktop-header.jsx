@@ -3,16 +3,15 @@
 import UserAvatar from "./user-avatar";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 const DesktopHeader = () => {
   const pathName = usePathname();
   const router = useRouter();
 
-  const mockUser = {
-    fullName: "Shadcn",
-    avatar: "https://github.com/shadcn.png",
-  };
+  const { data: session, status } = useSession();
 
+  console.log(session);
   const NAVIGATION_ITEMS = [
     {
       name: "Maps",
@@ -31,6 +30,15 @@ const DesktopHeader = () => {
       path: "/app/groups",
     },
   ];
+
+  if (status === "loading") {
+    return null;
+  }
+
+  const user = {
+    ...session.user,
+    fullName: session.user.fullname,
+  };
 
   return (
     <div className="flex items-center justify-between w-full h-16 px-6">
@@ -52,7 +60,7 @@ const DesktopHeader = () => {
           );
         })}
         <div className="ml-10">
-          <UserAvatar user={mockUser} className="w-8 h-8" />
+          <UserAvatar user={user} className="w-8 h-8 text-xs" />
         </div>
       </div>
     </div>
