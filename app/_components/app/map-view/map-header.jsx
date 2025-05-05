@@ -42,22 +42,15 @@ const MapHeader = () => {
       <div className="flex w-full h-10 justify-between items-center bg-[#D9D9D93D]">
         <div className="flex flex-row justify-between pl-2 space-x-8">
           <div className="flex flex-row justify-between px-4">
-            <Input placeholder={`${mapData.title}`} />
+            <DropdownMenuLabel>{`${mapData.title}`}</DropdownMenuLabel> 
           </div>
         </div>
         <div className="flex flex-row justify-between pr-6">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
-                <Save className="w-4 h-4 mr-2" /> Save
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <Button variant="ghost">Save</Button>
-              <DropdownMenuSeparator></DropdownMenuSeparator>
               <Dialog>
                 <DialogTrigger>
-                  <Button variant="ghost">Save As</Button>
+                  <Button variant="ghost">
+                    <Save className="w-4 h-4 mr-2" /> Save
+                  </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -70,7 +63,7 @@ const MapHeader = () => {
                       </Label>
                       <Input
                         id="title"
-                        defaultValue="Map 123"
+                        defaultValue={`${mapData.title}`}
                         className="col-span-3"
                       />
                     </div>
@@ -86,8 +79,6 @@ const MapHeader = () => {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <Button variant="ghost">
             <Share2 className="w-4 h-4 mr-2" /> Share
           </Button>
