@@ -28,6 +28,7 @@ import { Trash2 } from "lucide-react";
 import { X } from "lucide-react";
 import { PencilIcon } from "lucide-react";
 import ChangePropDialog from "../../shared/change-prop-dialog";
+import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 
 const LayersContent = () => {
   const {
@@ -175,10 +176,10 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     } else {
       toggleLayerVisibility(layer.layerUid, true);
     }
-    if (!mapClicked) {
-      setMapClicked(true);
+    if (mapClicked) {
+      setMapClicked(false);
       setTimeout(() => {
-        setMapClicked(false);
+        setMapClicked(true);
       }, 100);
     }
   };
@@ -404,6 +405,12 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
     removeMapLayers,
   } = useMapViewStore();
 
+  const {
+    reloadTable, 
+    setReloadTable,
+    setFtsQuery,
+  } = useTableQueryStore();
+
   const id = layer.layerUid;
 
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
@@ -432,12 +439,15 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
   ];
 
   const handleTableButtonClick = (key) => {
+    setFtsQuery(null);
+    setReloadTable(true);
     if (key == layerInfo.layerUid) {
       setTableLoaded(!tableLoaded);
+      setReloadTable(!reloadTable);
     } else {
-      setTableLoaded(true);
+      setTableLoaded(false);
       setTimeout(() => {
-        setTableLoaded(false);
+        setTableLoaded(true);
       }, 100);
     }
     setLayerInfo(key, layer.layerTitle);

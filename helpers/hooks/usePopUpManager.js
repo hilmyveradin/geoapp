@@ -6,7 +6,7 @@ const usePopUpManager = () => {
 
   const clickHandler = useCallback( 
     async function(e) {
-      setMapClicked(true);
+      setMapClicked(false);
       const { mapLayers } = useMapViewStore.getState(); 
 
       const body = {
@@ -16,7 +16,7 @@ const usePopUpManager = () => {
       };
 
       try {
-        const response = await fetch(`/api/get-object-info?mapUid=${mapData.mapUid}`, {
+        const response = await fetch(`/api/maps/get-object-info?mapUid=${mapData.mapUid}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -28,7 +28,7 @@ const usePopUpManager = () => {
         const data = await response.json();
         if (data.status === "success") {
           setObjectInfoData(data);
-          setMapClicked(false);
+          setMapClicked(true);
         }
       } catch (error) {
         console.error("Error during fetch:", error.message);

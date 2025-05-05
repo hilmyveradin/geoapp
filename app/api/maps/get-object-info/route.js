@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import authOptions from "../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
+import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   const mapUid = request.nextUrl.searchParams.get("mapUid");

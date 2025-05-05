@@ -8,6 +8,7 @@ import {
   Sheet,
   Save,
   Share2,
+  Search,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import LayersContent from "./map-sidebar/layers-content";
@@ -16,6 +17,10 @@ import AddLayersContent from "./map-sidebar/add-layer-content";
 import { Separator } from "@/components/ui/separator";
 import PaginationLayerTable from "../layer-table/PaginationLayerTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input";
+import TooltipText from "@/app/_components/shared/tooltipText";
 import {
   Menubar,
   MenubarContent,
@@ -27,18 +32,28 @@ import SaveAlertDialog from "../shared/save-alert-dialog";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import GeojsonCard from "@/app/_components/app/geojson-card/GeojsonCard";
+import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
+  const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
-  const [showSidebarRight, setShowSidebarRight] = useState(true);
   const { tableLoaded, setTableLoaded, mapData, layerInfo, mapClicked, setMapClicked } = useMapViewStore();
+  const {ftsQuery, setFtsQuery, reloadTable, setReloadTable, setSearchSubmit} = useTableQueryStore();
+  const {showRightSidebar, expandedRightSidebarButtons} = useMapRightSidebar();
+
+  const handleFtsQuery = (e) => {
+    // Destructure the name and value from
+    // the changed element
+    const { name, value } = e.target;
+    setFtsQuery({ ...ftsQuery, value });
+  };
 
   useEffect(() => {
-    setTableLoaded(true);
-    setMapClicked(true);
-  }, [setMapClicked, setTableLoaded]);
+    setTableLoaded(false);
+    setReloadTable(false);
+    setMapClicked(false);
+  }, [setMapClicked, setReloadTable, setTableLoaded]);
   // Define content for each button
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
@@ -48,9 +63,9 @@ const MapSidebar = () => {
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
     if (selectedButton == buttonName) {
-      setExpandedSidebarButtons(true);
-    } else {
       setExpandedSidebarButtons(false);
+    } else {
+      setExpandedSidebarButtons(true);
     }
   };
 
@@ -212,52 +227,107 @@ const MapSidebar = () => {
           {BUTTON_CONTENT[selectedButton]}
         </div>
       )}
-      {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
-      {!tableLoaded && (
+      {/* Cara baca logic di bawah: */}
+      {/* Ada 4 bool: showSidebar, expandedSidebarButtons, showRightSidebar, expandedRightSidebarButtons */}
+      {/* Value default awal false semua */}
+      {/* Saat sidebar atau right sidebar bertambah panjang, salah satu bool ini jadi true */}
+      {/* Maka perlu dicek variabel yang true aja */}
+      {/* Terus, buat masing-masing style, dimulai kalau yg true cuman 1 bool */}
+      {/* Kalau lebih, dicek ke 2 bool, 3 bool, hingga terakhir 4 bool */}
+      {tableLoaded && (
         <div
           className={cn(
-            "fixed rounded-md top-[60vh] h-[calc(100vh-60vh-24px)] pb-8 z-10",
+            "fixed rounded-md top-[58vh] h-[calc(100vh-60vh-24px)] pb-8 z-10 left-[60px] w-[calc(100vw-60px-60px)]",
             {
-              "left-[300px] w-[calc(100vw-300px-60px+48px)]":
-                !expandedSidebarButtons && !showSidebar,
-              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
-                expandedSidebarButtons && showSidebar,
-              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
-                !expandedSidebarButtons && showSidebar,
-              "left-[60px] w-[calc(100vw-60px-60px+48px)]":
-                expandedSidebarButtons && !showSidebar && showSidebarRight,
-              "left-[60px] w-[calc(100vw-60px-192px+48px)]":
-                expandedSidebarButtons && !showSidebar && !showSidebarRight,
+              "left-[172px] w-[calc(100vw-172px-60px)]":
+                showSidebar,
+              "left-[60px] w-[calc(100vw-60px-124px)]":
+                showRightSidebar,
+              "left-[300px] w-[calc(100vw-300px-60px)]":
+                expandedSidebarButtons,
+              "left-[60px] w-[calc(100vw-60px-300px)]":
+                expandedRightSidebarButtons,
+
+              "left-[412px] w-[calc(100vw-412px-60px)]":
+                showSidebar && expandedSidebarButtons,
+              "left-[172px] w-[calc(100vw-172px-124px)]":
+                showSidebar && showRightSidebar,
+              "left-[172px] w-[calc(100vw-172px-300px)]":
+                showSidebar && expandedRightSidebarButtons,
+
+              "left-[300px] w-[calc(100vw-300px-124px)]":
+                showRightSidebar && expandedSidebarButtons,
+              "left-[60px] w-[calc(100vw-60px-364px)]":
+                showRightSidebar && expandedRightSidebarButtons,
+
+              "left-[300px] w-[calc(100vw-240px-364px)]":
+                expandedSidebarButtons && expandedRightSidebarButtons,
+
+              "left-[412px] w-[calc(100vw-412px-124px)]":
+                showSidebar && showRightSidebar && expandedSidebarButtons,
+              "left-[172px] w-[calc(100vw-172px-364px)]":
+                showSidebar && showRightSidebar && expandedRightSidebarButtons,
+              "left-[412px] w-[calc(100vw-412px-300px)]":
+                showSidebar && expandedSidebarButtons && expandedRightSidebarButtons,
+
+              "left-[300px] w-[calc(100vw-300px-364px)]":
+                showRightSidebar && expandedSidebarButtons && expandedRightSidebarButtons,
+
+              "left-[412px] w-[calc(100vw-416px-364px)]":
+                showSidebar && expandedSidebarButtons && showRightSidebar && expandedRightSidebarButtons,
             }
           )}
         >
           <div className="flex items-center justify-between pl-4 bg-white">
-            <Label className="flex justify-center text-sm font-bold">
-              {layerInfo.layerTitle}
-            </Label>
+            <div className="w-1/2 pr-4">
+              <TooltipText content={layerInfo.layerTitle} side="top" align="start">
+                <p className="text-base font-bold truncate cursor-pointer">
+                  {layerInfo.layerTitle}
+                </p>
+              </TooltipText>
+            </div>
+            <Textarea 
+              placeholder="Put search query here..."
+              className="h-[40px] m-[4px]"
+              onChange={handleFtsQuery}
+            />
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setTableLoaded((prev) => !prev)}
+              onClick={() => {
+                setReloadTable(false);
+                setTimeout(() => {
+                  setSearchSubmit(true);
+                  setReloadTable(true);
+                }, 100);
+              }}
+            >
+              <Search />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setTableLoaded(false);
+                setReloadTable(false);
+              }}
             >
               <X />
             </Button>
           </div>
-          <PaginationLayerTable />
+          {reloadTable && <PaginationLayerTable />}
         </div>
       )}
-      {!mapClicked && (
+      {mapClicked && (
         <div
           className={cn(
-            "fixed z-10 top-[68px]",
+            "fixed z-10 top-[68px] left-[60px]",
             {
               "left-[300px]":
-                !expandedSidebarButtons && showSidebar,
+                expandedSidebarButtons,
               "left-[172px]":
-                expandedSidebarButtons && !showSidebar,
+                showSidebar,
               "left-[412px]":
-                !expandedSidebarButtons && !showSidebar,
-              "left-[61px]":
                 expandedSidebarButtons && showSidebar,
             }
           )}
