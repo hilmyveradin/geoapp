@@ -1,9 +1,12 @@
-import { useEffect, useRef } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import useMapViewStore from "./store/useMapViewStore";
 
 const useLayerManager = () => {
   const { mapLoaded, map, selectedLayers } = useMapViewStore();
   const currentLayersRef = useRef([]);
+  const [firstRender, setFirstRender] = useState(true);
 
   useEffect(() => {
     if (mapLoaded && map && selectedLayers.length) {
@@ -57,7 +60,11 @@ const useLayerManager = () => {
       });
 
       // TODO: Need to confirm the BBox value
-      map.fitBounds(BBoxValue, { padding: 40 }); // Adjust padding as needed
+      if (firstRender) {
+        map.fitBounds(BBoxValue, { padding: 40, maxZoom: 12 }); // Adjust padding as needed
+        setFirstRender(false);
+      }
+      // map.fitBounds(BBoxValue, { padding: 40 }); // Adjust padding as needed
     }
   }, [mapLoaded, selectedLayers, map]); // Ensure map is a dependency if it's coming from a store or context
 };
