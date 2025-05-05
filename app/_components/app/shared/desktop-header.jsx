@@ -39,11 +39,6 @@ const DesktopHeader = () => {
     );
   }
 
-  const user = {
-    ...session.user,
-    fullName: session.user.fullname,
-  };
-
   return (
     <div className="flex items-center justify-between w-full h-16 px-6">
       <div className="flex items-center">
@@ -64,7 +59,7 @@ const DesktopHeader = () => {
           );
         })}
         <div className="ml-10">
-          <UserAvatar user={user} className="w-8 h-8 text-xs" />
+          <UserAvatar user={session.user} className="w-8 h-8 text-xs" />
         </div>
       </div>
     </div>

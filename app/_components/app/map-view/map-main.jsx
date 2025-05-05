@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import { useShallow } from "zustand/react/shallow";
 import useLayerManager from "@/helpers/hooks/useLayerManager";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 

@@ -41,8 +41,8 @@ const authOptions = {
       // If user just signed in, set the expiration time
       if (user) {
         token.user = user.data;
-        token.accessToken = user.access_token;
-        token.refreshToken = user.refresh_token;
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
         token.accessTokenExpires = dayjs().add(15, "minute").toDate().getTime();
       }
 
@@ -83,8 +83,8 @@ async function refreshAccessToken(token) {
     if (!refreshedTokens.error) {
       return {
         ...token,
-        accessToken: refreshedTokens.access_token,
-        refreshToken: refreshedTokens.refresh_token,
+        accessToken: refreshedTokens.accessToken,
+        refreshToken: refreshedTokens.refreshToken,
         accessTokenExpires: dayjs().add(15, "minute").toDate().getTime(),
       };
     }

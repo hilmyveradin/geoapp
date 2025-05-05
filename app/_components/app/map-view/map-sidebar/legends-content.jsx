@@ -13,6 +13,7 @@ const LegendsContent = () => {
             key={`${data}-${index}`}
             src={data.legendUrl}
             className="w-10 h-10"
+            alt="legend url"
           />
         );
       })}

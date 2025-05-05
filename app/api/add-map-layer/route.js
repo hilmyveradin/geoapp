@@ -4,8 +4,6 @@ import authOptions from "../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    // const mapUid = request.nextUrl.searchParams.get("mapUid");
-
     const body = await request.json();
     const { layers, mapUid } = body;
     const session = await getServerSession(authOptions);
