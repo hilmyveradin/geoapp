@@ -131,7 +131,7 @@ const FieldAliasContent = () => {
   return (
     <>
       <div className="flex flex-col w-full h-full gap-2">
-        <div className="flex flex-col w-full h-[full] gap-2 p-2 mb-2 overflow-y-auto text-xs bg-nileBlue-50">
+        <div className="flex flex-col w-full h-[full] gap-2 p-2 mb-2 overflow-y-auto bg-nileBlue-50">
           <DropdownMenu className="h-10">
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 px-3 py-2 text-white rounded-md bg-nileBlue-900">
@@ -164,7 +164,12 @@ const FieldAliasContent = () => {
 
             {layerFields.map((field, index) => (
               <button
-                className="flex items-center gap-2 px-3 py-1 m-1 rounded-sm shadow-sm outline outline-nileBlue-300"
+                className={cn(
+                  "flex items-center gap-2 px-3 py-1 m-1 rounded-sm shadow-sm outline outline-neutral-500 text-xs",
+                  {
+                    "outline-nileBlue-300": selectedFieldForEdit === field,
+                  }
+                )}
                 key={index}
                 onClick={() => toggleFieldSelected(field)}
               >
@@ -179,7 +184,14 @@ const FieldAliasContent = () => {
                   </p>
                   <p>{`{${field.fieldName}}`}</p>
                 </div>
-                <DropdownMenu>
+                <PencilIcon
+                  className="w-5 h-5 p-1 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedFieldForEdit(field);
+                  }}
+                />
+                {/* <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <PencilIcon className="w-5 h-5 p-1 cursor-pointer" />
                   </DropdownMenuTrigger>
@@ -206,7 +218,7 @@ const FieldAliasContent = () => {
                       Edit field alias{" "}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu> */}
               </button>
             ))}
           </div>
