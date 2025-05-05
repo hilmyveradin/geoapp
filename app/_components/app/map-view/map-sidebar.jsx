@@ -321,16 +321,14 @@ const MapSidebar = () => {
       {mapClicked && (
         <div
           className={cn(
-            "fixed z-10 top-[68px]",
+            "fixed z-10 top-[68px] left-[60px]",
             {
               "left-[300px]":
-                !expandedSidebarButtons && !showSidebar,
+                expandedSidebarButtons,
               "left-[172px]":
-                expandedSidebarButtons && showSidebar,
+                showSidebar,
               "left-[412px]":
-                !expandedSidebarButtons && showSidebar,
-              "left-[61px]":
-                expandedSidebarButtons && !showSidebar,
+                expandedSidebarButtons && showSidebar,
             }
           )}
         >

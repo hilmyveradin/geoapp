@@ -33,6 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator";
+import TooltipText from "../../shared/tooltipText";
 import { AgGridReact } from "ag-grid-react";
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
@@ -41,9 +42,9 @@ import "./styles.css"
 
 export function Combobox({layerTitles, value, setValue, setPageIdx}) {
   const [open, setOpen] = useState(false)
-  const titleText = value
-    ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
-    : "Select layer title"
+  // const titleText = value
+  //   ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+  //   : "Select layer title"
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,13 +54,24 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
           role="combobox"
           aria-expanded={open}
           className="w-[50%] flex justify-between bg-nileBlue-50 hover:bg-nileBlue-50 shadow-md"
-          title={titleText}
+          // title={titleText}
         >
           <div className="w-[90%] flex items-center">
-            <span className="text-ellipsis overflow-hidden truncate text-black">{value
-              ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
-              : "Select layer title"}
-            </span>
+            <TooltipText 
+              content={
+                value 
+                  ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+                  : "Select layer title"
+              } 
+              side="top" 
+              align="start"
+            >
+              <p className="text-base font-normal truncate cursor-pointer text-black">
+                {value 
+                  ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+                  : "Select layer title"}
+              </p>
+            </TooltipText>
           </div>
           <ChevronDown className="shrink-0 text-nileBlue-950" />
         </Button>
@@ -85,9 +97,14 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
                     value === layerTitle.value ? "opacity-100" : "opacity-0"
                   )}
                 />
-                <span className="w-[80%] text-ellipsis overflow-hidden truncate">
+                <TooltipText content={layerTitle.label} side="top" align="start">
+                  <p className="text-base font-normal truncate cursor-pointer">
+                    {layerTitle.label}
+                  </p>
+                </TooltipText>
+                {/* <span className="w-[80%] text-ellipsis overflow-hidden truncate">
                   {layerTitle.label}
-                </span>
+                </span> */}
               </CommandItem>
             ))}
           </CommandGroup>
