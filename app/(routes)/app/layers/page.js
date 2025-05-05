@@ -11,6 +11,7 @@ import { Trash2 } from "lucide-react";
 import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import { X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import useSearchQueryStore from "@/helpers/hooks/store/useSearchQueryStore";
 
 const LayersDashboard = () => {
   const [mapLayers, setLayers] = useState([]);
@@ -18,6 +19,7 @@ const LayersDashboard = () => {
   const { refetchLayers, toggleRefetchLayers } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
     useCardStore();
+  const { searchedTitle } = useSearchQueryStore(); // Added state for search term
 
   const { toast } = useToast();
 
@@ -113,6 +115,10 @@ const LayersDashboard = () => {
     );
   }
 
+  const filteredLayers = mapLayers.filter((layer) =>
+    layer.layerTitle.toLowerCase().includes(searchedTitle.toLowerCase())
+  );
+
   return (
     <div className="w-full h-full px-8 mt-4">
       <div className="mb-4">
@@ -140,8 +146,8 @@ const LayersDashboard = () => {
         )}
       </div>
       {/* Pagination */}
-      {mapLayers.length > 0 ? (
-        <ClientPagination data={mapLayers} />
+      {filteredLayers.length > 0 ? (
+        <ClientPagination data={filteredLayers} />
       ) : (
         <div className="flex items-center justify-center w-full h-96">
           <p>

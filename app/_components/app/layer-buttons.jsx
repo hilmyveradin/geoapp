@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { ArrowDownWideNarrow } from "lucide-react";
 import {
   Dialog,
@@ -15,6 +15,7 @@ import { Dropzone } from "@/components/ui/dropzone";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
+import useSearchQueryStore from "@/helpers/hooks/store/useSearchQueryStore";
 
 const LayersButtons = () => {
   const { toast } = useToast();
@@ -23,6 +24,7 @@ const LayersButtons = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const { toggleRefetchLayers } = useRefetchStore();
   const [progressValue, setProgressValue] = useState(0);
+  const { searchedTitle, setSearchedTitle } = useSearchQueryStore(); // Added state for search term
 
   const handleFileChange = (newState) => {
     setFiles(newState);
@@ -91,11 +93,21 @@ const LayersButtons = () => {
   return (
     <div className="flex items-center justify-between w-full">
       {/*TODO: Delete this later */}
-      <div className="flex-grow" />
       {/* <Button variant="secondary" className="flex gap-2">
-        <Filter className="w-5 h-5" fill="#006236" />
+        <Filter className="w-5 h-5" />
         Filter
       </Button> */}
+      <div className="flex justify-center w-full">
+        <div className="flex items-center gap-2 py-2 pl-2 pr-3 mr-3 bg-white rounded-lg w-full" >
+          <Search className="w-4 h-4" />
+          <input
+            placeholder="Search for layers"
+            className="w-full border-none outline-none"
+            value={searchedTitle}
+            onChange={(e) => setSearchedTitle(e.target.value)}
+          />
+        </div>
+      </div>
       <div className="flex items-center justify-center gap-4">
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger asChild>
@@ -117,10 +129,10 @@ const LayersButtons = () => {
             </DialogHeader>
           </DialogContent>
         </Dialog>
-        {/* <Button variant="secondary" className="flex gap-2">
-          <ArrowDownWideNarrow className="w-5 h-5" fill="#006236" />
-          Sort By
-        </Button> */}
+          {/* <Button variant="secondary" className="flex gap-2">
+            <ArrowDownWideNarrow className="w-5 h-5" />
+            Sort By
+          </Button> */}
       </div>
     </div>
   );
