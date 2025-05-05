@@ -84,8 +84,8 @@ const MapView = ({ params }) => {
             ...data,
             mapBbox: data.layerBbox,
             mapTitle: data.layerTitle,
-            imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-            legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
+            imageUrl: `http://dev3.webgis.co.id/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+            legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
             mapType: mapType,
             mapUid: mapUid,
           };
