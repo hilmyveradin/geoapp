@@ -12,8 +12,7 @@ import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
 import useMapControlManager from "@/helpers/hooks/use-map-control-manager";
 import GeojsonCard from "../geojson-card/geojson-card";
 import use3DLayerManager from "@/helpers/hooks/use-3d-layer-manager";
-
-const MAPTILER_KEY = "OFfSxrBgH19zr7dfnSMK";
+import useMapStyleManager from "@/helpers/hooks/use-map-style-manager";
 
 const MapMain = () => {
   const [bounds, setBounds] = useState({
@@ -31,8 +30,8 @@ const MapMain = () => {
   usePopUpManager();
   useHighlightManager();
   useMapControlManager();
-  use3DLayerManager(mapRef, MAPTILER_KEY, is3DMode); // New hook usage
-
+  // use3DLayerManager(mapRef, MAPTILER_KEY, is3DMode); // New hook usage
+  useMapStyleManager();
   const {
     setMap,
     setMapLoaded,
@@ -124,8 +123,25 @@ const MapMain = () => {
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
-      center: [-74.0066, 40.7135], // New York City
+      style: {
+        version: 8,
+        sources: {
+          "osm-tiles": {
+            type: "raster",
+            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+            tileSize: 256,
+            attribution: "&copy; OpenStreetMap Contributors",
+          },
+        },
+        layers: [
+          {
+            id: "osm",
+            type: "raster",
+            source: "osm-tiles",
+          },
+        ],
+      },
+      center: [118.0148634, -2.548926],
       zoom: 15.5,
       pitch: is3DMode ? 45 : 0,
       bearing: is3DMode ? -17.6 : 0,

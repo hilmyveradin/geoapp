@@ -23,6 +23,7 @@ const useMapViewStore = create((set) => ({
   selectedLayer: null,
   highlightedLayer: null,
   changedLayerStyleUid: null,
+  mapStyle: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -168,6 +169,7 @@ const useMapViewStore = create((set) => ({
       changedLayerStyleUid: data,
     }));
   },
+  setMapStyle: (style) => set({ mapStyle: style }),
 }));
 
 export default useMapViewStore;

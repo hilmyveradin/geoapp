@@ -24,6 +24,8 @@ import ShareDialog from "../shared/share-dialog";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 import useTableQueryStore from "@/helpers/hooks/store/use-table-query-store";
 import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
+import BaseMapContent from "./map-sidebar/basemap-content";
+import { Earth } from "lucide-react";
 
 const MapSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -73,6 +75,7 @@ const MapSidebar = () => {
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
     layers: <LayersContent />,
+    basemap: <BaseMapContent />,
   };
 
   const handleButtonClick = (buttonName) => {
@@ -128,6 +131,24 @@ const MapSidebar = () => {
             })}
           />
           {showLeftSidebar && <span className="inline-block ml-2">Layers</span>}
+        </Button>
+
+        <Button
+          variant="ghost"
+          onClick={() => handleButtonClick("basemap")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "text-white bg-nileBlue-700": selectedButton === "basemap",
+            "p-0 justify-center": !showLeftSidebar,
+          })}
+        >
+          <Earth
+            className={cn("w-4 h-4 stroke-blackHaze-500", {
+              "stroke-white stroke-2": selectedButton === "basemap",
+            })}
+          />
+          {showLeftSidebar && (
+            <span className="inline-block ml-2">Basemap</span>
+          )}
         </Button>
 
         {/* <Button
@@ -231,7 +252,9 @@ const MapSidebar = () => {
           )}
         </Button>
       </div>
-      {(selectedButton === "addLayer" || selectedButton === "layers") && (
+      {(selectedButton === "addLayer" ||
+        selectedButton === "layers" ||
+        selectedButton === "basemap") && (
         <div
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",
