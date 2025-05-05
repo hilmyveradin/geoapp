@@ -29,15 +29,19 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { useInsertionEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const StyleContent = () => {
   const { mapLayers, selectedPopupLayer, setSelectedPopupLayer } =
     useMapViewStore();
+  const { toast } = useToast();
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [lineColor, setLineColor] = useState("#fff");
-  const [opacity, setOpacity] = useState(0);
   const [initialStyle, setInitialStyle] = useState();
   const [isFetching, setIsFetching] = useState(false);
+  const [isSavingChanges, setIsSavingChanges] = useState(false);
+
+  const [lineColor, setLineColor] = useState("#fff");
+  const [opacity, setOpacity] = useState(0);
 
   // POINT AND POLYGON STATES
   const [fillColor, setFillColor] = useState("#fff");
@@ -122,6 +126,91 @@ const StyleContent = () => {
     setPointStyle(value);
   };
 
+  const saveStyleChanges = () => {
+    const saveSymbolStyle = async () => {
+      setIsSavingChanges(true);
+
+      try {
+        const response = await fetch(
+          `/api/layers/get-style?layerUid=${selectedPopupLayer.layerUid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const responseData = await response.json();
+
+        setInitialStyle(responseData.data);
+
+        if (responseData.data.layerType == "Point") {
+          if (responseData.data.properties.marker) {
+            setPointStyle("marker");
+          } else if (responseData.data.properties.imageUrl) {
+            setPointStyle("image");
+          }
+        } else {
+          setPointStyle();
+        }
+      } catch (error) {
+        console.error("Failed to fetch layer data:", error);
+        // Optionally handle error state
+      } finally {
+        setIsSavingChanges(false);
+      }
+    };
+
+    const saveLineStyle = async () => {
+      const body = {
+        line_color: lineColor,
+        line_width: lineWidth,
+        line_opacity: opacity,
+      };
+
+      setIsSavingChanges(true);
+
+      try {
+        const response = await fetch("/api/layers/save-layer-line", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSavingChanges(false);
+      }
+    };
+
+    const savePolygonStyle = async () => {
+      const body = {
+        line_color: lineColor,
+        line_width: lineWidth,
+        line_opacity: opacity,
+      };
+
+      setIsSavingChanges(true);
+
+      try {
+        const response = await fetch("/api/layers/save-layer-polygon", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSavingChanges(false);
+      }
+    };
+  };
+
   if (isFetching) {
     <div className="flex items-center justify-center w-full h-full">
       <Loader2 className="w-5 h-5 stroke-blackHaze-500 animate-spin" />
@@ -133,7 +222,7 @@ const StyleContent = () => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full gap-4 p-2">
+    <div className="flex flex-col items-center w-full h-full gap-4 p-2">
       <DropdownMenu
         className="h-10"
         open={openDropdown}
@@ -179,9 +268,13 @@ const StyleContent = () => {
           />
           <p className="font-bold">Size</p>
           <SliderComponent
-            initialSliderValue={parseInt(initialStyle.properties.size)}
+            initialSliderValue={parseFloat(
+              initialStyle.properties.size
+            ).toFixed(1)}
             setParentSliderValue={handleSymbolSizeChange}
             sliderUnit={"px"}
+            maxValue={50}
+            stepValue={1}
           />
         </>
       )}
@@ -203,30 +296,50 @@ const StyleContent = () => {
             initialColorValue={initialStyle.properties.lineColor}
             setParentColortValue={handleLineColorChange}
           />
-        </>
-      )}
-
-      {pointStyle !== "image" && (
-        <>
           <p className="font-bold">Line Width</p>
           <SliderComponent
-            initialSliderValue={parseInt(initialStyle.properties.lineWidth)}
+            initialSliderValue={parseFloat(
+              initialStyle.properties.lineWidth
+            ).toFixed(1)}
             setParentSliderValue={handleSymbolSizeChange}
             sliderUnit={"px"}
+            maxValue={30}
+            stepValue={1}
           />
+          <p className="font-bold">Transparency</p>
+          <SliderComponent
+            initialSliderValue={parseFloat(
+              initialStyle.properties.lineOpacity
+            ).toFixed(1)}
+            setParentSliderValue={handleOpacitySliderChange}
+            sliderUnit={"%"}
+            maxValue={1}
+            stepValue={0.1}
+          />
+        </>
+      )}
+
+      <div className="h-full" />
+
+      <Button
+        onClick={() => {
+          saveStyleChanges;
+        }}
+      >
+        Save
+      </Button>
+
+      {/* {pointStyle !== "image" && (
+        <>
+
         </>
       )}
 
       {pointStyle !== "image" && (
         <>
-          <p className="font-bold">Transparency</p>
-          <SliderComponent
-            initialSliderValue={parseInt(initialStyle.properties.lineOpacity)}
-            setParentSliderValue={handleOpacitySliderChange}
-            sliderUnit={"%"}
-          />
+
         </>
-      )}
+      )} */}
     </div>
   );
 };
@@ -457,14 +570,36 @@ const ColorComponent = (props) => {
 };
 
 const SliderComponent = (props) => {
-  const { setParentSliderValue, sliderUnit, initialSliderValue } = props;
+  const {
+    setParentSliderValue,
+    sliderUnit,
+    initialSliderValue,
+    maxValue,
+    stepValue,
+  } = props;
 
   const [sliderValue, setSliderValue] = useState(initialSliderValue);
 
-  // Making sure the sliderValue set it's inital to the beginning
   useEffect(() => {
     setSliderValue(initialSliderValue);
   }, [initialSliderValue]);
+
+  const handleValueChange = (numSliderValue, numStepValue, operation) => {
+    const newValue =
+      operation === "increase"
+        ? numSliderValue + numStepValue
+        : numSliderValue - numStepValue;
+
+    return Number.isInteger(stepValue)
+      ? newValue
+      : parseFloat(newValue.toFixed(1));
+  };
+
+  const generateSliderValue = () => {
+    return Number.isInteger(stepValue)
+      ? parseInt(sliderValue)
+      : parseFloat(sliderValue).toFixed(1);
+  };
 
   return (
     <div className="flex items-center w-full gap-3 p-2 mb-4 text-base rounded-md shadow-md cursor-pointer">
@@ -474,25 +609,33 @@ const SliderComponent = (props) => {
           setParentSliderValue(e); // This to track the given value from global state
           setSliderValue(e);
         }}
-        max={100}
-        step={1}
+        max={maxValue}
+        step={stepValue}
       />
       <div className="flex items-center gap-2 px-2 rounded-md shadow-md">
-        <p className="w-4">{sliderValue}</p>
+        <p className="w-4">{generateSliderValue()}</p>
         <div className="flex flex-col">
           <ChevronUp
             className="w-4 h-4 cursor-pointer p-0.5"
             onClick={() => {
-              if (parseInt(sliderValue) < 100 && parseInt(sliderValue) >= 0) {
-                setSliderValue(parseInt(sliderValue) + 1);
+              let numSliderValue = parseFloat(sliderValue);
+              let numStepValue = parseFloat(stepValue);
+              if (numSliderValue < maxValue && numSliderValue >= 0) {
+                setSliderValue(
+                  handleValueChange(numSliderValue, numStepValue, "increase")
+                );
               }
             }}
           />
           <ChevronDown
             className="w-4 h-4 cursor-pointer p-0.5"
             onClick={() => {
-              if (parseInt(sliderValue) <= 100 && parseInt(sliderValue) > 0) {
-                setSliderValue(parseInt(sliderValue) - 1);
+              let numSliderValue = parseFloat(sliderValue);
+              let numStepValue = parseFloat(stepValue);
+              if (numSliderValue <= maxValue && numSliderValue > 0) {
+                setSliderValue(
+                  handleValueChange(numSliderValue, numStepValue, "decrease")
+                );
               }
             }}
           />
