@@ -43,7 +43,6 @@ const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      debugger;
       if (user) {
         return {
           ...token,
@@ -56,12 +55,10 @@ const authOptions = {
         };
       }
 
-      debugger;
       if (dayjs().isBefore(token.accessTokenExpires)) {
         return token;
       }
 
-      debugger;
       return refreshAccessToken(token);
     },
 
