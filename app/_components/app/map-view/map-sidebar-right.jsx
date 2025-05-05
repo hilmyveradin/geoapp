@@ -11,6 +11,7 @@ import FieldAliasContent from "./map-right-sidebar/field-alias-content";
 import StyleContent from "./map-right-sidebar/style-content";
 import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
 import FilterContent from "./map-right-sidebar/filter-content";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const MapSidebarRight = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -21,6 +22,14 @@ const MapSidebarRight = () => {
     setShowRightSidebar,
     setExpandedRightSidebarButtons,
   } = useMapRightSidebar();
+
+  const { selectedLayer } = useMapViewStore();
+
+  useEffect(() => {
+    if (!selectedLayer) {
+      setSelectedButton(null);
+    }
+  }, [selectedLayer]);
 
   // Define content for each button
   const BUTTON_CONTENT = {
@@ -52,10 +61,17 @@ const MapSidebarRight = () => {
           variant="ghost"
           className={cn("flex justify-center", {
             "p-0 justify-center": !showRightSidebar,
+            "stroke-white stroke-2 bg-nileBlue-400":
+              selectedButton === "styleContent",
           })}
           onClick={() => handleButtonClick("styleContent")}
+          disabled={!selectedLayer}
         >
-          <Shapes className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {})} />
+          <Shapes
+            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
+              "stroke-white stroke-2": selectedButton === "styleContent",
+            })}
+          />
           {showRightSidebar && (
             <span className="inline-block ml-2">Styles</span>
           )}
@@ -64,10 +80,17 @@ const MapSidebarRight = () => {
           variant="ghost"
           className={cn("flex justify-center", {
             "p-0 justify-center": !showRightSidebar,
+            "stroke-white stroke-2 bg-nileBlue-400":
+              selectedButton === "filterContent",
           })}
           onClick={() => handleButtonClick("filterContent")}
+          disabled={!selectedLayer}
         >
-          <Filter className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {})} />
+          <Filter
+            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
+              "stroke-white stroke-2": selectedButton === "filterContent",
+            })}
+          />
           {showRightSidebar && (
             <span className="inline-block ml-2">Filters</span>
           )}
@@ -76,11 +99,15 @@ const MapSidebarRight = () => {
           variant="ghost"
           className={cn("flex justify-center", {
             "p-0 justify-center": !showRightSidebar,
+            " bg-nileBlue-400": selectedButton === "fieldAliasContent",
           })}
           onClick={() => handleButtonClick("fieldAliasContent")}
+          disabled={!selectedLayer}
         >
           <FilePenLine
-            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {})}
+            className={cn("w-4 h-4 stroke-nileBlue-950 stroke-2", {
+              "stroke-white stroke-2": selectedButton === "fieldAliasContent",
+            })}
           />
           {showRightSidebar && (
             <span className="inline-block ml-2">Fields</span>

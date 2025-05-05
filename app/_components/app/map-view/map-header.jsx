@@ -8,8 +8,7 @@ import { useSession } from "next-auth/react";
 import UserAvatar from "../shared/user-avatar";
 
 const MapHeader = () => {
-  const { mapData, setMapData, setMapLayers } =
-    useMapViewStore();
+  const { mapData, setMapData, setMapLayers } = useMapViewStore();
   const { data: session } = useSession();
 
   const resetData = () => {
@@ -24,7 +23,7 @@ const MapHeader = () => {
           <Link href="/app/maps">
             <Button
               variant="ghost"
-              className="text-base font-medium hover:text-nileBlue-600 hover:font-bold"
+              className="text-base font-medium"
               onClick={resetData}
             >
               Maps
@@ -33,7 +32,7 @@ const MapHeader = () => {
           <Link href="/app/layers">
             <Button
               variant="ghost"
-              className="text-base font-medium hover:text-nileBlue-600 hover:font-bold"
+              className="text-base font-medium"
               onClick={resetData}
             >
               Layers

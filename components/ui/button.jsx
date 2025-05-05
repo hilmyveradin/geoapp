@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-nileBlue-700 text-primary-foreground shadow hover:bg-nileBlue-600",
+          "bg-nileBlue-700 text-primary-foreground shadow hover:bg-nileBlue-600 hover:text-white",
         secondary:
           "bg-white text-nileBlue-700 shadow-sm hover:bg-nileBlue-50 outline-nileBlue-700 outline hover:text-white",
         destructive:
@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outline:
           "border border-input bg-background shadow-sm hover:bg-nileBlue-300 hover:text-white",
 
-        ghost: "hover:bg-nileBlue-200 hover:bg-nileBlue-700",
+        ghost: "hover:bg-nileBlue-200 hover:bg-nileBlue-700 hover:text-white",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

@@ -29,6 +29,7 @@ import { X } from "lucide-react";
 import { PencilIcon } from "lucide-react";
 import ChangePropDialog from "../../shared/change-prop-dialog";
 import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
+import { List } from "lucide-react";
 
 const LayersContent = () => {
   const {
@@ -153,6 +154,8 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     toggleLayerVisibility,
     mapClicked,
     setMapClicked,
+    selectedLayer,
+    setSelectedLayer,
   } = useMapViewStore();
 
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
@@ -217,13 +220,6 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     });
   };
 
-  // Handler to toggle collapsible content
-  const toggleCollapsibleContent = () => {
-    const isLayerVisible = collapsibleContent === "layer";
-    setCollapsibleContent(isLayerVisible ? null : "layer");
-    setImageLoaded(!isLayerVisible);
-  };
-
   return (
     <div>
       <TooltipText content={layer.layerTitle} side="top" align="start">
@@ -239,7 +235,11 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
               e.stopPropagation();
               updateMultiSelection(layer);
             } else {
-              toggleCollapsibleContent();
+              if (selectedLayer) {
+                setSelectedLayer(null);
+              } else {
+                setSelectedLayer(layer);
+              }
             }
           }}
         >
@@ -247,7 +247,7 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
             className={cn(
               "absolute top-0 left-0 bottom-0 bg-gableGreen-500 transition-all",
               {
-                "w-2 rounded-l-md": collapsibleContent,
+                "w-2 rounded-l-md": selectedLayer?.layerUid === layer.layerUid,
               }
             )}
           />
@@ -255,6 +255,20 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
           <p className="flex-grow w-20 px-2 pr-2 text-xs truncate">
             {layer.layerTitle}
           </p>
+
+          <List
+            className="w-3 h-3 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (collapsibleContent === "layer") {
+                setCollapsibleContent(null);
+                setImageLoaded(false);
+              } else {
+                setCollapsibleContent("layer");
+              }
+            }}
+          />
+
           <button
             onClick={(e) => {
               e.stopPropagation();

@@ -28,13 +28,12 @@ import { Plus } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { capitalizeFirstLetter } from "@/helpers/string-helpers";
-import { ColumnSpacingIcon } from "@radix-ui/react-icons";
 
 const StyleContent = () => {
   const {
     mapLayers,
-    selectedPopupLayer,
-    setSelectedPopupLayer,
+    selectedLayer,
+    setSelectedLayer,
     toggleRefreshLayerOrder,
   } = useMapViewStore();
   const { toast } = useToast();
@@ -63,21 +62,21 @@ const StyleContent = () => {
   const [pointImageData, setPointImageData] = useState();
 
   // This effect responsible for set the selectedPopuplayer if it's not exists --> might want to refactor later
-  useEffect(() => {
-    if (!selectedPopupLayer) {
-      setSelectedPopupLayer(mapLayers[0]);
-    }
-  }, [mapLayers, selectedPopupLayer, setSelectedPopupLayer]);
+  // useEffect(() => {
+  //   if (!selectedLayer) {
+  //     setSelectedLayer(mapLayers[0]);
+  //   }
+  // }, [mapLayers, selectedLayer, setSelectedLayer]);
 
-  // This effect resonsible for fetching initial styles if selectedPopupLayer exists
+  // This effect resonsible for fetching initial styles if selectedLayer exists
   useEffect(() => {
-    if (selectedPopupLayer) {
+    if (selectedLayer) {
       async function fetchInitialStyle() {
         setIsFetching(true);
 
         try {
           const response = await fetch(
-            `/api/layers/get-style?layerUid=${selectedPopupLayer.layerUid}`,
+            `/api/layers/get-style?layerUid=${selectedLayer.layerUid}`,
             {
               method: "GET",
               headers: {
@@ -123,7 +122,7 @@ const StyleContent = () => {
 
       fetchInitialStyle();
     }
-  }, [selectedPopupLayer, toggleRefetchStyle]);
+  }, [selectedLayer, toggleRefetchStyle]);
 
   const handleLineColorChange = (value) => {
     setLineColor(value);
@@ -194,7 +193,7 @@ const StyleContent = () => {
         };
 
         return fetch(
-          `/api/layers/save-point-marker?layerUid=${selectedPopupLayer.layerUid}`,
+          `/api/layers/save-point-marker?layerUid=${selectedLayer.layerUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -212,7 +211,7 @@ const StyleContent = () => {
           };
 
           return fetch(
-            `/api/layers/save-point-image-url?layerUid=${selectedPopupLayer.layerUid}`,
+            `/api/layers/save-point-image-url?layerUid=${selectedLayer.layerUid}`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -225,7 +224,7 @@ const StyleContent = () => {
           formData.append("uploadFile", pointImageData);
 
           return fetch(
-            `/api/layers/save-point-image?layerUid=${selectedPopupLayer.layerUid}`,
+            `/api/layers/save-point-image?layerUid=${selectedLayer.layerUid}`,
             {
               method: "POST",
               headers: { "Content-Type": "multipart/form-data" },
@@ -243,14 +242,11 @@ const StyleContent = () => {
         line_opacity: Array.isArray(lineOpacity) ? lineOpacity[0] : lineOpacity,
       };
 
-      return fetch(
-        `/api/layers/save-line?layerUid=${selectedPopupLayer.layerUid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }
-      );
+      return fetch(`/api/layers/save-line?layerUid=${selectedLayer.layerUid}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
     };
 
     const savePolygonStyle = async () => {
@@ -263,7 +259,7 @@ const StyleContent = () => {
       };
 
       return fetch(
-        `/api/layers/save-polygon?layerUid=${selectedPopupLayer.layerUid}`,
+        `/api/layers/save-polygon?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -273,11 +269,11 @@ const StyleContent = () => {
     };
 
     let saveFunction;
-    if (selectedPopupLayer.layerType === "Point") {
+    if (selectedLayer.layerType === "Point") {
       saveFunction = saveSymbolStyle();
-    } else if (selectedPopupLayer.layerType === "Line") {
+    } else if (selectedLayer.layerType === "Line") {
       saveFunction = saveLineStyle();
-    } else if (selectedPopupLayer.layerType === "Polygon") {
+    } else if (selectedLayer.layerType === "Polygon") {
       saveFunction = savePolygonStyle();
     }
 
@@ -305,7 +301,7 @@ const StyleContent = () => {
     </div>;
   }
 
-  if (!selectedPopupLayer || !initialStyle) {
+  if (!selectedLayer || !initialStyle) {
     return null;
   }
 
@@ -318,7 +314,7 @@ const StyleContent = () => {
       >
         <DropdownMenuTrigger asChild className="w-full">
           <button className="flex items-center gap-2 px-3 py-2 text-white rounded-md bg-nileBlue-900">
-            <p className="w-full truncate">{selectedPopupLayer.layerTitle}</p>
+            <p className="w-full truncate">{selectedLayer.layerTitle}</p>
             <ChevronDownIcon
               className={cn("w-5 h-5 transition-all", {
                 "-rotate-180": openDropdown,
@@ -328,8 +324,8 @@ const StyleContent = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="p-0 text-white w-[224px] bg-nileBlue-900 pr-2">
           <DropdownMenuRadioGroup
-            value={selectedPopupLayer}
-            onValueChange={setSelectedPopupLayer}
+            value={selectedLayer}
+            onValueChange={setSelectedLayer}
           >
             {mapLayers.map((layer) => {
               return (
@@ -346,7 +342,7 @@ const StyleContent = () => {
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      {selectedPopupLayer.layerType === "Point" && (
+      {selectedLayer.layerType === "Point" && (
         <>
           <p className="font-semibold">Current Symbol</p>
           <SymbolComponent
@@ -378,8 +374,8 @@ const StyleContent = () => {
         </>
       )}
 
-      {((selectedPopupLayer.layerType === "Point" && pointStyle === "marker") ||
-        selectedPopupLayer.layerType === "Polygon") && (
+      {((selectedLayer.layerType === "Point" && pointStyle === "marker") ||
+        selectedLayer.layerType === "Polygon") && (
         <>
           <p className="font-semibold">Fill Color</p>
           <ColorComponent

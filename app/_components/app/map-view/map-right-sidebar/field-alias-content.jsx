@@ -20,33 +20,28 @@ import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const FieldAliasContent = () => {
-  const {
-    mapLayers,
-    selectedPopupLayer,
-    setSelectedPopupLayer,
-    setMapClicked,
-  } = useMapViewStore();
+  const { mapLayers, selectedLayer, setSelectedLayer, setMapClicked } =
+    useMapViewStore();
 
   const [layerFields, setLayerFields] = useState(); // Responsible for all of the fields available
   const [selectedFields, setSelectedFields] = useState([]); // Responsible for checked array
   const [selectedFieldForEdit, setSelectedFieldForEdit] = useState();
-
   const [isFetching, setIsFetching] = useState(true);
 
-  useEffect(() => {
-    if (!selectedPopupLayer) {
-      setSelectedPopupLayer(mapLayers[0]);
-    }
-  }, [mapLayers, selectedPopupLayer, setSelectedPopupLayer]);
+  // useEffect(() => {
+  //   if (!selectedLayer) {
+  //     setSelectedLayer(mapLayers[0]);
+  //   }
+  // }, [mapLayers, selectedLayer, setSelectedLayer]);
 
   useEffect(() => {
-    if (selectedPopupLayer) {
+    if (selectedLayer) {
       async function fetchLayerData() {
         setIsFetching(true);
 
         try {
           const response = await fetch(
-            `/api/layers/get-layer-id?layerUid=${selectedPopupLayer.layerUid}`,
+            `/api/layers/get-layer-id?layerUid=${selectedLayer.layerUid}`,
             {
               method: "GET",
             }
@@ -65,7 +60,7 @@ const FieldAliasContent = () => {
 
       fetchLayerData();
     }
-  }, [selectedPopupLayer]); // Make sure to include all dependencies here
+  }, [selectedLayer]); // Make sure to include all dependencies here
 
   const saveFieldAliases = async (field, action) => {
     try {
@@ -73,7 +68,7 @@ const FieldAliasContent = () => {
         [field.fieldName]: field.fieldAlias,
       };
       const response = await fetch(
-        `/api/layers/set-field-alias?layerUid=${selectedPopupLayer.layerUid}`,
+        `/api/layers/set-field-alias?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -117,7 +112,7 @@ const FieldAliasContent = () => {
     }
   };
 
-  if (!selectedPopupLayer) {
+  if (!selectedLayer) {
     return null;
   }
 
@@ -136,16 +131,14 @@ const FieldAliasContent = () => {
           <DropdownMenu className="h-10">
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 px-3 py-2 text-white rounded-md bg-nileBlue-900">
-                <p className="w-full truncate">
-                  {selectedPopupLayer.layerTitle}
-                </p>
+                <p className="w-full truncate">{selectedLayer.layerTitle}</p>
                 <ChevronDownIcon className="w-5 h-5" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="p-0 text-white w-[224px] bg-nileBlue-900 pr-2">
               <DropdownMenuRadioGroup
-                value={selectedPopupLayer}
-                onValueChange={setSelectedPopupLayer}
+                value={selectedLayer}
+                onValueChange={setSelectedLayer}
               >
                 {mapLayers.map((item, index) => {
                   return (

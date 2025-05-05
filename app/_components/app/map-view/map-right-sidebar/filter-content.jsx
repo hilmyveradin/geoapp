@@ -19,12 +19,8 @@ import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 import { Trash2 } from "lucide-react";
 
 const FilterContent = () => {
-  const {
-    mapLayers,
-    selectedPopupLayer,
-    setSelectedPopupLayer,
-    setHighlightedLayer,
-  } = useMapViewStore();
+  const { mapLayers, selectedLayer, setSelectedLayer, setHighlightedLayer } =
+    useMapViewStore();
 
   const { ftsQuery, setFtsQuery } = useTableQueryStore();
 
@@ -34,11 +30,11 @@ const FilterContent = () => {
   const [ftsQueryInput, setFtsQueryInput] = useState("");
   const [savedFtsQuery, setSavedFtsQuery] = useState("");
 
-  useEffect(() => {
-    if (!selectedPopupLayer) {
-      setSelectedPopupLayer(mapLayers[0]);
-    }
-  }, [mapLayers, selectedPopupLayer, setSelectedPopupLayer]);
+  // useEffect(() => {
+  //   if (!selectedLayer) {
+  //     setSelectedLayer(mapLayers[0]);
+  //   }
+  // }, [mapLayers, selectedLayer, setSelectedLayer]);
 
   useEffect(() => {
     const saveFilter = async () => {
@@ -50,7 +46,7 @@ const FilterContent = () => {
           with_geom: true,
         });
         const response = await fetch(
-          `/api/layers/get-fts-query-data?layerUid=${selectedPopupLayer.layerUid}`,
+          `/api/layers/get-fts-query-data?layerUid=${selectedLayer.layerUid}`,
           {
             method: "POST",
             headers: {
@@ -85,7 +81,7 @@ const FilterContent = () => {
     if (ftsQuery) {
       saveFilter();
     }
-  }, [ftsQuery, selectedPopupLayer, setHighlightedLayer]);
+  }, [ftsQuery, selectedLayer, setHighlightedLayer]);
 
   const saveFtsQuery = () => {
     setFtsQuery({ value: ftsQueryInput });
@@ -100,7 +96,7 @@ const FilterContent = () => {
     setHighlightedLayer(null);
   };
 
-  if (!selectedPopupLayer) {
+  if (!selectedLayer) {
     return null;
   }
 
@@ -113,7 +109,7 @@ const FilterContent = () => {
       >
         <DropdownMenuTrigger asChild className="w-full">
           <button className="flex items-center gap-2 px-3 py-2 text-white rounded-md bg-nileBlue-900">
-            <p className="w-full truncate">{selectedPopupLayer.layerTitle}</p>
+            <p className="w-full truncate">{selectedLayer.layerTitle}</p>
             <ChevronDownIcon
               className={cn("w-5 h-5 transition-all", {
                 "-rotate-180": openDropdown,
@@ -123,9 +119,9 @@ const FilterContent = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="p-0 text-white w-[224px] bg-nileBlue-900 pr-2">
           <DropdownMenuRadioGroup
-            value={selectedPopupLayer}
+            value={selectedLayer}
             onValueChange={(value) => {
-              setSelectedPopupLayer(value);
+              setSelectedLayer(value);
               resetFts();
             }}
           >
