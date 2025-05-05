@@ -5,6 +5,8 @@ import useRefetchStore from "./store/useRefetchStore";
 const useUpdateLayer = () => {
   const { setMapLayers, mapData } = useMapViewStore();
   const { refetchMapLayers } = useRefetchStore();
+
+  // This effect responsible to refetch map layers
   useEffect(() => {
     async function getLayerUid(layerUid) {
       const response = await fetch(
