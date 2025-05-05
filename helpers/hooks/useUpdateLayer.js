@@ -3,7 +3,7 @@ import useMapViewStore from "./store/useMapViewStore";
 import useRefetchStore from "./store/useRefetchStore";
 
 const useUpdateLayer = () => {
-  const { setLayersData, mapData } = useMapViewStore();
+  const { setMapLayers, mapData } = useMapViewStore();
   const { refetchMapLayers } = useRefetchStore();
   useEffect(() => {
     async function getLayerUid(layerUid) {
@@ -53,14 +53,14 @@ const useUpdateLayer = () => {
         // Flatten the array of arrays (if necessary) and set the state
         const layerDatas = resolvedLayerDatas.flat(); // Use .flat() if each promise resolves to an array
 
-        setLayersData(layerDatas);
+        setMapLayers(layerDatas);
       } catch (error) {
         console.log(error);
       }
     }
 
     loadMapData();
-  }, [mapData.mapUid, refetchMapLayers, setLayersData]);
+  }, [mapData.mapUid, refetchMapLayers, setMapLayers]);
 };
 
 export default useUpdateLayer;

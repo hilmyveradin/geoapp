@@ -32,7 +32,7 @@ const ComposeMapDialog = (props) => {
   const { toast } = useToast();
   const { toggleRefetchMaps } = useRefetchStore();
 
-  const [layersData, setLayersData] = useState();
+  const [mapLayers, setMapLayers] = useState();
 
   const [titleValue, setTitleValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
@@ -70,7 +70,7 @@ const ComposeMapDialog = (props) => {
           })
           .sort((a, b) => a.layerTitle.localeCompare(b.layerTitle));
 
-        setLayersData(tempLayers);
+        setMapLayers(tempLayers);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
@@ -96,8 +96,8 @@ const ComposeMapDialog = (props) => {
   }, [openSearchCommand]);
 
   useEffect(() => {
-    if (layersData) {
-      const filteredAndSorted = layersData
+    if (mapLayers) {
+      const filteredAndSorted = mapLayers
         .filter((user) => {
           return !selectedLayersData.some(
             (selected) =>
@@ -105,7 +105,7 @@ const ComposeMapDialog = (props) => {
           );
         })
         .sort((a, b) => a.layerTitle.localeCompare(b.layerTitle));
-      setLayersData(filteredAndSorted);
+      setMapLayers(filteredAndSorted);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLayersData]);
@@ -117,7 +117,7 @@ const ComposeMapDialog = (props) => {
   };
 
   const handleLayerSelection = (data) => {
-    const layerData = layersData.find(
+    const layerData = mapLayers.find(
       (layer) => layer.layerUid.toLowerCase() === data
     );
 
@@ -310,7 +310,7 @@ const ComposeMapDialog = (props) => {
                 />
                 {openSearchCommand && (
                   <CommandGroup className="command-group-class absolute right-0 mr-[20] mt-[50px] max-h-[246px] w-full !overflow-y-auto rounded-lg border border-solid border-neutral-100 bg-neutral-50 shadow-lg z-[100]">
-                    {layersData?.map((data) => (
+                    {mapLayers?.map((data) => (
                       <CommandItem
                         key={data.layerUid}
                         value={data.layerUid}
