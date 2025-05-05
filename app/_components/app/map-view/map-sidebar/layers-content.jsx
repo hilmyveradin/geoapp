@@ -405,7 +405,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
     removeMapLayers,
   } = useMapViewStore();
 
-  const { reloadTable, setReloadTable, setFtsQuery } = useTableQueryStore();
+  const { reloadTable, setReloadTable, setFtsQuery, searchSubmit, setSearchSubmit } = useTableQueryStore();
 
   const id = layer.layerUid;
 
@@ -439,6 +439,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
   const handleTableButtonClick = (key) => {
     setFtsQuery(null);
     setReloadTable(true);
+    setSearchSubmit(false);
     if (key == layerInfo.layerUid) {
       setTableLoaded(!tableLoaded);
       setReloadTable(!reloadTable);
