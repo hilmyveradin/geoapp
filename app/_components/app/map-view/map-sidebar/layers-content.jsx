@@ -1,6 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { TabsContent } from "@/components/ui/tabs";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";

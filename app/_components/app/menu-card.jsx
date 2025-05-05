@@ -1,4 +1,3 @@
-"use client";
 import {
   Card,
   CardContent,
@@ -7,42 +6,41 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { MoreVertical } from "lucide-react";
-import { useState } from "react";
 import UserAvatar from "./shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import MenuCardDropdown from "./menu-card-dropdown";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const MenuCard = (props) => {
   const { key, cardData } = props;
-  const router = useRouter();
   return (
-    <Card
-      key={key}
-      className="px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100"
-      onClick={() => {
-        router.push(`/app/overview/${cardData.cardType}/${cardData.cardUid}`);
-      }}
-    >
-      <CardContent className="relative flex items-center justify-center p-0">
-        <img src={cardData.thumbnailUrl} alt="Thumbnail" className="w-full" />
-        <MenuCardDropdown>
-          <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
-        </MenuCardDropdown>
-      </CardContent>
-      <CardHeader className="flex p-0 mt-2">
-        <h3 className={cn("font-semibold truncate")}>{cardData.cardTitle}</h3>
-        <CardDescription className="flex items-center justify-between space-x-2">
-          <div className="flex items-center space-x-2">
-            <UserAvatar user={cardData.creator} />
-            <p> {cardData.creator.fullName} </p>
-          </div>
-          <Button className="bg-gableGreen-500 hover:bg-gableGreen-400">
-            View
-          </Button>
-        </CardDescription>
-      </CardHeader>
-    </Card>
+    <Link href={`/app/overview/${cardData.cardType}/${cardData.cardUid}`}>
+      <Card
+        key={key}
+        className="px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100"
+      >
+        <CardContent className="relative flex items-center justify-center p-0">
+          <img src={cardData.thumbnailUrl} alt="Thumbnail" className="w-full" />
+          <MenuCardDropdown>
+            <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
+          </MenuCardDropdown>
+        </CardContent>
+        <CardHeader className="flex p-0 mt-2">
+          <h3 className={cn("font-semibold truncate")}>{cardData.cardTitle}</h3>
+          <CardDescription className="flex items-center justify-between space-x-2">
+            <div className="flex items-center space-x-2">
+              <UserAvatar user={cardData.creator} />
+              <p> {cardData.creator.fullName} </p>
+            </div>
+            <Link href={`/app/map-view/${cardData.cardUid}`}>
+              <Button className="bg-gableGreen-500 hover:bg-gableGreen-400">
+                View
+              </Button>
+            </Link>
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    </Link>
   );
 };
 
