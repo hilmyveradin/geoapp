@@ -3,6 +3,7 @@
 import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
+import { Loader2 } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { Map } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -87,7 +88,12 @@ const MapOverview = ({ params }) => {
 
   console.log(overviewData);
 
-  if (!overviewData) return <div>Loading...</div>;
+  if (!overviewData)
+    return (
+      <div className="flex items-center justify-center w-full h-96">
+        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+      </div>
+    );
 
   return (
     <div className="flex w-full h-full gap-16 p-10 bg-blue-100">

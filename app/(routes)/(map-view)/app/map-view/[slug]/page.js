@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import MapViewLayout from "../../../layout";
 import MapSidebarRight from "@/app/_components/app/map-view/map-sidebar-right";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import { Loader2 } from "lucide-react";
 
 const MapView = ({ params }) => {
   const mapUid = params.slug;
@@ -66,7 +67,12 @@ const MapView = ({ params }) => {
     loadMapData();
   }, [mapUid, setLayersData, setMapData, setSelectedLayers]);
 
-  if (!mapData && !layersData) return <div>Loading...</div>;
+  if (!mapData && !layersData)
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+      </div>
+    );
 
   return (
     <div className="flex flex-col">

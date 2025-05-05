@@ -38,7 +38,7 @@ const MobileHeader = () => {
 
   return (
     <>
-      <div className="flex items-center justify-end w-full h-8 px-2">
+      <div className="flex items-center justify-end w-full h-12 px-2">
         <Menu
           className="cursor-pointer"
           aria-label="Open Menu"
@@ -64,8 +64,8 @@ const MobileHeader = () => {
         {/* Drawer content */}
         <div className="relative flex flex-col justify-between w-full h-full p-4 ml-auto bg-white rounded-lg">
           <div className="flex flex-col justify-start w-full">
-            <div className="flex items-center justify-between w-full">
-              <img src="/geoportal-logo.svg" alt="logo" className="w-20 mb-4" />
+            <div className="flex items-start justify-between w-full h-12">
+              <img src="/geoportal-logo.svg" alt="logo" className="h-8 mb-4" />
               <X
                 className="w-5 h-5 stroke-black"
                 onClick={() => setMenuOpen(false)}

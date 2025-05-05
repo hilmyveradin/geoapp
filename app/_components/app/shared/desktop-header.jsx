@@ -1,17 +1,17 @@
 "use client";
 
 import UserAvatar from "./user-avatar";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 const DesktopHeader = () => {
   const pathName = usePathname();
-  const router = useRouter();
 
   const { data: session, status } = useSession();
 
-  console.log(session);
   const NAVIGATION_ITEMS = [
     {
       name: "Maps",
@@ -32,7 +32,11 @@ const DesktopHeader = () => {
   ];
 
   if (status === "loading") {
-    return null;
+    return (
+      <div className="flex items-center justify-center w-full h-16">
+        <Loader2 className="w-10 h-10 stroke-cts-500 animate-spin" />
+      </div>
+    );
   }
 
   const user = {
@@ -48,15 +52,15 @@ const DesktopHeader = () => {
       <div className="flex items-center justify-center gap-6">
         {NAVIGATION_ITEMS.map((item, index) => {
           return (
-            <button
-              key={`topbar-item-${index}`}
-              className={cn("rounded-xl font-bold px-2 py-1", {
-                "bg-green-400": pathName.includes(item.path),
-              })}
-              onClick={() => router.push(item.path)}
-            >
-              {item.name}
-            </button>
+            <Link href={item.path} key={`topbar-item-${index}`}>
+              <button
+                className={cn("rounded-xl font-bold px-3 py-1", {
+                  "bg-green-400": pathName.includes(item.path),
+                })}
+              >
+                {item.name}
+              </button>
+            </Link>
           );
         })}
         <div className="ml-10">
