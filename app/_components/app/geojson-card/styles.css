@@ -1,11 +1,27 @@
-.ag-theme-quartz-custom {
-    --ag-foreground-color: rgb(126, 46, 132);
-    --ag-background-color: rgb(249, 245, 227);
-    --ag-header-foreground-color: rgb(204, 245, 172);
-    --ag-header-background-color: rgb(209, 64, 129);
-    --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
-    --ag-header-column-resize-handle-color: rgb(126, 46, 132);
+.ag-tooltip.ag-tooltip{
+    --tw-bg-opacity: 1;
+    background-color: rgb(118 129 129 / var(--tw-bg-opacity));
+    color: #fff;
+    border-radius: 6px;
+    border-width: 0px;
+    border-style: none;
+    border-color: #545454;
+    padding-left: 0.75rem/* 12px */;
+    padding-right: 0.75rem/* 12px */;
+    padding-top: 0.375rem/* 6px */;
+    padding-bottom: 0.375rem/* 6px */;
+ }
 
-    --ag-font-size: 17px;
-    --ag-font-family: monospace;
+.ag-theme-quartz-custom.ag-theme-quartz-custom {
+    --ag-background-color: #fff;
+    --ag-foreground-color: #181d1f;
+    --ag-header-background-color: #9ac5df;
+    --ag-icon-font-color: color-mix(in srgb, transparent, var(--ag-foreground-color) 90%);
+
+    --ag-odd-row-background-color: #9ac5df;
+    --ag-border-radius: 6px;
+    --ag-borders: solid 1px;
+
+    --ag-font-size: 14px;
+    --ag-font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
