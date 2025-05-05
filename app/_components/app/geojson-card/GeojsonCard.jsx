@@ -71,7 +71,7 @@ export function ComboboxDemo({layerTitles, value, setValue, setPageIdx}) {
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue)
                   setOpen(false)
-                  setPageIdx(0)
+                  setPageIdx(currentValue === value ? null : 0)
                 }}
               >
                 <Check
@@ -108,16 +108,15 @@ export function DemoTable({inputLayerDataArray, value, layerTitles, pageIdx}) {
       minWidth: 175,
     },
   ]);
-
-  if (value && pageIdx) {
+  console.log(value);
+  if (value !== "" && (pageIdx !== null && pageIdx !== undefined)) {
     const index = layerTitles.findIndex(
       (layerTitle) => layerTitle.value === value
     );
     rows = inputLayerDataArray[index][pageIdx];
-  } else {
+} else {
     rows = [];
   }
-  console.log(rows);
   const autoSizeStrategy = useMemo(() => {
     return {
       type: "fitCellContents",
@@ -160,12 +159,15 @@ export default function GeojsonCard() {
   const index = layerTitles.findIndex(
     (layerTitle) => layerTitle.value === value
   );
-  console.log(newObjects[index]);
   const handlePrevClick = () => {
-    if (pageIdx > 0) {setPageIdx(pageIdx - 1);}
+    if (index !== -1 && pageIdx !== null && pageIdx > 0) {
+      setPageIdx(pageIdx - 1);
+    }
   }
   const handleNextClick = () => {
-    if (index && pageIdx < newObjects[index].length) {setPageIdx(pageIdx + 1);}
+    if (index !== -1 && pageIdx !== null && pageIdx < newObjects[index].length - 1) {
+      setPageIdx(pageIdx + 1);
+    }
   }
 
   return (
@@ -180,7 +182,7 @@ export default function GeojsonCard() {
             <button onClick={handlePrevClick}>
               <ChevronLeft/>
             </button>
-            <Label>{pageIdx === null ? "" : pageIdx+1} of {pageIdx === null ? "" : newObjects[index].length}</Label>
+            <Label>{pageIdx === null ? "" : pageIdx+1} of {pageIdx === null || index === -1 ? "" : newObjects[index].length}</Label>
             <button onClick={handleNextClick}>
               <ChevronRight/>
             </button>
