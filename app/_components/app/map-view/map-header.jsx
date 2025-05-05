@@ -47,6 +47,7 @@ import {
 
 const MapHeader = () => {
   const { mapData } = useMapViewStore();
+  console.log(mapData)
   return (
     <div>
       <div className="flex items-center justify-between w-full bg-white h-14">
@@ -84,7 +85,7 @@ const MapHeader = () => {
             </SheetContent>
           </Sheet>
           {/* <h1 className="text-2xl">{`${mapData.title}`}</h1>  */}
-          <Label className="pt-2 text-sm font-medium">{`${mapData.title}`}</Label>
+          <Label className="pt-2 text-sm font-medium">{`${mapData.mapTitle}`}</Label>
         </div>
         {/* </div> */}
         {/* <div className="flex flex-row justify-between pr-6">
