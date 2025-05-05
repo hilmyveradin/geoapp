@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import authOptions from "../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 export async function POST(request) {
   try {
+    const session = await getServerSession(authOptions);
     const body = await request.json();
-    const cookieStore = cookies();
-    const token = cookieStore.get("accessToken");
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/new_map`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/create`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token.value}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -23,7 +23,11 @@ export async function POST(request) {
         await res.text()
       );
       // Instead of throwing an error, we are returning a NextResponse object with a status code
-      return new NextResponse(null, { status: res.status });
+      return new NextResponse(
+        `foobar!!! ${{ res }}`,
+        { status: res.status },
+        ""
+      );
     }
 
     const data = await res.json();

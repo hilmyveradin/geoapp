@@ -91,10 +91,10 @@ const ComposeMapDialog = (props) => {
         .filter((user) => {
           return !selectedLayersData.some(
             (selected) =>
-              selected.layer_uid.toLowerCase() === user.layer_uid.toLowerCase()
+              selected.layerUid.toLowerCase() === user.layerUid.toLowerCase()
           );
         })
-        .sort((a, b) => a.layer_title.localeCompare(b.layer_title));
+        .sort((a, b) => a.layerTitle.localeCompare(b.layerTitle));
       setLayersData(filteredAndSorted);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,13 +102,13 @@ const ComposeMapDialog = (props) => {
 
   const removeSelectedLayer = (data) => {
     setSelectedLayersData(
-      selectedLayersData.filter((layer) => layer.layer_uid !== data.layer_uid)
+      selectedLayersData.filter((layer) => layer.layerUid !== data.layerUid)
     );
   };
 
   const handleLayerSelection = (data) => {
     const layerData = layersData.find(
-      (layer) => layer.layer_uid.toLowerCase() === data
+      (layer) => layer.layerUid.toLowerCase() === data
     );
 
     // Create the layer data object
@@ -152,7 +152,7 @@ const ComposeMapDialog = (props) => {
         description: descriptionValue,
         tags: selectedTags,
         layers: selectedLayersData.map((layer) => ({
-          layer_uid: layer.layer_uid,
+          layer_uid: layer.layerUid,
         })),
       };
       console.log("BODY: ", body);
@@ -219,7 +219,7 @@ const ComposeMapDialog = (props) => {
         <div className="flex flex-wrap gap-2">
           {selectedLayersData.map((data) => (
             <SelectedLayerPills
-              key={data.layer_uid}
+              key={data.layerUid}
               removeSelectedLayer={removeSelectedLayer}
               data={data}
             />
@@ -290,8 +290,8 @@ const ComposeMapDialog = (props) => {
                   <CommandGroup className="command-group-class absolute right-0 mr-[20] mt-[50px] max-h-[246px] w-full !overflow-y-auto rounded-lg border border-solid border-neutral-100 bg-neutral-50 shadow-lg z-[100]">
                     {layersData?.map((data) => (
                       <CommandItem
-                        key={data.layer_uid}
-                        value={data.layer_uid}
+                        key={data.layerUid}
+                        value={data.layerUid}
                         onSelect={(data) => handleLayerSelection(data)}
                         className="border-transparent"
                       >
@@ -334,7 +334,7 @@ const SearchLayerPills = (props) => {
     <div className="flex items-center w-full space-x-2">
       <img src={data.thumbnailUrl} alt="search pills" className="w-10 h-8" />
       <div className="flex flex-col space-y-2">
-        <p className="max-w-full truncate">{data.layer_title}</p>
+        <p className="max-w-full truncate">{data.layerTitle}</p>
         <div className="flex items-center space-x-1">
           <UserAvatar user={data.creator} className="w-7 h-7" />
           <p>{data.creator.fullName}</p>
@@ -358,11 +358,11 @@ const SelectedLayerPills = (props) => {
       )}
     >
       <img
-        src={data.thumbnaillUrl}
+        src={data.thumbnailUrl}
         alt="search pills"
         className="w-10 h-8 ml-4"
       />
-      <p className="w-full text-xs truncate">{data.layer_title}</p>
+      <p className="w-full text-xs truncate">{data.layerTitle}</p>
       <button
         onClick={() => removeSelectedLayer(data)}
         onMouseEnter={() => setIsHovered(true)}

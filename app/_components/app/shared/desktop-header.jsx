@@ -46,8 +46,8 @@ const DesktopHeader = () => {
 
   return (
     <div className="flex items-center justify-between w-full h-16 px-6">
-      <div className="flex items-center w-20 h-16">
-        <img src="/geoportal-logo.svg" alt="logo" />
+      <div className="flex items-center">
+        <img src="/geoportal-logo.svg" alt="logo" className="w-28" />
       </div>
       <div className="flex items-center justify-center gap-6">
         {NAVIGATION_ITEMS.map((item, index) => {

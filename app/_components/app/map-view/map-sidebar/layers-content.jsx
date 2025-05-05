@@ -172,22 +172,21 @@ const LayersCard = ({ data }) => {
           />
         </div>
       )}
-      {collapsibleContent === "options" && <OptionsSection layerUid={data.layerUid}/>}
+      {collapsibleContent === "options" && <OptionsSection data={data} />}
     </div>
   );
 };
 
-const OptionsSection = (layerUid, layerTitle) => {
-  const { selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded } = useMapViewStore();
-  const str = JSON.stringify(layerUid)
-  const obj = JSON.parse(str)
-  const id = obj.layerUid
-
+const OptionsSection = ({ data }) => {
+  const { setZoomedLayerBbox, selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded } = useMapViewStore();
+  const id = data.layerUid
   const buttonLists = [
     {
       icon: <ZoomIn className="w-3 h-3 stroke-2" />,
       name: "Zoom to",
-      onClick: null,
+      onClick: () => {
+        setZoomedLayerBbox(data.layerBbox);
+      },
     },
     {
       icon: <Table className="w-3 h-3 stroke-2" />,

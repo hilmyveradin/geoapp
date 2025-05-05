@@ -13,12 +13,18 @@ import { Fragment, useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
 import AddLayersContent from "./map-sidebar/add-layer-content";
-import TablesContent from "./map-sidebar/tables-content";
 import { Separator } from "@/components/ui/separator";
 import { ButtonSidebar } from '@/components/ui/button-sidebar';
 import PaginationLayerTable from '../layer-table/PaginationLayerTable';
 import SaveAlertDialog from "../shared/save-alert-dialog";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -45,13 +51,13 @@ const MapSidebar = () => {
       buttonKey: "tables",
       icon: Sheet,
       label: "Tables",
-      onClick: () => handleButtonClick("tables"),
+      onClick: null, //TODO: Add layer function to this tables
     },
     {
       buttonKey: "save",
       icon: Save,
       label: "Save",
-      onClick: null,
+      onClick: () => console.log("foobar"),
     },
     {
       buttonKey: "share",
@@ -65,7 +71,6 @@ const MapSidebar = () => {
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
     layers: <LayersContent />,
-    tables: <TablesContent />,
   };
 
   // Reusable Button component
@@ -73,7 +78,7 @@ const MapSidebar = () => {
     return (
       <Button
         variant="ghost"
-        onClick={onClick}
+        onClick={onClick ? onClick : null}
         className={cn("flex justify-start text-blackHaze-500", {
           "text-white": selectedButton === buttonKey,
         })}
@@ -105,7 +110,19 @@ const MapSidebar = () => {
         </SaveAlertDialog>
       );
     } else if (data.buttonKey === "share") {
-      return <SidebarButton {...data} />;
+      return (
+        <Menubar>
+          <MenubarMenu>
+            <MenubarTrigger asChild>
+              <SidebarButton {...data} />
+            </MenubarTrigger>
+            <MenubarContent side="right">
+              <MenubarItem>Foobar</MenubarItem>
+              <MenubarItem>Print</MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+      );
     } else {
       return <SidebarButton {...data} />;
     }
@@ -121,24 +138,98 @@ const MapSidebar = () => {
           }
         )}
       >
-        {/* Render buttons dynamically */}
-        {BUTTONS_CONSTANTS.map((data, index) => {
-          if (data.buttonKey === "collapsible") {
-            return null;
-          }
+        <Button
+          variant="ghost"
+          onClick={() => handleButtonClick("addLayer")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "text-white": selectedButton === "addLayer",
+          })}
+        >
+          <PlusCircle
+            className={cn("w-4 h-4 stroke-blackHaze-500", {
+              "stroke-white stroke-2": selectedButton === "addLayer",
+            })}
+          />
+          {!showSidebar && <span className="inline-block ml-2">Add Layer</span>}
+        </Button>
 
-          return (
-            <Fragment key={data.buttonKey}>
-              {/* <SidebarButton {...data} /> */}
-              {generateSidebarButton(data)}
+        <Button
+          variant="ghost"
+          onClick={() => handleButtonClick("layers")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "text-white": selectedButton === "layers",
+          })}
+        >
+          <Layers3
+            className={cn("w-4 h-4 stroke-blackHaze-500", {
+              "stroke-white stroke-2": selectedButton === "layers",
+            })}
+          />
+          {!showSidebar && <span className="inline-block ml-2">Layers</span>}
+        </Button>
 
-              {/* Insert a separator after certain buttons */}
-              {["tables", "share"].includes(data.buttonKey) && (
-                <Separator className="my-2" /> // Adjust className as needed
-              )}
-            </Fragment>
-          );
-        })}
+        <Button
+          variant="ghost"
+          onClick={() => console.log("Tables click")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "text-white": selectedButton === "tables",
+          })}
+        >
+          <Sheet
+            className={cn("w-4 h-4 stroke-blackHaze-500", {
+              "stroke-white stroke-2": selectedButton === "tables",
+            })}
+          />
+          {!showSidebar && <span className="inline-block ml-2">Tables</span>}
+        </Button>
+
+        <Separator className="my-2" />
+
+        <Menubar className="bg-transparent border-none">
+          <MenubarMenu>
+            <MenubarTrigger
+              asChild
+              className="data-[state=active]:text-white data-[state=active]:stroke-white data-[state=active]:stroke-2"
+            >
+              <Button
+                variant="ghost"
+                className={cn("flex justify-start text-blackHaze-500", {
+                  // "text-white": selectedButton === "save",
+                })}
+              >
+                <Save
+                  className={cn("w-4 h-4 stroke-blackHaze-500", {
+                    // "stroke-white stroke-2": selectedButton === "save",
+                  })}
+                />
+                {!showSidebar && (
+                  <span className="inline-block ml-2">Save</span>
+                )}
+              </Button>
+            </MenubarTrigger>
+            <MenubarContent side="right">
+              <MenubarItem>Save</MenubarItem>
+              <MenubarItem>Save as</MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+
+        <Button
+          variant="ghost"
+          onClick={() => console.log("Share click")}
+          className={cn("flex justify-start text-blackHaze-500", {
+            "text-white": selectedButton === "share",
+          })}
+        >
+          <Share2
+            className={cn("w-4 h-4 stroke-blackHaze-500", {
+              "stroke-white stroke-2": selectedButton === "share",
+            })}
+          />
+          {!showSidebar && <span className="inline-block ml-2">Share</span>}
+        </Button>
+
+        <Separator className="my-2" />
 
         {/* Additional empty div for spacing, pushing the Collapse button to the bottom */}
         <div className="flex-grow" />
@@ -157,7 +248,7 @@ const MapSidebar = () => {
           {!showSidebar && <span className="inline-block ml-2">Collapse</span>}
         </Button>
       </div>
-      {selectedButton && (
+      {(selectedButton === "addLayer" || selectedButton === "layers") && (
         <div
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",

@@ -51,7 +51,7 @@ const Login = () => {
         <img src="/geoportal-logo.svg" alt="logo" className="h-20 mb-4" />
         <div className="flex w-full gap-4">
           <img
-            src="/login-image.svg"
+            src="/login-image.png"
             alt="user avatar"
             className="w-[60%] rounded-lg"
           />
