@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ControlledTable from "./ControlledTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
@@ -12,18 +12,30 @@ export default function PaginationLayerTable() {
   const { layerInfo } = useMapViewStore();
   const {
     ftsQuery, 
-    reloadTable, 
     searchSubmit, 
-    setSearchSubmit
   } = useTableQueryStore();
   const [ftsQueryBody, setFtsQueryBody] = React.useState({
     fts_input: null,
     with_geom: 'false',
+    offset: 0,
+    length: 0,
   });
 
+  useEffect(() => {
+    const handleFtsQueryChange = () => {
+      if (ftsQuery) {
+        setFtsQueryBody({
+          fts_input: ftsQuery.value,
+          with_geom: false,
+        });
+      }
+    };
+
+    handleFtsQueryChange();
+  }, [ftsQuery]);
+  
   const getRows = async (numRows, startRow) => {
     try {
-      console.log("normal get rows")
       const response = await fetch(
         `/api/layers/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
         {
@@ -54,18 +66,20 @@ export default function PaginationLayerTable() {
 
   const getRowsFTS = async (numRows, startRow) => {
     try {
-      if (ftsQuery) {
-        setFtsQueryBody({ fts_input: ftsQuery.value, with_geom: 'false' });
-      }
-      console.log(ftsQuery)
+      const body = JSON.stringify({
+        fts_input: ftsQuery.value,
+        with_geom: false,
+        offset: startRow,
+        length: numRows,
+      })
       const response = await fetch(
-        `/api/layers/get-fts-query-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
+        `/api/layers/get-fts-query-data?layerUid=${layerInfo.layerUid}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: ftsQueryBody
+          body: body
         }
       );
 
@@ -74,14 +88,20 @@ export default function PaginationLayerTable() {
       }
 
       const data = await response.json();
-      setTotalRows(data.totalData);
-      setColumnDefs(
-        Object.keys(data.data[0] || {}).map((key) => ({
-          headerName: key,
-          field: key,
-        }))
-      );
-      return data.data;
+      if (data.msg.includes("FTS query successful")) {
+        setTotalRows(data.totalData);
+        setColumnDefs(
+          Object.keys(data.data[0] || {}).map((key) => ({
+            headerName: key,
+            field: key,
+          }))
+        );
+        return data.data;
+      }
+      else {
+        setTotalRows(-1);
+        return null;
+      }
     } catch (error) {
       console.error("Error fetching rows:", error);
     }

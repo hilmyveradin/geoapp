@@ -261,10 +261,11 @@ const MapSidebar = () => {
               variant="ghost"
               size="sm"
               onClick={() => {
-                setSearchSubmit(true);
-                // setTimeout(() => {
-                //   setReloadTable(true);
-                // }, 100);
+                setReloadTable(false);
+                setTimeout(() => {
+                  setSearchSubmit(true);
+                  setReloadTable(true);
+                }, 100);
               }}
             >
               <Search />
@@ -280,7 +281,7 @@ const MapSidebar = () => {
               <X />
             </Button>
           </div>
-          <PaginationLayerTable />
+          {reloadTable && <PaginationLayerTable />}
         </div>
       )}
       {mapClicked && (

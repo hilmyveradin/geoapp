@@ -165,12 +165,16 @@ const ControlledTable = ({
     if (!gridApi) {
       return;
     }
-    if (loadingBlocks.includes(pageNumber * pageSize)) {
+    // Kalau pake totalCount === 0, pas loading dianggap no rows, padahal masih nunggu request API
+    // Di JS, kalau variabel integer nggak didefinisikan, otomatis dikasih nilai 0.
+    if (totalCount === -1) {
+      gridApi.showNoRowsOverlay();
+    } else if (loadingBlocks.includes(pageNumber * pageSize)) {
       gridApi.showLoadingOverlay();
     } else {
       gridApi.hideOverlay();
     }
-  }, [gridApi, pageNumber, pageSize, loadingBlocks]);
+  }, [gridApi, pageNumber, pageSize, loadingBlocks, totalCount]);
 
   useEffect(() => {
     const startRow = pageNumber * pageSize;

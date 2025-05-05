@@ -3,12 +3,8 @@ import { getServerSession } from "next-auth";
 import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
-  const layerUid = request.nextUrl.searchParams.get("layerUid");
-  const offset = request.nextUrl.searchParams.get("offset");
-  const length = request.nextUrl.searchParams.get("length");
   const body = await request.json();
-  const { fts_input, with_geom } = body;
-
+  const layerUid = request.nextUrl.searchParams.get("layerUid");
   try {
     const session = await getServerSession(authOptions);
 
@@ -20,15 +16,10 @@ export async function POST(request) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        body: JSON.stringify({
-            fts_input: fts_input,
-            with_geom: with_geom, 
-            offset: offset, 
-            length: length 
-        }),
+        body: JSON.stringify(body),
       }
     );
-    console.log(body);
+
     if (!res.ok) {
       console.error(
         "API responded with an error",

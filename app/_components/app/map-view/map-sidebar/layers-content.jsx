@@ -440,6 +440,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
 
   const handleTableButtonClick = (key) => {
     setFtsQuery(null);
+    setReloadTable(true);
     if (key == layerInfo.layerUid) {
       setTableLoaded(!tableLoaded);
       setReloadTable(!reloadTable);
