@@ -20,8 +20,10 @@ import TablesContent from "./map-sidebar/tables-content";
 import SaveContent from "./map-sidebar/save-content";
 import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
-import { ButtonSidebar } from "@/components/ui/button-sidebar";
-import { GridExample } from "@/app/_components/app/layer-table/ag-grid-react";
+import { DataTableDemo } from '../layer-table/layer-table';
+import { ButtonSidebar } from '@/components/ui/button-sidebar';
+import { GridExample } from '@/app/_components/app/layer-table/ag-grid-react';
+import DemoPaginationTable from '../layer-table/dummydata';
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -160,7 +162,7 @@ const MapSidebar = () => {
         </div>
       )}
       {/* TODO: Fix this grid views */}
-      {/* <div
+      <div
         className={cn(
           "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2",
           {
@@ -175,10 +177,9 @@ const MapSidebar = () => {
             "left-[60px] w-[calc(100vw-60px-192px)]":
               expandedSidebarButtons && showSidebar && !showSidebarRight,
           }
-        )}
-      >
-        <GridExample></GridExample>
-      </div> */}
+        )}>
+          <DemoPaginationTable></DemoPaginationTable>
+      </div>
       <div
         className={cn(
           "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
