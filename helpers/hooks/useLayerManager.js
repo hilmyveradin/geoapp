@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import useMapViewStore from "./store/useMapViewStore";
+import authOptions from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
 
 const useLayerManager = () => {
+  const { data: session } = useSession();
+
   const {
     mapLoaded,
     map,
@@ -60,7 +65,7 @@ const useLayerManager = () => {
             return;
           }
 
-          const url = `http://dev3.webgis.co.id/geoserver/geoportal/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`;
+          const url = `http://dev3.webgis.co.id/geoserver/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true&token=${session.accessToken}`;
 
           // Add or update existing layer
           if (!map.getSource(layerId)) {
