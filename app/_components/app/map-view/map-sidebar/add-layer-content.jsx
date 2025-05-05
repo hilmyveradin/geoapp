@@ -125,6 +125,7 @@ const AddLayersContent = () => {
   const [refetchLayers, setRefetchLayers] = useState(false);
   const [searchedTitle, setSearchedTitle] = useState(""); // Added state for search term
   const { layersData } = useMapViewStore();
+  const [progressValue, setProgressValue] = useState(0);
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -168,32 +169,54 @@ const AddLayersContent = () => {
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
     async function postVectorData(formData) {
-      try {
-        const response = await fetch("/api/upload-vectordata", {
-          method: "POST",
-          body: formData,
-        });
+      const xhr = new XMLHttpRequest();
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+      // Set the upload progress event listener.
+      xhr.upload.addEventListener("progress", function(event) {
+        if (event.lengthComputable) {
+          setProgressValue((event.loaded / event.total) * 85);
         }
-        const temp = await response.json();
-        toast({
-          title: temp.status,
-          description: temp.msg,
-          variant: "success",
-        });
-      } catch (error) {
-        console.error("Error during fetch:", error.message);
-        toast({
-          title: "ERROR",
-          description: error.message,
-          variant: "destructive",
-        });
-      } finally {
-        setRefetchLayers((prev) => !prev);
-        setUploadProgress(false); // Reset progress on error
+      });
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          setProgressValue(0);
+          try {
+            const responseData = JSON.parse(xhr.responseText);
+            if (responseData.status == "success") {
+              toast({
+                title: responseData.status,
+                description: responseData.msg,
+                variant: "success"
+              });
+            } else {
+              toast({
+                title: responseData.status,
+                description: responseData.msg,
+                variant: "destructive"
+              })
+            }
+          } catch (error) {
+            console.error("Error during fetch:", error.message);
+            toast({
+              title: "ERROR",
+              description: error.message,
+              variant: "destructive"
+            });
+          } finally {
+            setRefetchLayers(!refetchLayers);
+            setUploadProgress(false); // Reset progress on error
+          }
+        } else {
+          toast({
+            title: "ERROR",
+            description: xhr.status,
+            variant: "destructive",
+          });
+        }
       }
+      xhr.open("POST", "/api/upload-vectordata")
+      xhr.send(formData);
     }
 
     if (files.length > 0) {
@@ -233,7 +256,8 @@ const AddLayersContent = () => {
           fileExtension="zip"
           progress={uploadProgress}
           resetView={refetchLayers}
-        />
+          progressValue={progressValue}
+          />
       </div>
 
       <div className="flex items-center gap-2 py-2 pl-2 pr-3 bg-white border rounded-lg">

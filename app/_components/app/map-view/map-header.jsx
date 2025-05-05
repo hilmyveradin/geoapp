@@ -8,25 +8,36 @@ import { useSession } from "next-auth/react";
 import UserAvatar from "../shared/user-avatar";
 
 const MapHeader = () => {
-  const { mapData } = useMapViewStore();
+  const { mapData, setMapData, setLayersData, setSelectedLayers } = useMapViewStore();
   const { data: session, status } = useSession();
   const user = {
     ...session.user,
     fullName: session.user.fullname,
   };
 
+  const resetData = () => {
+    setSelectedLayers(null);
+    setLayersData(null);
+    setMapData(null);
+  }
   return (
     <div className="flex items-center justify-between w-full bg-white border shadow-xl h-14">
       <Label className="pl-12 text-base font-medium">{`${mapData.mapTitle}`}</Label>
       <div className="flex items-center">
         <div className="pr-2">
           <Link href="/app/maps">
-            <Button variant="ghost" className="text-base font-medium hover:text-gableGreen-100 hover:font-bold">
+            <Button 
+              variant="ghost" 
+              className="text-base font-medium hover:text-gableGreen-100 hover:font-bold"
+              onClick={resetData}>
               Maps
             </Button>
           </Link>
           <Link href="/app/layers">
-            <Button variant="ghost" className="text-base font-medium hover:text-gableGreen-100 hover:font-bold">
+            <Button 
+              variant="ghost" 
+              className="text-base font-medium hover:text-gableGreen-100 hover:font-bold"
+              onClick={resetData}>
               Layers
             </Button>
           </Link>
