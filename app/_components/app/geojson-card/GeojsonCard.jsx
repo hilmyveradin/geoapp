@@ -1,47 +1,41 @@
 "use strict";
 
-import React, { 
-  useState,
-  useMemo 
-} from "react";
-import { 
-  Check, 
+import React, { useState, useMemo } from "react";
+import {
+  Check,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   ChevronUp,
   ZoomIn,
-  X
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import TooltipText from "../../shared/tooltipText";
 import { AgGridReact } from "ag-grid-react";
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-material.css';
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-material.css";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import "./styles.css"
+import "./styles.css";
 
-export function Combobox({layerTitles, value, setValue, setPageIdx}) {
-  const [open, setOpen] = useState(false)
+export function Combobox({ layerTitles, value, setValue, setPageIdx }) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,18 +47,22 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
           className="w-[50%] flex justify-between bg-nileBlue-50 hover:bg-nileBlue-50 shadow-md"
         >
           <div className="w-[90%] flex items-center">
-            <TooltipText 
+            <TooltipText
               content={
-                value 
-                  ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+                value
+                  ? layerTitles.find(
+                      (layerTitles) => layerTitles.value === value
+                    )?.label
                   : "Select layer title"
-              } 
-              side="top" 
+              }
+              side="top"
               align="start"
             >
-              <p className="text-base font-normal truncate cursor-pointer text-black">
-                {value 
-                  ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+              <p className="text-base font-normal text-black truncate cursor-pointer">
+                {value
+                  ? layerTitles.find(
+                      (layerTitles) => layerTitles.value === value
+                    )?.label
                   : "Select layer title"}
               </p>
             </TooltipText>
@@ -82,9 +80,9 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
                 key={layerTitle.value}
                 value={layerTitle.value}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
-                  setOpen(false)
-                  setPageIdx(currentValue === value ? null : 0)
+                  setValue(currentValue === value ? "" : currentValue);
+                  setOpen(false);
+                  setPageIdx(currentValue === value ? null : 0);
                 }}
               >
                 <Check
@@ -93,7 +91,11 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
                     value === layerTitle.value ? "opacity-100" : "opacity-0"
                   )}
                 />
-                <TooltipText content={layerTitle.label} side="top" align="start">
+                <TooltipText
+                  content={layerTitle.label}
+                  side="top"
+                  align="start"
+                >
                   <p className="text-base font-normal truncate cursor-pointer">
                     {layerTitle.label}
                   </p>
@@ -104,31 +106,31 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
-export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
+export function Table({ inputLayerDataArray, value, layerTitles, pageIdx }) {
   let rows = [];
-  
+
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
-    { 
+    {
       field: "key",
       tooltipValueGetter: (p) => p.value,
       minWidth: 100,
     },
-    { 
+    {
       field: "value",
       tooltipValueGetter: (p) => p.value,
       minWidth: 175,
     },
   ]);
-  if (value !== "" && (pageIdx !== null && pageIdx !== undefined)) {
+  if (value !== "" && pageIdx !== null && pageIdx !== undefined) {
     const index = layerTitles.findIndex(
       (layerTitle) => layerTitle.value === value
     );
     rows = inputLayerDataArray[index][pageIdx];
-} else {
+  } else {
     rows = [];
   }
   const autoSizeStrategy = useMemo(() => {
@@ -139,10 +141,10 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
   }, []);
 
   // disable sorting on all columns
-  const defaultColDef = useMemo(() => { 
+  const defaultColDef = useMemo(() => {
     return {
-          sortable: false
-      };
+      sortable: false,
+    };
   }, []);
 
   return (
@@ -159,12 +161,19 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
         defaultColDef={defaultColDef}
       />
     </div>
-  )
+  );
 }
 
 export default function GeojsonCard() {
-  const { objectInfoData, mapClicked, setMapClicked, mapLayers } = useMapViewStore();
-  
+  const {
+    objectInfoData,
+    mapClicked,
+    setMapClicked,
+    mapLayers,
+    setHighlightedLayer,
+    setZoomedLayerBbox,
+  } = useMapViewStore();
+
   const layerTitles = objectInfoData.data
     .filter((layer) => {
       const matchingLayer = mapLayers.find(
@@ -178,19 +187,24 @@ export default function GeojsonCard() {
     }))
     .reverse();
 
-  const layerDataArray = objectInfoData.data.map(layer => [...layer.layerData]).reverse();
-  const newObjects = layerDataArray.map(objArray => 
-    objArray.map(obj => {
-      const { geometry, type, properties } = obj;
-      return Object.entries(properties).map(([key, value]) => ({ 
-        key, 
-        value: value === null ? "empty" : value.toString()}));
+  const layerDataArray = objectInfoData.data
+    .map((layer) => [...layer.layerData])
+    .reverse();
+  const newObjects = layerDataArray.map((objArray) =>
+    objArray.map((obj) => {
+      const { properties } = obj;
+      return Object.entries(properties).map(([key, value]) => ({
+        key,
+        value: value === null ? "empty" : value.toString(),
+      }));
     })
   );
-  const [value, setValue] = useState(layerTitles.length > 0 ? layerTitles[0].value : '');
+  const [value, setValue] = useState(
+    layerTitles.length > 0 ? layerTitles[0].value : ""
+  );
   const [pageIdx, setPageIdx] = useState(0);
   const [isExpanded, setIsExpanded] = useState(true);
-  
+
   const index = layerTitles.findIndex(
     (layerTitle) => layerTitle.value === value
   );
@@ -203,7 +217,7 @@ export default function GeojsonCard() {
       }
     }
   };
-  
+
   const handleNextClick = () => {
     if (index !== -1 && pageIdx !== null) {
       if (pageIdx === newObjects[index].length - 1) {
@@ -220,13 +234,41 @@ export default function GeojsonCard() {
 
   const handleTogglePopUp = () => {
     setMapClicked(!mapClicked);
-  }
+    setHighlightedLayer(null);
+  };
+
+  const handleZoomandHighlightLayer = () => {
+    const layerTitle = layerTitles.find(
+      (layerTitle) => layerTitle.value === value
+    )?.label; // Get the actual title from the state value
+
+    if (layerTitle) {
+      const matchingLayer = mapLayers.find(
+        (mapLayer) => mapLayer.layerTitle === layerTitle
+      );
+
+      if (matchingLayer && matchingLayer.layerBbox) {
+        setZoomedLayerBbox(matchingLayer.layerBbox); // Assuming this function sets the map view to the bbox
+        const selectedLayerData =
+          layerDataArray[
+            layerTitles.findIndex((lt) => lt.label === layerTitle)
+          ];
+        if (selectedLayerData) {
+          const highlightedLayerGeoJSON = {
+            type: "FeatureCollection",
+            features: selectedLayerData,
+          };
+          setHighlightedLayer(highlightedLayerGeoJSON);
+        }
+      }
+    }
+  };
 
   return (
     <>
       {layerTitles.length > 0 && (
         <Card className="bg-nileBlue-50 rounded-md w-[35vw]">
-          <div className="flex flex-col space-y-3 py-3">
+          <div className="flex flex-col py-3 space-y-3">
             <div className="flex flex-row justify-between px-6">
               <Combobox
                 layerTitles={layerTitles}
@@ -238,7 +280,7 @@ export default function GeojsonCard() {
                 <button onClick={handleToggleExpand}>
                   <ChevronUp
                     className={`mr-2 transition-transform ${
-                      isExpanded ? '' : 'rotate-180'
+                      isExpanded ? "" : "rotate-180"
                     }`}
                   />
                 </button>
@@ -249,20 +291,23 @@ export default function GeojsonCard() {
             </div>
             <Separator />
             <div className="flex flex-row justify-between px-6">
-              <div className="flex flex-row p-1">
+              <button
+                className="flex flex-row p-1"
+                onClick={handleZoomandHighlightLayer}
+              >
                 <ZoomIn className="text-nileBlue-950" />
-                <Label className="ml-2 mt-1 inline-block text-nileBlue-800">
+                <Label className="inline-block mt-1 ml-2 text-nileBlue-800">
                   Zoom to
                 </Label>
-              </div>
-              <div className="flex items-center bg-nileBlue-50 rounded-md shadow-md text-nileBlue-800 p-1">
+              </button>
+              <div className="flex items-center p-1 rounded-md shadow-md bg-nileBlue-50 text-nileBlue-800">
                 <button onClick={handlePrevClick}>
                   <ChevronLeft />
                 </button>
                 <Label>
-                  {pageIdx === null ? '' : pageIdx + 1} of{' '}
+                  {pageIdx === null ? "" : pageIdx + 1} of{" "}
                   {pageIdx === null || index === -1
-                    ? ''
+                    ? ""
                     : newObjects[index].length}
                 </Label>
                 <button onClick={handleNextClick}>
