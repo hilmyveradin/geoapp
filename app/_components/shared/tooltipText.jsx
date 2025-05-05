@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const TooltipText = ({ children, content, className, ...props }) => {
   return (
     <TooltipProvider className="z-50">
-      <Tooltip>
+      <Tooltip className="z-50">
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         {content && content.length > 0 && (
           <TooltipContent

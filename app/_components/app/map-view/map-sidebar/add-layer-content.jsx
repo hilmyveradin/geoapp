@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
+import TooltipText from "@/app/_components/shared/tooltipText";
 
 const LayersContent = ({ layers }) => {
   return (
@@ -21,7 +22,6 @@ const LayersContent = ({ layers }) => {
 };
 
 const AddLayerCard = ({ data }) => {
-  console.log("DATA: ", data);
   const generateDate = () => {
     if (data?.updatedAt) {
       return `Updated: ${dayjs(data.updatedAt).format("DD/MM/YYYY")}`;
@@ -38,11 +38,13 @@ const AddLayerCard = ({ data }) => {
           </AspectRatio>
         </div>
         <div className="flex flex-col gap-1">
-          <p className="w-32 font-bold truncate">{data.layerTitle}</p>
+          <TooltipText content={data.layerTitle} side="top" align="start">
+            <p className="w-32 font-bold truncate cursor-pointer">
+              {data.layerTitle}
+            </p>
+          </TooltipText>
           <p>
-            {/*TODO: Fix this when It's ready {data.layerDataModel} by <span>{data.creator.fullName}</span> */}
-            Vector layers by{" "}
-            <span className="font-semibold">{data.creator.fullName}</span>
+            {data.layerDataModel} by <span>{data.creator.fullName}</span>
           </p>
           <p>{generateDate()}</p>
         </div>
@@ -110,7 +112,7 @@ const AddLayersContent = () => {
         />
       </div>
 
-      <div className="flex items-center gap-2 py-2 pl-2 pr-3 bg-white rounded-lg">
+      <div className="flex items-center gap-2 py-2 pl-2 pr-3 bg-white border rounded-lg">
         <Search className="w-4 h-4" />
         <input
           placeholder="Search for layers"

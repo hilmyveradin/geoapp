@@ -164,7 +164,7 @@ const MapSidebar = () => {
       {/* TODO: Fix this grid views */}
       <div
         className={cn(
-          "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2",
+          "fixed rounded-md border bottom-6 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
           {
             "left-[300px] w-[calc(100vw-300px-60px)]":
               !expandedSidebarButtons && showSidebar,
