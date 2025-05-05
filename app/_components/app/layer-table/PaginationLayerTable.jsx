@@ -27,6 +27,7 @@ export default function PaginationLayerTable() {
       }
 
       const data = await response.json();
+      console.log(data);
       setTotalRows(data.totalData);
       setColumnDefs(
         Object.keys(data.data[0] || {}).map((key) => ({

@@ -1,9 +1,10 @@
 import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-material.css";
+// import "ag-grid-community/styles/ag-grid.css";
+// import "ag-grid-community/styles/ag-theme-material.css";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import "./styles.css"
 
 const LoadingBlock = ({ getRows, pageSize, startRow, onLoaded }) => {
   const [rows, setRows] = useState();
@@ -215,7 +216,7 @@ const ControlledTable = ({
     <div
       aria-live="polite"
       aria-busy={loadingBlocks.includes(pageNumber * pageSize)}
-      className="ag-theme-material"
+      className="ag-theme-material-custom"
       style={{
         height: "100%",
         width: "100%",

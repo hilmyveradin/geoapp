@@ -123,12 +123,13 @@ export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
   }
   const autoSizeStrategy = useMemo(() => {
     return {
-      type: "fitCellContents",
+      type: "fitGridWidth",
+      defaultMinWidth: 100,
     };
   }, []);
   return (
     <div
-      className={"ag-theme-quartz"} // applying the grid theme
+      className={"ag-theme-quartz-custom"} // applying the grid theme
       style={{ height: 125 }} // the grid will fill the size of the parent container
     >
       <AgGridReact
