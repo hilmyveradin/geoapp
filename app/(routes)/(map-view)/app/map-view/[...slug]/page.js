@@ -31,8 +31,8 @@ const MapView = ({ params }) => {
       const modifiedDatas = datas.data.map((data) => {
         return {
           ...data,
-          imageUrl: `http://dev3.webgis.co.id/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
-          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
+          imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+          legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
           isShown: true,
         };
       });
@@ -86,8 +86,8 @@ const MapView = ({ params }) => {
             ...data,
             mapBbox: data.layerBbox,
             mapTitle: data.layerTitle,
-            imageUrl: `http://dev3.webgis.co.id/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
-            legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
+            imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+            legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
             mapType: mapType,
             mapUid: mapUid,
             isShown: true,

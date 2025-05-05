@@ -43,8 +43,8 @@ const AddLayersContent = () => {
         const tempLayers = temp.data.map((data) => {
           return {
             ...data,
-            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-            legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
+            thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
             isShown: true,
           };
         });

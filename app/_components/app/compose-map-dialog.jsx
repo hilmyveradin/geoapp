@@ -64,7 +64,7 @@ const ComposeMapDialog = (props) => {
           .map((data) => {
             return {
               ...data,
-              thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+              thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             };
           })
           .sort((a, b) => a.layerTitle.localeCompare(b.layerTitle));

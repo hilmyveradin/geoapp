@@ -9,7 +9,7 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/lnstyle_th_unique_rnd`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${layerUid}/lnstyle_th_unique_rnd`,
       {
         method: "POST",
         headers: {

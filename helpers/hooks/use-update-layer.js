@@ -22,8 +22,8 @@ const useUpdateLayer = () => {
       const modifiedDatas = datas.data.map((data) => {
         return {
           ...data,
-          imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
+          imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+          legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/legend/${data.layerUid}`,
         };
       });
 

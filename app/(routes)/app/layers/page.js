@@ -71,7 +71,7 @@ const LayersDashboard = () => {
               cardDescription: data.layerDescription,
               cardTags: data.layerTags,
               cardUid: data.layerUid,
-              thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+              thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             };
           })
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

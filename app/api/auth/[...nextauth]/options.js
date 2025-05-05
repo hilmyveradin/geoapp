@@ -20,14 +20,17 @@ const authOptions = {
         }
 
         try {
-          const res = await fetch(`${process.env.API_BASE_URL}/iam/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              username: credentials.username,
-              password: credentials.password,
-            }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/iam/login`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: credentials.username,
+                password: credentials.password,
+              }),
+            }
+          );
 
           if (!res.ok) {
             throw new Error("Invalid credentials");
@@ -78,11 +81,14 @@ const authOptions = {
 
 async function refreshAccessToken(token) {
   try {
-    const response = await fetch(`${process.env.API_BASE_URL}/iam/refresh`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refresh_token: token.refreshToken }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/iam/refresh`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh_token: token.refreshToken }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to refresh token");

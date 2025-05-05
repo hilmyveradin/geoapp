@@ -6,13 +6,16 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/map/list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       console.error(

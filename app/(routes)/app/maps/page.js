@@ -70,7 +70,7 @@ const MapsDashboard = () => {
               cardDescription: data.mapDescription,
               cardTags: data.mapTags,
               cardUid: data.mapUid,
-              thumbnailUrl: `http://dev3.webgis.co.id/be/cms/map/thumbnail/${data.thumbnailUrl}`,
+              thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/map/thumbnail/${data.thumbnailUrl}`,
             };
           })
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

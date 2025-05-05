@@ -7,14 +7,17 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
     const body = await request.json();
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify(body),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/map/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
     if (!res.ok) {
       console.error(
