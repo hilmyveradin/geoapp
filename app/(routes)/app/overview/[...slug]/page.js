@@ -142,9 +142,22 @@ const MapOverview = ({ params }) => {
           </div>
           <div className="flex flex-col gap-2">
             <p className="font-semibold text-sm sm:text-base">Tags</p>
-            <p className="text-sm sm:text-base">
-              {mapData.tags || "This item has no tags"}
-            </p>
+            <div className="flex flex-wrap gap-2">
+              {mapData.tags && mapData.tags.length > 0 ? (
+                mapData.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 text-xs sm:text-sm bg-gray-200 text-gray-700 rounded-full inline-block"
+                  >
+                    {tag}
+                  </span>
+                ))
+              ) : (
+                <p className="text-sm sm:text-base text-gray-500 italic">
+                  This item has no tags
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

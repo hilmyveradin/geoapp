@@ -345,7 +345,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Oceans",
-      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/ocean-basemap.png`,
+      image: `/basemaps/ocean-basemap.png`,
       style: `https://api.maptiler.com/maps/ocean/style.json?key=${MAPTILER_KEY}`,
     },
   ];
@@ -372,13 +372,7 @@ const BaseMapCard = ({ name, image, onClick }) => {
       className="flex items-center gap-2 p-2 bg-white rounded-md shadow cursor-pointer hover:bg-gray-100"
       onClick={onClick}
     >
-      <Image
-        src={image}
-        alt={name}
-        width={100}
-        height={80}
-        className="rounded-md"
-      />
+      <img src={image} alt={name} className="rounded-md w-[100px] h-20" />
       <span className="font-medium">{name}</span>
     </div>
   );

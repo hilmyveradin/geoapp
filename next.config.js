@@ -4,16 +4,16 @@ const webpack = require("webpack");
 const nextConfig = {
   basePath: process.env.NEXT_PUBLIC_GEOPORTAL_PATH || "",
   reactStrictMode: false,
-  images: {
-    remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "dev3.webgis.co.id",
-        port: "",
-        pathname: "/be/gs/thumbnail/***",
-      },
-    ],
-  },
+  // images: {
+  //   remotePatterns: [
+  //     {
+  //       protocol: "http",
+  //       hostname: "dev3.webgis.co.id",
+  //       port: "",
+  //       pathname: "/be/gs/thumbnail/***",
+  //     },
+  //   ],
+  // },
   webpack: (config) => {
     config.plugins.push(
       new webpack.DefinePlugin({
