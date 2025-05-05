@@ -240,7 +240,7 @@ export default function GeojsonCard() {
   const handleZoomandHighlightLayer = () => {
     const layerTitle = layerTitles.find(
       (layerTitle) => layerTitle.value === value
-    )?.label; // Get the actual title from the state value
+    )?.label; // Retrieve the actual title from the state value
 
     if (layerTitle) {
       const matchingLayer = mapLayers.find(
@@ -248,17 +248,29 @@ export default function GeojsonCard() {
       );
 
       if (matchingLayer && matchingLayer.layerBbox) {
-        setZoomedLayerBbox(matchingLayer.layerBbox); // Assuming this function sets the map view to the bbox
-        const selectedLayerData =
-          layerDataArray[
-            layerTitles.findIndex((lt) => lt.label === layerTitle)
-          ];
-        if (selectedLayerData) {
-          const highlightedLayerGeoJSON = {
-            type: "FeatureCollection",
-            features: selectedLayerData,
-          };
-          setHighlightedLayer(highlightedLayerGeoJSON);
+        setZoomedLayerBbox(matchingLayer.layerBbox); // This function sets the map view to the bbox
+
+        // Find the index for the selected layer from layerTitles to get the right slice from layerDataArray
+        const layerIndex = layerTitles.findIndex(
+          (lt) => lt.label === layerTitle
+        );
+
+        if (
+          layerIndex !== -1 &&
+          pageIdx !== null &&
+          layerDataArray[layerIndex].length > pageIdx
+        ) {
+          // Access the specific data slice for the current page index
+          const selectedLayerData = layerDataArray[layerIndex][pageIdx];
+
+          debugger;
+          if (selectedLayerData) {
+            const highlightedLayerGeoJSON = {
+              type: "FeatureCollection",
+              features: [selectedLayerData],
+            };
+            setHighlightedLayer(highlightedLayerGeoJSON);
+          }
         }
       }
     }
