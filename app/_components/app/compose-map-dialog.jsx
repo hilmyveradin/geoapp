@@ -108,7 +108,7 @@ const ComposeMapDialog = (props) => {
       setMapLayers(filteredAndSorted);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedLayersData]);
+  }, [selectedLayersData, searchInput]);
 
   const removeSelectedLayer = (data) => {
     setSelectedLayersData(
@@ -158,12 +158,10 @@ const ComposeMapDialog = (props) => {
   const composeMapAction = () => {
     async function composeMap() {
       const body = {
-        title: titleValue,
-        description: descriptionValue,
-        tags: selectedTags,
-        layers: selectedLayersData.map((layer) => ({
-          layer_uid: layer.layerUid,
-        })),
+        map_title: titleValue,
+        map_description: descriptionValue,
+        map_tags: selectedTags,
+        layer_uid: selectedLayersData.map((layer) => layer.layerUid),
       };
 
       setSubmittingData(true);
@@ -292,7 +290,10 @@ const ComposeMapDialog = (props) => {
           <div className="flex min-h-[48px] items-center justify-center rounded-lg border border-tn-500">
             <div className="flex flex-wrap items-center w-full gap-1 p-2">
               {selectedLayerDisplay()}
-              <Command className="flex-grow h-full rounded-full">
+              <Command
+                className="flex-grow h-full rounded-full"
+                shouldFilter={false}
+              >
                 <CommandInput
                   className={cn(
                     "command-input-class ml-2 h-full !border-none",
@@ -310,16 +311,35 @@ const ComposeMapDialog = (props) => {
                 />
                 {openSearchCommand && (
                   <CommandGroup className="command-group-class absolute right-0 mr-[20] mt-[50px] max-h-[246px] w-full !overflow-y-auto rounded-lg border border-solid border-neutral-100 bg-neutral-50 shadow-lg z-[100]">
-                    {mapLayers?.map((data) => (
-                      <CommandItem
-                        key={data.layerUid}
-                        value={data.layerUid}
-                        onSelect={(data) => handleLayerSelection(data)}
-                        className="border-transparent"
-                      >
-                        <SearchLayerPills data={data} />
-                      </CommandItem>
-                    ))}
+                    {mapLayers
+                      .filter((layer) => {
+                        if (searchInput) {
+                          if (
+                            layer.layerTitle
+                              .toLowerCase()
+                              .includes(searchInput.toLowerCase())
+                          ) {
+                            return layer;
+                          } else {
+                            return null;
+                          }
+                        } else {
+                          return layer;
+                        }
+                      })
+                      .map((data, index) => {
+                        return (
+                          <CommandItem
+                            key={`${index}`}
+                            value={`${data.layerUid}`}
+                            onSelect={(data) => handleLayerSelection(data)}
+                            keywords={searchInput}
+                            className="border-transparent"
+                          >
+                            <SearchLayerPills data={data} />
+                          </CommandItem>
+                        );
+                      })}
                   </CommandGroup>
                 )}
               </Command>
