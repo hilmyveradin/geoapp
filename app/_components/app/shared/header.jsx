@@ -30,13 +30,25 @@ const AppHeader = () => {
   const router = useRouter();
 
   const { data: session, status } = useSession();
-  const { isAdmin, isEditor, setUserRoles } = useUserStore();
+  const { setIsEditor, setIsAdmin } = useUserStore();
 
   useEffect(() => {
-    if (session) {
-      setUserRoles(session.user?.roles);
+    if (session && session.user) {
+      // Check if user is admin
+      const isAdminRole =
+        session.user?.roles?.some((role) =>
+          role.roleName.toLowerCase().includes("admin")
+        ) || false;
+
+      const isEditorRole =
+        session.user?.roles?.some((role) =>
+          role.roleName.toLowerCase().includes("editor")
+        ) || false;
+
+      setIsAdmin(isAdminRole);
+      setIsEditor(isEditorRole);
     }
-  }, [session, setUserRoles]);
+  }, [session, setIsAdmin, setIsEditor]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
