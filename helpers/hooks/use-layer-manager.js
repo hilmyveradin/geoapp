@@ -46,6 +46,7 @@ const useLayerManager = () => {
 
   useEffect(() => {
     if (mapLoaded && map) {
+      console.log("CALLED!!!");
       const updateLayers = () => {
         // Initialize layerOrderRef only once on first effective load
         if (layerOrderRef.current.length === 0 && mapLayers.length > 0) {
