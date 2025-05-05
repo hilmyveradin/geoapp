@@ -37,7 +37,7 @@ const MapHeader = () => {
   );
 
   return (
-    <div className="relative bg-white border shadow-xl z-50">
+    <div className="relative bg-white border shadow-xl z-10">
       <div className="flex items-center justify-between w-full h-14 px-2">
         <Label className="text-sm md:text-base font-medium truncate max-w-[200px] md:max-w-none">
           {mapData.mapTitle}

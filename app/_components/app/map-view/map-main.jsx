@@ -11,7 +11,6 @@ import useHighlightManager from "@/helpers/hooks/use-highlight-manager";
 import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
 import useMapControlManager from "@/helpers/hooks/use-map-control-manager";
 import GeojsonCard from "../geojson-card/geojson-card";
-import use3DLayerManager from "@/helpers/hooks/use-3d-layer-manager";
 import useMapStyleManager from "@/helpers/hooks/use-map-style-manager";
 
 const MapMain = () => {
@@ -23,14 +22,11 @@ const MapMain = () => {
   });
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const [is3DMode, setIs3DMode] = useState(false);
-
   useLayerManager();
   useZoomToLayer();
   usePopUpManager();
   useHighlightManager();
   useMapControlManager();
-  // use3DLayerManager(mapRef, MAPTILER_KEY, is3DMode); // New hook usage
   useMapStyleManager();
   const {
     setMap,
@@ -46,19 +42,6 @@ const MapMain = () => {
     showRightSidebar,
     expandedRightSidebarContent,
   } = useMapSidebarStore();
-
-  const toggle3DMode = useCallback(() => {
-    setIs3DMode((prev) => !prev);
-    if (mapRef.current) {
-      if (!is3DMode) {
-        mapRef.current.setPitch(45);
-        mapRef.current.setBearing(-17.6);
-      } else {
-        mapRef.current.setPitch(0);
-        mapRef.current.setBearing(0);
-      }
-    }
-  }, [is3DMode]);
 
   const calculateBounds = useCallback(() => {
     const parentRect = mapContainerRef.current.getBoundingClientRect(); // Get the parent container's dimensions
@@ -142,9 +125,7 @@ const MapMain = () => {
         ],
       },
       center: [118.0148634, -2.548926],
-      zoom: 15.5,
-      pitch: is3DMode ? 45 : 0,
-      bearing: is3DMode ? -17.6 : 0,
+      zoom: 8,
       antialias: true,
     });
 
@@ -167,6 +148,7 @@ const MapMain = () => {
       const ne = bounds.getNorthEast();
       const sw = bounds.getSouthWest();
       const bboxArray = [sw.lng, sw.lat, ne.lng, ne.lat];
+
       setCurrentViewBbox(bboxArray);
     };
 
@@ -177,29 +159,10 @@ const MapMain = () => {
       setMap(null);
       setZoomedLayerBbox(null);
     };
-  }, [setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox, is3DMode]);
+  }, [setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox]);
 
   return (
     <div ref={mapContainerRef} className="w-full h-full">
-      {/* <div className="fixed z-20 top-20 right-5 bg-white p-2 rounded shadow">
-        <label className="flex items-center cursor-pointer">
-          <div className="relative">
-            <input
-              type="checkbox"
-              className="sr-only"
-              checked={is3DMode}
-              onChange={toggle3DMode}
-            />
-            <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
-            <div
-              className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${
-                is3DMode ? "transform translate-x-6" : ""
-              }`}
-            ></div>
-          </div>
-          <div className="ml-3 text-gray-700 font-medium">3D Mode</div>
-        </label>
-      </div> */}
       {mapClicked && (
         <Draggable handle=".handle" bounds={bounds}>
           <div
