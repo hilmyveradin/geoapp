@@ -144,7 +144,7 @@ const MapSidebarRight = () => {
         <LegendContent />
       </Tabs> */}
       </div>
-      {(selectedButton === "FieldAliasContent" ||
+      {(selectedButton === "fieldAliasContent" ||
         selectedButton === "styleContent" ||
         selectedButton === "filterContent") && (
         <div
