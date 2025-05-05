@@ -21,11 +21,9 @@ const MenuCard = (props) => {
 
   const handleClick = (e) => {
     if (isCtrlPressed) {
-      e.preventDefault();
       toggleCardSelection(cardData.cardUid);
       return;
     }
-
     router.push(`/app/overview/${cardData.cardType}/${cardData.cardUid}`);
   };
 
@@ -61,11 +59,18 @@ const MenuCard = (props) => {
             <UserAvatar user={cardData.creator} />
             <p> {cardData.creator.fullName} </p>
           </div>
-          <Link href={`/app/map-view/${cardData.cardType}/${cardData.cardUid}`}>
-            <Button className="bg-gableGreen-500 hover:bg-gableGreen-400">
-              View
-            </Button>
-          </Link>
+
+          <Button
+            className="bg-gableGreen-500 hover:bg-gableGreen-400"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(
+                `/app/map-view/${cardData.cardType}/${cardData.cardUid}`
+              );
+            }}
+          >
+            View
+          </Button>
         </CardDescription>
       </CardHeader>
     </Card>
