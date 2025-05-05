@@ -71,7 +71,7 @@ const BaseMapContent = () => {
   const mapChoices = [
     {
       name: "OpenStreetMap",
-      image: "/basemaps/osm-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/osm-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -93,7 +93,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Satellite",
-      image: "/basemaps/satellite-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/satellite-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -121,7 +121,7 @@ const BaseMapContent = () => {
 
     {
       name: "Dark",
-      image: "/basemaps/dark-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/dark-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -145,12 +145,12 @@ const BaseMapContent = () => {
     },
     {
       name: "3D Buildings",
-      image: "/basemaps/3d-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/3d-basemap.png`,
       style: threeDStyle,
     },
     {
       name: "Esri World Topo",
-      image: "/basemaps/esri-world-topo-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/esri-world-topo-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -174,7 +174,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Google Imagery With Rain Viewer",
-      image: "/basemaps/rain-viewer-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/rain-viewer-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -214,7 +214,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Google Maps",
-      image: "/basemaps/google-maps-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/google-maps-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -238,7 +238,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Google Terrain",
-      image: "/basemaps/google-maps-terrain-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/google-maps-terrain-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -262,12 +262,12 @@ const BaseMapContent = () => {
     },
     {
       name: "Dark Gray Canvas",
-      image: "/basemaps/dark-canvas-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/dark-canvas-basemap.png`,
       style: `https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json`,
     },
     {
       name: "Bing Map Aerial",
-      image: "/basemaps/bing-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/bing-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -293,7 +293,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Bing Map Hybrid",
-      image: "/basemaps/bing-map-hybrid-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/bing-map-hybrid-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -319,7 +319,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Bing Map Road",
-      image: "/basemaps/bing-road-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/bing-road-basemap.png`,
       style: {
         version: 8,
         sources: {
@@ -345,7 +345,7 @@ const BaseMapContent = () => {
     },
     {
       name: "Oceans",
-      image: "/basemaps/ocean-basemap.png",
+      image: `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/basemaps/ocean-basemap.png`,
       style: `https://api.maptiler.com/maps/ocean/style.json?key=${MAPTILER_KEY}`,
     },
   ];

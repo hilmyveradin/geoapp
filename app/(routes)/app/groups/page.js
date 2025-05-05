@@ -7,12 +7,12 @@ import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const GruopsDashboard = () => {
+const GroupsDashboard = () => {
   const [pageLoading, setPageLoading] = useState(true);
-  const [groupsData, setGroupsData] = useState([]);
+  const [groupsData, setGroupsData] = useState(null);
 
   const { refetchGroups } = useRefetchStore();
-  const { searchedGroupTitle, setSearchedGroupTitle } = useSearchQueryStore(); // Added state for search term
+  const { searchedGroupTitle, setSearchedGroupTitle } = useSearchQueryStore();
 
   useEffect(() => {
     return () => {
@@ -21,7 +21,6 @@ const GruopsDashboard = () => {
   }, [setSearchedGroupTitle]);
 
   useEffect(() => {
-    // Define function to get layers API
     async function getGroupLists() {
       try {
         const response = await fetch(
@@ -36,28 +35,17 @@ const GruopsDashboard = () => {
         }
 
         const responseData = await response.json();
-        const data = responseData.data;
-
-        setGroupsData(data);
+        setGroupsData(responseData);
       } catch (error) {
         console.error("Error during fetch:", error.message);
+        setGroupsData({ status: "failed" });
       } finally {
         setPageLoading(false);
       }
     }
 
-    getGroupLists()
-      // make sure to catch any error
-      .catch(console.error);
+    getGroupLists().catch(console.error);
   }, [refetchGroups]);
-
-  // debugger;
-  const filteredGroups = groupsData.filter((group) => {
-    console.log(group);
-    return group.groupName
-      .toLowerCase()
-      .includes(searchedGroupTitle.toLowerCase());
-  });
 
   if (pageLoading) {
     return (
@@ -67,14 +55,31 @@ const GruopsDashboard = () => {
     );
   }
 
+  if (!groupsData || groupsData.status === "failed") {
+    return (
+      <div className="w-full h-full px-8 mt-4">
+        <GroupButtons />
+        <div className="text-center mt-8">
+          <p className="text-lg font-semibold text-gray-700">
+            Groups are not available
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const filteredGroups = groupsData.data.filter((group) =>
+    group.groupName.toLowerCase().includes(searchedGroupTitle.toLowerCase())
+  );
+
   return (
     <div className="w-full h-full px-8 mt-4">
       <GroupButtons />
-      {filteredGroups.map((group, index) => {
-        return <GroupCards key={group.groupUid} group={group} />;
-      })}
+      {filteredGroups.map((group) => (
+        <GroupCards key={group.groupUid} group={group} />
+      ))}
     </div>
   );
 };
 
-export default GruopsDashboard;
+export default GroupsDashboard;
