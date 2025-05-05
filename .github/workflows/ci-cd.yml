@@ -47,10 +47,21 @@ jobs:
           script: |
             source ~/.bashrc || source ~/.profile
             cd /home/ubuntu/var/www/geoportal/geoportal-webapp
-            # Stash pnpm-lock.yaml changes to prevent merge conflicts
-            git stash push -m "Stash pnpm-lock.yaml" -- pnpm-lock.yaml
-            git pull origin main --rebase
+            # Stash all changes to ensure a clean state for pulling
+            git stash push -m "Stash local changes"
+            # Attempt to pull changes and handle possible conflicts
+            if git pull origin main; then
+              echo "Successfully pulled from main."
+            else
+              echo "Attempting to rebase..."
+              if git rebase --abort; then
+                echo "Rebase aborted due to conflicts."
+                exit 1  # Exit with error if rebase fails
+              fi
+            fi
+            # Pop the stash to restore changes
+            git stash pop
             /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm install
             /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm build
-            # Use pm2 to start or restart the application
+            # Use pm2 to manage the process
             /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pm2 start /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pnpm --name "geoportal" -- start || /home/ubuntu/.nvm/versions/node/v18.20.2/bin/pm2 restart geoportal -f
