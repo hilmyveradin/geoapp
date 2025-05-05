@@ -174,6 +174,8 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     img.onload = () => {
       if (img.width === img.height) {
         setIsSquare(true);
+      } else {
+        setIsSquare(false);
       }
       setImageLoaded(true);
       setDateHash(Date.now());
