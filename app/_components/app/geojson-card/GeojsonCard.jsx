@@ -206,9 +206,7 @@ export default function GeojsonCard() {
     <>
       {layerTitles.length > 0 && (
         <Card
-          className={`w-[35vw] bg-nileBlue-50 rounded-md ${
-            isExpanded ? 'h-[260px]' : 'h-[20vh]'
-          }`}
+          className={`bg-nileBlue-50 rounded-md`}
         >
           <div className="flex flex-col space-y-3 py-3">
             <div className="flex flex-row justify-between px-6">
