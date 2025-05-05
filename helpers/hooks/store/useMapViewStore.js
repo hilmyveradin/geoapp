@@ -3,7 +3,6 @@ import { create } from "zustand";
 const useMapViewStore = create((set) => ({
   map: null,
   mapLoaded: false,
-  selectedLayers: null,
   mapData: null,
   mapLayers: null,
   layerInfo: {
@@ -20,6 +19,8 @@ const useMapViewStore = create((set) => ({
   refreshLayerOrder: false,
   isLayerReordered: false,
   currentViewBbox: null,
+  addedLayerUids: [],
+  selectedPopupLayer: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -64,21 +65,6 @@ const useMapViewStore = create((set) => ({
       mapLayers: state.mapLayers.map((layer) =>
         layer.layerUid === layerUid ? { ...layer, isShown: visible } : layer
       ),
-    })),
-
-  setSelectedLayers: (data) =>
-    set(() => ({
-      selectedLayers: data,
-    })),
-
-  addSelectedLayers: (data) =>
-    set((state) => ({
-      selectedLayers: [...(state.selectedLayers || []), data],
-    })),
-
-  removeSelectedLayers: (data) =>
-    set((state) => ({
-      selectedLayers: state.selectedLayers.filter((layer) => layer !== data),
     })),
 
   setLayerInfo: (layerUid, layerTitle) =>
@@ -165,6 +151,10 @@ const useMapViewStore = create((set) => ({
       currentViewBbox: data,
     }));
   },
+  setSelectedPopupLayer: (data) =>
+    set(() => ({
+      selectedPopupLayer: data,
+    })),
 }));
 
 export default useMapViewStore;
