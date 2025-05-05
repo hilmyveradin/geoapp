@@ -56,7 +56,7 @@ const MapView = ({ params }) => {
         // Flatten the array of arrays (if necessary) and set the state
         const layerDatas = resolvedLayerDatas.flat(); // Use .flat() if each promise resolves to an array
 
-        setSelectedLayers(layerDatas);
+        setSelectedLayers(layerDatas.reverse());
         setLayersData(layerDatas);
         setMapData(data);
       } catch (error) {
@@ -84,7 +84,7 @@ const MapView = ({ params }) => {
             mapUid: mapUid,
           };
         });
-        setSelectedLayers(modifiedDatas);
+        setSelectedLayers(modifiedDatas.reverse());
         setLayersData(modifiedDatas);
         setMapData(modifiedDatas[0]);
       } catch (error) {

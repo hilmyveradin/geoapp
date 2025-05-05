@@ -28,7 +28,7 @@ const useMapViewStore = create((set) => ({
 
   addLayersData: (data) =>
     set((state) => ({
-      layersData: [...(state.layersData || []), data],
+      layersData: [data, ...(state.layersData || [])],
     })),
 
   removeLayersData: (data) =>
