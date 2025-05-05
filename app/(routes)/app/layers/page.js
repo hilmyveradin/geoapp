@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Dropzone } from "@/components/ui/dropzone";
+import MenuCard from "@/app/_components/app/menu-card";
 
 const LayersDashboard = () => {
   const [layersData, setLayersData] = useState([]);
@@ -66,10 +67,10 @@ const LayersDashboard = () => {
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
     // console.log(files);
-    const formData = new FormData()
+    const formData = new FormData();
     // var file = new File([files[-1]], "file.zip");
-    console.log(files[0])
-    formData.append('vector_zip', files[0])
+    console.log(files[0]);
+    formData.append("vector_zip", files[0]);
     async function postVectorData(formData) {
       try {
         const response = await fetch("/api/upload-vectordata", {
@@ -81,12 +82,12 @@ const LayersDashboard = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const temp = await response.json();
-        console.log(temp)
+        console.log(temp);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
     }
-    postVectorData(formData)
+    postVectorData(formData);
   }, [files]);
 
   return (
@@ -109,27 +110,24 @@ const LayersDashboard = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 ">
+      <div class="sm:grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 flex flex-col">
         {/* Create a loop to render every thumbnail image */}
         {/* TODO: Add Pagination Handling */}
-        {layersData.slice(0, 6).map((layersData) => (
-          // Define key so each Card has unique id
-          <Card key={layersData.layer_id}>
-            <CardContent className="p-2 pt-6">
-              <img
-                src={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
-                alt="Thumbnail"
-              />
-            </CardContent>
-            {/* Card layer name and creator name */}
-            <CardHeader className="p-2">
-              <h3 className={cn("font-semibold overflow-x-auto")}>
-                {layersData.layer_title}
-              </h3>
-              <CardDescription>{layersData.creator}</CardDescription>
-            </CardHeader>
-          </Card>
-        ))}
+        {layersData.slice(0, 6).map((layersData) => {
+          // TODO: Fix the avatar with a new data
+          const user = {
+            fullName: layersData.creator,
+            avatar: layersData.creator,
+          };
+          return (
+            <MenuCard
+              key={layersData.layer_id}
+              source={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
+              title={layersData.layer_title}
+              user={user}
+            />
+          );
+        })}
       </div>
     </div>
   );
