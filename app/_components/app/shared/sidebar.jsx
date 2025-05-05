@@ -2,10 +2,9 @@
 
 "use client";
 
-import { getUserNameInitial } from "@/app/_helpers/stringHelpers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getUserNameInitial } from "@/helpers/string-helpers";
 import { cn } from "@/lib/utils";
-import { PinBottomIcon } from "@radix-ui/react-icons";
 import { HomeIcon } from "lucide-react";
 import { MapIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
