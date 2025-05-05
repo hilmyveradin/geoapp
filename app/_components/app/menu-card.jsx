@@ -33,7 +33,7 @@ const MenuCard = (props) => {
       className={cn(
         "px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100",
         {
-          "outline-blue-500 outline": selectedCards.some(
+          "outline-nileBlue-700 outline": selectedCards.some(
             (id) => id === cardData.cardUid
           ),
         }
@@ -61,7 +61,6 @@ const MenuCard = (props) => {
           </div>
 
           <Button
-            className="bg-gableGreen-500 hover:bg-gableGreen-400"
             onClick={(e) => {
               e.stopPropagation();
               router.push(

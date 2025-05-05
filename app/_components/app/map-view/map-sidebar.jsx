@@ -37,7 +37,7 @@ const MapSidebar = () => {
   useEffect(() => {
     setTableLoaded(true);
   }, [setTableLoaded]);
-  
+
   // Define content for each button
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
@@ -57,7 +57,7 @@ const MapSidebar = () => {
     <div className="">
       <div
         className={cn(
-          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gableGreen-500 w-[48px] text-white text-xs",
+          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-nileBlue-900 w-[48px] text-white text-xs",
           {
             "w-[160px]": !showSidebar,
           }
@@ -225,15 +225,19 @@ const MapSidebar = () => {
             }
           )}
         >
-          <div className="flex justify-between items-center bg-white pl-4">
-            <Label className="flex text-sm justify-center font-bold">
+          <div className="flex items-center justify-between pl-4 bg-white">
+            <Label className="flex justify-center text-sm font-bold">
               {layerInfo.layerTitle}
             </Label>
-            <Button variant="ghost" size="sm" onClick={() => setTableLoaded((prev) => !prev)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setTableLoaded((prev) => !prev)}
+            >
               <X />
-            </Button> 
+            </Button>
           </div>
-          <PaginationLayerTable/>
+          <PaginationLayerTable />
         </div>
       )}
       {/* TODO: Add this sidebar div <div
