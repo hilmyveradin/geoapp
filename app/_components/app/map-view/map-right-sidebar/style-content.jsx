@@ -31,6 +31,8 @@ import {
   capitalizeFirstLetter,
   handleErrorMessage,
 } from "@/helpers/string-helpers";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AceEditor from "react-ace";
 
 const StyleContent = () => {
   const {
@@ -49,6 +51,7 @@ const StyleContent = () => {
 
   const [lineColor, setLineColor] = useState("#fff");
   const [lineOpacity, setLineOpacity] = useState(1);
+  const [tabValue, setTabValue] = useState();
 
   // POINT AND POLYGON STATES
   const [fillColor, setFillColor] = useState("#fff");
@@ -64,6 +67,14 @@ const StyleContent = () => {
   const [pointMarker, setPointMarker] = useState("");
   const [pointImageUrl, setPointImageUrl] = useState("");
   const [pointImageData, setPointImageData] = useState();
+
+  // ADVANCED STYLES
+  const [advancedJson, setAdvancedJson] = useState();
+
+  // Refresh advanced JSON if there's change in selectedLayer
+  useEffect(() => {
+    setAdvancedJson("");
+  }, [selectedLayer]);
 
   // This effect responsible for set the selectedPopuplayer if it's not exists --> might want to refactor later
   // useEffect(() => {
@@ -177,6 +188,10 @@ const StyleContent = () => {
   const saveStyleChanges = () => {
     setIsSavingChanges(true);
 
+    if (tabValue === "basic") {
+    } else {
+    }
+
     const saveSymbolStyle = async () => {
       if (pointStyle === "marker") {
         const body = {
@@ -272,13 +287,47 @@ const StyleContent = () => {
       );
     };
 
+    const saveAdvancedSymbolStyle = async () => {};
+
+    const saveAdvancedLineStyle = async () => {
+      return fetch(
+        `/api/layers/save-line-advanced?layerUid=${selectedLayer.layerUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(advancedJson),
+        }
+      );
+    };
+
+    const saveAdvancedPolygonStyle = async () => {
+      return fetch(
+        `/api/layers/save-polygon-advanced?layerUid=${selectedLayer.layerUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(advancedJson),
+        }
+      );
+    };
+
     let saveFunction;
-    if (selectedLayer.layerType === "Point") {
-      saveFunction = saveSymbolStyle();
-    } else if (selectedLayer.layerType === "Line") {
-      saveFunction = saveLineStyle();
-    } else if (selectedLayer.layerType === "Polygon") {
-      saveFunction = savePolygonStyle();
+    if (tabValue === "basic") {
+      if (selectedLayer.layerType === "Point") {
+        saveFunction = saveSymbolStyle();
+      } else if (selectedLayer.layerType === "Line") {
+        saveFunction = saveLineStyle();
+      } else if (selectedLayer.layerType === "Polygon") {
+        saveFunction = savePolygonStyle();
+      }
+    } else {
+      if (selectedLayer.layerType === "Point") {
+        // saveFunction = saveSymbolStyle();
+      } else if (selectedLayer.layerType === "Line") {
+        saveFunction = saveAdvancedLineStyle();
+      } else if (selectedLayer.layerType === "Polygon") {
+        saveFunction = saveAdvancedPolygonStyle();
+      }
     }
 
     saveFunction
@@ -296,6 +345,7 @@ const StyleContent = () => {
         });
         setToggleRefetchStyle((state) => !state);
         toggleRefreshLayerOrder(); // Assuming this function needs to be called here
+        setAdvancedJson("");
       })
       .catch((error) => {
         const { title, description } = handleErrorMessage(error);
@@ -357,88 +407,119 @@ const StyleContent = () => {
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      {selectedLayer.layerType === "Point" && (
-        <>
-          <p className="font-semibold">Current Symbol</p>
-          <SymbolComponent
-            initialStyle={initialStyle}
-            initialPointStyle={pointStyle}
-            handlePointStyleChange={handlePointStyleChange}
-            handlePointImageDataChange={handlePointImageDataChange}
-            handlePointImageUrlChange={handlePointImageUrlChange}
-            handlePointMarkerChange={handlePointMarkerChange}
-          />
-          <p className="font-semibold">Size</p>
-          <SliderComponent
-            initialSliderValue={parseFloat(
-              initialStyle.properties.size
-            ).toFixed(1)}
-            setParentSliderValue={handlePointSizeChange}
-            sliderUnit={"px"}
-            maxValue={50}
-            stepValue={1}
-          />
-          <p className="font-semibold">Rotation</p>
-          <SliderComponent
-            initialSliderValue={parseInt(initialStyle.properties.rotation)}
-            setParentSliderValue={handlePointRotationChange}
-            sliderUnit={"°"}
-            maxValue={360}
-            stepValue={1}
-          />
-        </>
-      )}
 
-      {((selectedLayer.layerType === "Point" && pointStyle === "marker") ||
-        selectedLayer.layerType === "Polygon") && (
-        <>
-          <p className="font-semibold">Fill Color</p>
-          <ColorComponent
-            initialColorValue={initialStyle.properties.fillColor}
-            setParentColortValue={handleFillColorChange}
-          />
-          <p className="font-semibold">Fill Opacity</p>
-          <SliderComponent
-            initialSliderValue={parseFloat(
-              initialStyle.properties.fillOpacity
-            ).toFixed(1)}
-            setParentSliderValue={handleFillOpacitySliderChange}
-            sliderUnit={"%"}
-            maxValue={1}
-            stepValue={0.1}
-          />
-        </>
-      )}
+      <Tabs defaultValue="basic" value={tabValue} onValueChange={setTabValue}>
+        <TabsList className="grid w-full grid-cols-2 bg-slate-200">
+          <TabsTrigger value="basic">Basic</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+        </TabsList>
+        <TabsContent value="basic" className="flex flex-col gap-4">
+          {selectedLayer.layerType === "Point" && (
+            <>
+              <p className="font-semibold">Current Symbol</p>
+              <SymbolComponent
+                initialStyle={initialStyle}
+                initialPointStyle={pointStyle}
+                handlePointStyleChange={handlePointStyleChange}
+                handlePointImageDataChange={handlePointImageDataChange}
+                handlePointImageUrlChange={handlePointImageUrlChange}
+                handlePointMarkerChange={handlePointMarkerChange}
+              />
+              <p className="font-semibold">Size</p>
+              <SliderComponent
+                initialSliderValue={parseFloat(
+                  initialStyle.properties.size
+                ).toFixed(1)}
+                setParentSliderValue={handlePointSizeChange}
+                sliderUnit={"px"}
+                maxValue={50}
+                stepValue={1}
+              />
+              <p className="font-semibold">Rotation</p>
+              <SliderComponent
+                initialSliderValue={parseInt(initialStyle.properties.rotation)}
+                setParentSliderValue={handlePointRotationChange}
+                sliderUnit={"°"}
+                maxValue={360}
+                stepValue={1}
+              />
+            </>
+          )}
 
-      {pointStyle !== "image" && (
-        <>
-          <p className="font-semibold">Line Color</p>
-          <ColorComponent
-            initialColorValue={initialStyle.properties.lineColor}
-            setParentColortValue={handleLineColorChange}
+          {((selectedLayer.layerType === "Point" && pointStyle === "marker") ||
+            selectedLayer.layerType === "Polygon") && (
+            <>
+              <p className="font-semibold">Fill Color</p>
+              <ColorComponent
+                initialColorValue={initialStyle.properties.fillColor}
+                setParentColortValue={handleFillColorChange}
+              />
+              <p className="font-semibold">Fill Opacity</p>
+              <SliderComponent
+                initialSliderValue={parseFloat(
+                  initialStyle.properties.fillOpacity
+                ).toFixed(1)}
+                setParentSliderValue={handleFillOpacitySliderChange}
+                sliderUnit={"%"}
+                maxValue={1}
+                stepValue={0.1}
+              />
+            </>
+          )}
+
+          {pointStyle !== "image" && (
+            <>
+              <p className="font-semibold">Line Color</p>
+              <ColorComponent
+                initialColorValue={initialStyle.properties.lineColor}
+                setParentColortValue={handleLineColorChange}
+              />
+              <p className="font-semibold">Line Width</p>
+              <SliderComponent
+                initialSliderValue={parseFloat(
+                  initialStyle.properties.lineWidth
+                ).toFixed(1)}
+                setParentSliderValue={handleLineWidthChange}
+                sliderUnit={"px"}
+                maxValue={30}
+                stepValue={1}
+              />
+              <p className="font-semibold">Line Opacity</p>
+              <SliderComponent
+                initialSliderValue={parseFloat(
+                  initialStyle.properties.lineOpacity
+                ).toFixed(1)}
+                setParentSliderValue={handleLineOpacitySliderChange}
+                sliderUnit={"%"}
+                maxValue={1}
+                stepValue={0.1}
+              />
+            </>
+          )}
+        </TabsContent>
+        <TabsContent value="advanced">
+          <AceEditor
+            value={advancedJson}
+            placeholder="Type your style here"
+            mode="javascript"
+            theme="xcode"
+            onChange={setAdvancedJson}
+            fontSize={14}
+            lineHeight={19}
+            showPrintMargin={false}
+            showGutter={false}
+            highlightActiveLine={true}
+            setOptions={{
+              enableBasicAutocompletion: false,
+              enableLiveAutocompletion: true,
+              enableSnippets: false,
+              showLineNumbers: true,
+              tabSize: 2,
+            }}
+            style={{ maxWidth: "220px" }}
           />
-          <p className="font-semibold">Line Width</p>
-          <SliderComponent
-            initialSliderValue={parseFloat(
-              initialStyle.properties.lineWidth
-            ).toFixed(1)}
-            setParentSliderValue={handleLineWidthChange}
-            sliderUnit={"px"}
-            maxValue={30}
-            stepValue={1}
-          />
-          <p className="font-semibold">Line Opacity</p>
-          <SliderComponent
-            initialSliderValue={parseFloat(
-              initialStyle.properties.lineOpacity
-            ).toFixed(1)}
-            setParentSliderValue={handleLineOpacitySliderChange}
-            sliderUnit={"%"}
-            maxValue={1}
-            stepValue={0.1}
-          />
-        </>
-      )}
+        </TabsContent>
+      </Tabs>
 
       <div className="h-full" />
 

@@ -13,7 +13,7 @@ import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
 import FilterContent from "./map-right-sidebar/filter-content";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
-const MapSidebarRight = () => {
+const MapRightSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);
 
   // Agar bisa diakses di map-sidebar.jsx
@@ -33,8 +33,8 @@ const MapSidebarRight = () => {
 
   // Define content for each button
   const BUTTON_CONTENT = {
-    fieldAliasContent: <FieldAliasContent />,
     styleContent: <StyleContent />,
+    fieldAliasContent: <FieldAliasContent />,
     filterContent: <FilterContent />,
   };
 
@@ -156,4 +156,4 @@ const MapSidebarRight = () => {
   );
 };
 
-export default MapSidebarRight;
+export default MapRightSidebar;

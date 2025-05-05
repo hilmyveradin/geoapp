@@ -42,7 +42,6 @@ const MapSidebar = () => {
     setTableLoaded,
     mapData,
     layerInfo,
-    mapClicked,
     setMapClicked,
     setHighlightedLayer,
   } = useMapViewStore();

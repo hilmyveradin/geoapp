@@ -68,7 +68,7 @@ export const handleErrorMessage = (status) => {
     default:
       return {
         title: "Error Occurred",
-        description: "An unexpected error occurred.",
+        description: "An unexpected error occurred. Please try again",
       };
   }
 };

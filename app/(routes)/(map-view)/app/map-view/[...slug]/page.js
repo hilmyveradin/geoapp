@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import MapViewLayout from "../../../layout";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { Loader2 } from "lucide-react";
-import MapSidebarRight from "@/app/_components/app/map-view/map-sidebar-right";
+import MapRightSidebar from "@/app/_components/app/map-view/map-right-sidebar";
 
 const MapView = ({ params }) => {
   const mapType = params.slug[0];
@@ -124,7 +124,7 @@ const MapView = ({ params }) => {
         <div className="pl-12 w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
-        <MapSidebarRight />
+        <MapRightSidebar />
       </div>
     </div>
   );
