@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useLayerManager from "@/helpers/hooks/useLayerManager";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
+import usePopUpManager from "@/helpers/hooks/usePopUpManager";
 
 const MapMain = () => {
   const mapContainerRef = useRef(null);
@@ -11,6 +12,7 @@ const MapMain = () => {
 
   useLayerManager();
   useZoomToLayer();
+  usePopUpManager();
 
   const { setMap, setMapLoaded, setZoomedLayerBbox } = useMapViewStore();
 

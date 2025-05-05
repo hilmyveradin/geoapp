@@ -13,6 +13,8 @@ const useMapViewStore = create((set) => ({
   selectedLayerTableUid: null,
   tableLoaded: true,
   zoomedLayerBbox: null,
+  mapClicked: true,
+  objectInfoData: null,
   multiSelectedLayers: [],
   deletedLayerUids: [],
   refreshLayerOrder: false,
@@ -87,7 +89,17 @@ const useMapViewStore = create((set) => ({
       zoomedLayerBbox: data,
     })),
 
-  setMultiSelectedLayers: (data) =>
+  setMapClicked: (data) =>
+    set(() => ({
+      mapClicked: data,
+    })),
+
+  setObjectInfoData: (data) =>
+    set(() => ({
+      objectInfoData: data,
+    })),
+    
+    setMultiSelectedLayers: (data) =>
     set(() => ({
       multiSelectedLayers: data,
     })),
