@@ -14,7 +14,7 @@ export function middleware(request) {
   }
 
   const accessToken = request.cookies.get("accessToken");
-  console.log(accessToken)
+
   // // Check if the user is already on the dashboard or home page to prevent redirection loops
   // if (url.pathname === "/app/dashboard" || url.pathname === "/") {
   //   return response;
@@ -22,9 +22,9 @@ export function middleware(request) {
 
   // Set the accessToken in the headers if it exists
   if (accessToken) {
-    response.headers.set("Authorization", `Bearer ${accessToken}`);
+    response.headers.set("Authorization", `Bearer ${accessToken.value}`);
     // User is authenticated, redirect to dashboard
-  } else if (url.pathname.startsWith("/app/") && !accessToken) {
+  } else if (url.pathname.startsWith("/app/") && !accessToken.value) {
     url.pathname = "/";
     return NextResponse.redirect(url);
   }

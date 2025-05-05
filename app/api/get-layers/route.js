@@ -5,7 +5,7 @@ export async function GET(request) {
   try {
     const cookieStore = cookies()
     const token = cookieStore.get('accessToken')
-    console.log(token)
+
     const res = await fetch(`${process.env.API_BASE_URL}/gs/layers`, {
       method: "GET",
       headers: {

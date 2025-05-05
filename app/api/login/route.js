@@ -32,7 +32,7 @@ export async function POST(request) {
     // Assuming 'data' contains your tokens
     const accessToken = data.access_token;
     const refreshToken = data.refresh_token;
-    console.log(accessToken);
+
     // Set your tokens here as cookies
     response.cookies.set("accessToken", accessToken, {
       httpOnly: true,
