@@ -4,12 +4,12 @@ import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
+    const layerUid = request.nextUrl.searchParams.get("layerUid");
     const body = await request.json();
-    const { layerUid } = body;
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/ptstyle_external`,
+      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/pgstyle_simple`,
       {
         method: "POST",
         headers: {

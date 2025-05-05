@@ -134,7 +134,7 @@ const MapSidebarRight = () => {
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",
             {
               "right-12 w-60": !showSidebar,
-              "right-40 w-60": showSidebar,
+              "right-28 w-60": showSidebar,
             }
           )}
         >

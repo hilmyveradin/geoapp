@@ -6,3 +6,8 @@ export const getUserNameInitial = (name) => {
   }
   return initials;
 };
+
+export const capitalizeFirstLetter = (string) => {
+  if (!string) return string;
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};

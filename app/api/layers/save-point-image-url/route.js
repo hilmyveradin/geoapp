@@ -4,17 +4,19 @@ import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    const formData = await request.formData();
+    const layerUid = request.nextUrl.searchParams.get("layerUid");
+    const body = await request.json();
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/ptstyle_upload`,
+      `${process.env.API_BASE_URL}/cms/layer/${layerUid}/ptstyle_external`,
       {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        body: formData,
+        body: JSON.stringify(body),
       }
     );
 
