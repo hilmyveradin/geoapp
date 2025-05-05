@@ -2,29 +2,36 @@ import { NextResponse } from "next/server";
 
 export function middleware(request) {
   const url = request.nextUrl.clone();
+  const response = NextResponse.next();
+
+  // Exclude Next.js specific paths and API calls
   if (
     url.pathname.startsWith("/_next/") ||
     url.pathname.startsWith("/static/") ||
     url.pathname.startsWith("/api/")
   ) {
-    return NextResponse.next();
+    return response;
   }
 
   const accessToken = request.cookies.get("accessToken");
 
-  // Exclude paths that don't require the middleware, such as styling or components
-  // Redirect logic based on the token presence
-  if (accessToken && url.pathname === "/login") {
+  // // Check if the user is already on the dashboard or home page to prevent redirection loops
+  // if (url.pathname === "/app/dashboard" || url.pathname === "/") {
+  //   return response;
+  // }
+
+  // Set the accessToken in the headers if it exists
+  if (accessToken) {
+    response.headers.set("Authorization", `Bearer ${accessToken}`);
+    // User is authenticated, redirect to dashboard
+  } else if (url.pathname.startsWith("/app/") && !accessToken) {
     url.pathname = "/";
-    return NextResponse.redirect(url);
-  } else if (!accessToken && url.pathname !== "/login") {
-    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
-  matcher: ["/login", "/:path*"], // Define the paths where this middleware should run
+  matcher: ["/app/:path*", "/"], // Define the paths where this middleware should run
 };

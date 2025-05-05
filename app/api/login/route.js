@@ -5,7 +5,7 @@ export async function POST(request) {
     const body = await request.json();
     const { username, password } = body;
 
-    const res = await fetch("http://dev3.webgis.co.id/api/iam/login", {
+    const res = await fetch(`${process.env.API_BASE_URL}/iam/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,6 +48,6 @@ export async function POST(request) {
     return response;
   } catch (error) {
     console.error(error);
-    return new Response("Internal Server Error", { status: 500 });
+    return NextResponse("Internal Server Error", { status: 500 });
   }
 }

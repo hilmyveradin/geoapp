@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 
 const Login = () => {
   const router = useRouter();
+  // TODO: Change this to shadcn Form
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,7 +33,7 @@ const Login = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      router.push("/");
+      router.push("/app/dashboard");
     } catch (error) {
       console.error("Error during fetch:", error.message);
     }
