@@ -52,7 +52,7 @@ const MapsDashboard = () => {
 
   return (
     <div>
-      layersData
+      CI-CD berhasil
     </div>
   );
 };
