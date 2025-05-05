@@ -44,7 +44,7 @@ import { Textarea } from "@/components/ui/textarea"
 const MapHeader = () => {
   return (
     <div>
-      <div className="flex w-full h-16 justify-between items-center px-6 bg-[#F7FFFB]">
+      <div className="flex w-full h-10 justify-between items-center px-6 bg-[#F7FFFB]">
         <div className="flex flex-row justify-between">
           <Input placeholder="your_data_name" />
         </div>
@@ -54,7 +54,7 @@ const MapHeader = () => {
           </DropdownMenuTrigger>
         </DropdownMenu>
       </div>
-      <div className="flex w-full h-16 justify-between items-center bg-[#D9D9D93D]">
+      <div className="flex w-full h-10 justify-between items-center bg-[#D9D9D93D]">
         <div className="flex flex-row justify-between pl-2">
           <Button variant="ghost" className="justify-items-start">
             <List className="mr-2 h-4 w-4" /> Details
