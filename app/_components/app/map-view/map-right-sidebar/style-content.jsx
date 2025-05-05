@@ -284,19 +284,24 @@ const StyleContent = () => {
       );
     };
 
-    const saveAdvancedSymbolStyle = async () => {};
+    const saveAdvancedSymbolStyle = async () => {
+      return fetch(
+        `/api/layers/save-point-advanced?layerUid=${selectedLayer.layerUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(JSON.parse(advancedJson)),
+        }
+      );
+    };
 
     const saveAdvancedLineStyle = async () => {
-      let parsedAdvancedJson;
-      if (typeof advancedJson === "string") {
-        parsedAdvancedJson = JSON.parse(advancedJson);
-      }
       return fetch(
         `/api/layers/save-line-advanced?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(parsedAdvancedJson),
+          body: JSON.stringify(JSON.parse(advancedJson)),
         }
       );
     };
@@ -323,7 +328,7 @@ const StyleContent = () => {
       }
     } else {
       if (selectedLayer.layerType === "Point") {
-        // saveFunction = saveSymbolStyle();
+        saveFunction = saveAdvancedSymbolStyle();
       } else if (selectedLayer.layerType === "Line") {
         saveFunction = saveAdvancedLineStyle();
       } else if (selectedLayer.layerType === "Polygon") {
