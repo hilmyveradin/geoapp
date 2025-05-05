@@ -8,6 +8,7 @@ import {
   Sheet,
   Save,
   Share2,
+  Search,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import LayersContent from "./map-sidebar/layers-content";
@@ -16,6 +17,10 @@ import AddLayersContent from "./map-sidebar/add-layer-content";
 import { Separator } from "@/components/ui/separator";
 import PaginationLayerTable from "../layer-table/PaginationLayerTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input";
+import TooltipText from "@/app/_components/shared/tooltipText";
 import {
   Menubar,
   MenubarContent,
@@ -34,11 +39,20 @@ const MapSidebar = () => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
   const { tableLoaded, setTableLoaded, mapData, layerInfo, mapClicked, setMapClicked } = useMapViewStore();
+  const {ftsQuery, setFtsQuery, reloadTable, setReloadTable, setSearchSubmit} = useTableQueryStore();
+
+  const handleFtsQuery = (e) => {
+    // Destructure the name and value from
+    // the changed element
+    const { name, value } = e.target;
+    setFtsQuery({ ...ftsQuery, value });
+  };
 
   useEffect(() => {
-    setTableLoaded(true);
-    setMapClicked(true);
-  }, [setMapClicked, setTableLoaded]);
+    setTableLoaded(false);
+    setReloadTable(false);
+    setMapClicked(false);
+  }, [setMapClicked, setReloadTable, setTableLoaded]);
   // Define content for each button
   const BUTTON_CONTENT = {
     addLayer: <AddLayersContent />,
@@ -212,33 +226,56 @@ const MapSidebar = () => {
           {BUTTON_CONTENT[selectedButton]}
         </div>
       )}
-      {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
-      {!tableLoaded && (
+      {tableLoaded && (
         <div
           className={cn(
-            "fixed rounded-md top-[60vh] h-[calc(100vh-60vh-24px)] pb-8 z-10",
+            "fixed rounded-md top-[58vh] h-[calc(100vh-60vh-24px)] pb-8 z-10",
             {
-              "left-[300px] w-[calc(100vw-300px-60px+48px)]":
+              "left-[300px] w-[calc(100vw-300px-60px)]":
                 !expandedSidebarButtons && !showSidebar,
-              "left-[172px] w-[calc(100vw-172px-60px+48px)]":
+              "left-[172px] w-[calc(100vw-172px-60px)]":
                 expandedSidebarButtons && showSidebar,
-              "left-[412px] w-[calc(100vw-412px-60px+48px)]":
+              "left-[412px] w-[calc(100vw-412px-60px)]":
                 !expandedSidebarButtons && showSidebar,
-              "left-[60px] w-[calc(100vw-60px-60px+48px)]":
+              "left-[60px] w-[calc(100vw-60px-60px)]":
                 expandedSidebarButtons && !showSidebar && showSidebarRight,
-              "left-[60px] w-[calc(100vw-60px-192px+48px)]":
+              "left-[60px] w-[calc(100vw-60px-192px)]":
                 expandedSidebarButtons && !showSidebar && !showSidebarRight,
             }
           )}
         >
           <div className="flex items-center justify-between pl-4 bg-white">
-            <Label className="flex justify-center text-sm font-bold">
-              {layerInfo.layerTitle}
-            </Label>
+            <div className="w-1/2 pr-4">
+              <TooltipText content={layerInfo.layerTitle} side="top" align="start">
+                <p className="text-base font-bold truncate cursor-pointer">
+                  {layerInfo.layerTitle}
+                </p>
+              </TooltipText>
+            </div>
+            <Textarea 
+              placeholder="Put search query here..."
+              className="h-[40px] m-[4px]"
+              onChange={handleFtsQuery}
+            />
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setTableLoaded((prev) => !prev)}
+              onClick={() => {
+                setSearchSubmit(true);
+                // setTimeout(() => {
+                //   setReloadTable(true);
+                // }, 100);
+              }}
+            >
+              <Search />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setTableLoaded(false);
+                setReloadTable(false);
+              }}
             >
               <X />
             </Button>
@@ -246,19 +283,19 @@ const MapSidebar = () => {
           <PaginationLayerTable />
         </div>
       )}
-      {!mapClicked && (
+      {mapClicked && (
         <div
           className={cn(
             "fixed z-10 top-[68px]",
             {
               "left-[300px]":
-                !expandedSidebarButtons && showSidebar,
-              "left-[172px]":
-                expandedSidebarButtons && !showSidebar,
-              "left-[412px]":
                 !expandedSidebarButtons && !showSidebar,
-              "left-[61px]":
+              "left-[172px]":
                 expandedSidebarButtons && showSidebar,
+              "left-[412px]":
+                !expandedSidebarButtons && showSidebar,
+              "left-[61px]":
+                expandedSidebarButtons && !showSidebar,
             }
           )}
         >

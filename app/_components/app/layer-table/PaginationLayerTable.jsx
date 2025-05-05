@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ControlledTable from "./ControlledTable";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import useTableQueryStore from "@/helpers/hooks/store/useTableQueryStore";
 const ROWS_PER_PAGE = 10;
 
 export default function PaginationLayerTable() {
@@ -8,10 +9,21 @@ export default function PaginationLayerTable() {
   const [pageNumber, setPageNumber] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
   const [columnDefs, setColumnDefs] = useState([]);
-  const [showTable, setShowTable] = useState(true);
   const { layerInfo } = useMapViewStore();
+  const {
+    ftsQuery, 
+    reloadTable, 
+    searchSubmit, 
+    setSearchSubmit
+  } = useTableQueryStore();
+  const [ftsQueryBody, setFtsQueryBody] = React.useState({
+    fts_input: null,
+    with_geom: 'false',
+  });
+
   const getRows = async (numRows, startRow) => {
     try {
+      console.log("normal get rows")
       const response = await fetch(
         `/api/layers/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
         {
@@ -27,7 +39,41 @@ export default function PaginationLayerTable() {
       }
 
       const data = await response.json();
-      console.log(data);
+      setTotalRows(data.totalData);
+      setColumnDefs(
+        Object.keys(data.data[0] || {}).map((key) => ({
+          headerName: key,
+          field: key,
+        }))
+      );
+      return data.data;
+    } catch (error) {
+      console.error("Error fetching rows:", error);
+    }
+  };
+
+  const getRowsFTS = async (numRows, startRow) => {
+    try {
+      if (ftsQuery) {
+        setFtsQueryBody({ fts_input: ftsQuery.value, with_geom: 'false' });
+      }
+      console.log(ftsQuery)
+      const response = await fetch(
+        `/api/layers/get-fts-query-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: ftsQueryBody
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
       setTotalRows(data.totalData);
       setColumnDefs(
         Object.keys(data.data[0] || {}).map((key) => ({
@@ -44,7 +90,7 @@ export default function PaginationLayerTable() {
     <ControlledTable
       rows={rows}
       columnDefs={columnDefs}
-      getRows={getRows}
+      getRows={(searchSubmit && ftsQuery) ? getRowsFTS : getRows}
       totalCount={totalRows}
       onChange={setRows}
       onPageNumberChange={setPageNumber}
