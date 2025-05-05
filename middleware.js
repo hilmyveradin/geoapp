@@ -14,7 +14,7 @@ export function middleware(request) {
   }
 
   const accessToken = request.cookies.get("accessToken");
-
+  console.log(accessToken)
   // // Check if the user is already on the dashboard or home page to prevent redirection loops
   // if (url.pathname === "/app/dashboard" || url.pathname === "/") {
   //   return response;
