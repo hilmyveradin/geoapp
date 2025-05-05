@@ -45,7 +45,7 @@ const LayersDashboard = () => {
           return {
             ...layers,
             user: mockUser,
-            thumbnail_url: `${IMAGE_BASE_URL}/gs/thumbnail/${layers.thumbnail_url}`,
+            thumbnail_url: `${IMAGE_BASE_URL}/cms/layer/thumbnail/${layers.thumbnail_url}`,
           };
         });
         setLayers(mockLayers);
