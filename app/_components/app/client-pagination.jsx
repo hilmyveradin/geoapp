@@ -92,12 +92,15 @@ function PaginationSection({
       <PaginationItem
         key={idx}
         className={
-          currentPage === page ? "bg-nileBlue-700 rounded-md cursor-pointer" : ""
+          currentPage === page
+            ? "bg-nileBlue-700 rounded-md cursor-pointer text-white"
+            : ""
         }
       >
-        <PaginationLink 
+        <PaginationLink
           onClick={() => setCurrentPage(page)}
-          className="hover:bg-nileBlue-300">
+          className="hover:bg-nileBlue-300"
+        >
           {page}
         </PaginationLink>
       </PaginationItem>
@@ -109,7 +112,7 @@ function PaginationSection({
         <PaginationEllipsis
           key="ellipsis-start"
           onClick={() => setCurrentPage(activePages[0] - 1)}
-          className="hover:bg-nileBlue-300 rounded-md"
+          className="rounded-md hover:bg-nileBlue-300"
         />
       );
     }
@@ -122,7 +125,7 @@ function PaginationSection({
           onClick={() =>
             setCurrentPage(activePages[activePages.length - 1] + 1)
           }
-          className="hover:bg-nileBlue-300 rounded-md"
+          className="rounded-md hover:bg-nileBlue-300"
         />
       );
     }
@@ -134,18 +137,18 @@ function PaginationSection({
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious 
+            <PaginationPrevious
               onClick={handlePrevPage}
-              className="hover:bg-nileBlue-300" 
+              className="hover:bg-nileBlue-300"
             />
           </PaginationItem>
 
           {renderPages()}
 
           <PaginationItem>
-            <PaginationNext 
+            <PaginationNext
               onClick={handleNextPage}
-              className="hover:bg-nileBlue-300" 
+              className="hover:bg-nileBlue-300"
             />
           </PaginationItem>
         </PaginationContent>
