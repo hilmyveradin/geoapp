@@ -15,16 +15,22 @@ export async function GET() {
         res.status,
         await res.text()
       );
-      throw new Error(`API error with status code ${res.status}`);
+      // Instead of throwing an error, we are returning a NextResponse object with a status code
+      return new NextResponse(null, { status: res.status });
     }
 
     const data = await res.json();
 
-    const response = NextResponse.json(data);
+    // Create a new instance of NextResponse with the 'new' keyword
+    const response = new NextResponse(JSON.stringify(data), {
+      headers: { "Content-Type": "application/json" },
+      status: 200, // You can set the status code here if needed
+    });
 
     return response;
   } catch (error) {
     console.error(error);
-    return NextResponse("Internal Server Error", { status: 500 });
+    // Make sure to use 'new' keyword to create a new NextResponse instance
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
