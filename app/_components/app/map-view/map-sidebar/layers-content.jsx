@@ -1,11 +1,20 @@
 "use client";
 
+import TooltipText from "@/app/_components/shared/tooltipText";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
-import { CollapsibleContent } from "@radix-ui/react-collapsible";
+import { cn } from "@/lib/utils";
+import { EyeOff } from "lucide-react";
+import { Eye } from "lucide-react";
+// import { CollapsibleContent } from "@radix-ui/react-collapsible";
 import { MoreVertical } from "lucide-react";
+import { Table } from "lucide-react";
+import { PencilIcon } from "lucide-react";
+import { Trash } from "lucide-react";
+import { ZoomIn } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -51,17 +60,11 @@ const LayersContent = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full mt-2 overflow-y-auto">
+    <div className="flex flex-col w-full h-full pr-2 mt-2 overflow-y-auto text-xs">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppableId">
           {(provided, snapshot) => (
-            <div
-              style={{
-                backgroundColor: snapshot.isDraggingOver ? "blue" : "grey",
-              }}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
+            <div ref={provided.innerRef} {...provided.droppableProps}>
               {layersData.map((item, index) => (
                 <Draggable
                   key={`${item.layerUid}`}
@@ -74,7 +77,7 @@ const LayersContent = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <div className="px-2 mb-4 bg-yellow-100">
+                      <div className="px-2 mb-4">
                         {/* <LayersCard data={item} /> */}
                         <NewLayersCard data={item} />
                       </div>
@@ -153,6 +156,7 @@ const NewLayersCard = ({ data }) => {
   // const [viewOptions, setViewOptions] = useState(false)
 
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const buttonIcons = [
     "/app/map-view/icon-1.svg",
@@ -172,7 +176,7 @@ const NewLayersCard = ({ data }) => {
     }
   }, [selectedLayers, data]);
 
-  const handleCheckboxChange = () => {
+  const handleHideShowChange = () => {
     if (isChecked) {
       removeSelectedLayers(data);
     } else {
@@ -183,68 +187,110 @@ const NewLayersCard = ({ data }) => {
 
   return (
     <>
-      <div
-        className="relative flex items-center justify-center h-10 px-2 bg-white rounded-md shadow-md cursor-pointer w-60"
-        onClick={() => {
-          if (collapsibleContent === "layer") {
-            debugger;
-            setCollapsibleContent(null);
-          } else {
-            setCollapsibleContent("layer");
-          }
-        }}
-      >
-        <div className="absolute top-0 bottom-0 left-0 w-2 bg-gableGreen-500 rounded-l-md" />
-        <p className="px-2 pr-2 text-sm truncate"> {data.layerTitle} </p>
-
-        <MoreHorizontal
-          className="justify-end ml-auto !w-7 !h-7 stroke-2" // Added ml-auto here
-          onClick={(e) => {
-            e.stopPropagation();
-            debugger;
-            if (collapsibleContent === "options") {
+      <TooltipText content={data.layerTitle}>
+        <div
+          className="relative flex items-center justify-center h-10 gap-2 px-2 bg-white border rounded-md shadow-md cursor-pointer w-54"
+          onClick={() => {
+            if (collapsibleContent === "layer") {
+              debugger;
               setCollapsibleContent(null);
+              setImageLoaded(false);
             } else {
-              setCollapsibleContent("options");
+              setCollapsibleContent("layer");
             }
           }}
-        />
-      </div>
+        >
+          <div
+            className={cn(
+              "absolute top-0 left-0 bottom-0 bg-gableGreen-500 transition-all",
+              {
+                "duration-300 w-2 rounded-l-md": collapsibleContent,
+                "w-0 rounded-l-lg": !collapsibleContent,
+              }
+            )}
+          />
+
+          <p className="px-2 pr-2 text-xs truncate max-w-20">
+            {data.layerTitle}
+          </p>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleHideShowChange();
+            }}
+          >
+            {isChecked ? (
+              <Eye className="w-3 h-3" />
+            ) : (
+              <EyeOff className="w-3 h-3" />
+            )}
+          </button>
+
+          <MoreHorizontal
+            className="justify-end w-8 h-8 ml-auto stroke-2" // Added ml-auto here
+            onClick={(e) => {
+              e.stopPropagation();
+              debugger;
+              if (collapsibleContent === "options") {
+                setCollapsibleContent(null);
+                setImageLoaded(false);
+              } else {
+                setCollapsibleContent("options");
+              }
+            }}
+          />
+        </div>
+      </TooltipText>
       {collapsibleContent === "layer" && (
-        <div className="bg-white"> view Layer</div>
+        <div className="flex items-center gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
+          <p>Legend symbol: </p>
+          {!imageLoaded && <Skeleton className="w-5 h-5 rounded-full" />}
+          <img
+            key={`${data}`}
+            src={data.legendUrl}
+            className="w-5 h-5"
+            alt="legend logo"
+            onLoad={() => setImageLoaded(true)}
+            style={{ display: imageLoaded ? "block" : "none" }}
+          />
+        </div>
       )}
-      {collapsibleContent === "options" && (
-        <div className="bg-white"> options </div>
-      )}
+      {collapsibleContent === "options" && <OptionsSection />}
     </>
+  );
+};
 
-    // <Collapsible>
-    //   <CollapsibleTrigger>this is collapsible </CollapsibleTrigger>
-    //   <CollapsibleContent>foobar</CollapsibleContent>
-    // </Collapsible>
-    // <div className="flex items-start w-full h-20 gap-3 mb-3 ml-3">
-    //   <Checkbox
-    //     checked={isChecked}
-    //     onCheckedChange={handleCheckboxChange}
-    //     className="w-6 h-6 mt-[2px]"
-    //   />
-    //   <div className="flex flex-col gap-2">
-    //     <p className="text-lg truncate">{data.layerTitle}</p>
-    //     <div className="flex items-center gap-4">
-    //       {buttonIcons.map((item, index) => {
-    //         return (
-    //           <img
-    //             key={`${item}-${index}`}
-    //             src={item}
-    //             className="flex items-center w-5 h-5 cursor-pointer"
-    //           />
-    //         );
-    //       })}
+const OptionsSection = () => {
+  const buttonLists = [
+    {
+      icon: <ZoomIn className="w-3 h-3 stroke-2" />,
+      name: "Zoom to",
+    },
+    {
+      icon: <Table className="w-3 h-3 stroke-2" />,
+      name: "Show Table",
+    },
+    {
+      icon: <PencilIcon className="w-3 h-3 stroke-2" />,
+      name: "Rename",
+    },
+    {
+      icon: <Trash className="w-3 h-3 stroke-2" />,
+      name: "Remove",
+    },
+  ];
 
-    //       <Separator orientation="vertical" className="w-[2px] h-6" />
-    //       <MoreHorizontal className="w-5 h-5 cursor-pointer" />
-    //     </div>
-    //   </div>
-    // </div>
+  return (
+    <div className="flex flex-col gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
+      {buttonLists.map((item, index) => (
+        <button
+          key={`button-${item}-${index}`}
+          className="flex items-center justify-start gap-2 p-1"
+        >
+          <span>{item.icon}</span>
+          {item.name}
+        </button>
+      ))}
+    </div>
   );
 };
