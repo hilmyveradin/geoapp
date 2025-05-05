@@ -26,9 +26,14 @@ const ChangePropDialog = ({
   initialTags,
   onCompleteHandler,
 }) => {
-  const { toggleRefetchMaps, toggleRefetchLayers } = useRefetchStore();
+  const {
+    toggleRefetchMaps,
+    toggleRefetchLayers,
+    toggleRefetchChangeLayerProps,
+  } = useRefetchStore();
 
-  const { replaceMapLayersLayerProp, currentViewBbox } = useMapViewStore();
+  const { replaceMapLayersLayerProp, currentViewBbox, mapLayers } =
+    useMapViewStore();
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [submittingData, setSubmittingData] = useState(false);
@@ -111,7 +116,7 @@ const ChangePropDialog = ({
         }
       } catch (error) {
         toast({
-          title: "Error creating layer",
+          title: "Error edit map props",
           description: "Please try again",
           variant: "destructive",
         });
@@ -158,12 +163,21 @@ const ChangePropDialog = ({
 
         setOpenDialog(false);
 
+        debugger;
+
+        if (mapLayers?.length === 1) {
+          debugger;
+          toggleRefetchChangeLayerProps();
+        }
+
+        debugger;
+
         if (onCompleteHandler) {
           onCompleteHandler();
         }
       } catch (error) {
         toast({
-          title: "Error creating layer",
+          title: "Error editing layer props",
           description: "Please try again",
           variant: "destructive",
         });

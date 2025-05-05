@@ -6,6 +6,7 @@ const useRefetchStore = create((set) => ({
   refetchMapLayers: true,
   refetchGroups: true,
   refetchUsers: true,
+  refetchChangeLayerProps: true,
 
   toggleRefetchMaps: () =>
     set((state) => ({
@@ -30,6 +31,11 @@ const useRefetchStore = create((set) => ({
   toggleRefetchUsers: () =>
     set((state) => ({
       refetchUsers: !state.refetchUsers,
+    })),
+
+  toggleRefetchChangeLayerProps: () =>
+    set((state) => ({
+      refetchChangeLayerProps: !state.refetchChangeLayerProps,
     })),
 }));
 

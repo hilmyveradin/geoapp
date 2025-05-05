@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import MapRightSidebar from "@/app/_components/app/map-view/map-right-sidebar";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 import useUserStore from "@/helpers/hooks/store/use-user-store";
+import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
 
 const MapView = ({ params }) => {
   const mapType = params.slug[0];
@@ -19,6 +20,7 @@ const MapView = ({ params }) => {
     useMapViewStore();
 
   const { isAdmin, isEditor } = useUserStore();
+  const { refetchChangeLayerProps } = useRefetchStore();
 
   useEffect(() => {
     async function getLayerUid(layerUid) {
@@ -115,7 +117,14 @@ const MapView = ({ params }) => {
     } else {
       loadLayerData();
     }
-  }, [mapType, mapUid, setMapLayers, setMapData, setSelectedLayers]);
+  }, [
+    mapType,
+    mapUid,
+    setMapLayers,
+    setMapData,
+    setSelectedLayers,
+    refetchChangeLayerProps,
+  ]);
 
   if ((!mapData && !mapLayers) || isLoading)
     return (
