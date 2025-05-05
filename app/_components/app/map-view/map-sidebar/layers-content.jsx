@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { EyeOff } from "lucide-react";
 import { Eye } from "lucide-react";
 import { Table } from "lucide-react";
-import { PencilIcon } from "lucide-react";
 import { Trash } from "lucide-react";
 import { ZoomIn } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
@@ -29,7 +28,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
 const LayersContent = () => {
-  const { layersData, setLayersData, mapData } = useMapViewStore();
+  const { layersData, setLayersData } = useMapViewStore();
 
   const [enabled, setEnabled] = useState(false);
 
@@ -164,7 +163,7 @@ const LayersCard = ({ data }) => {
           </button>
 
           <MoreHorizontal
-            className="justify-end w-5 h-5 ml-auto stroke-2" // Added ml-auto here
+            className="justify-end w-5 h-5 ml-auto stroke-2"
             onClick={(e) => {
               e.stopPropagation();
               if (collapsibleContent === "options") {
