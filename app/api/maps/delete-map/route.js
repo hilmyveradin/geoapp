@@ -4,18 +4,19 @@ import authOptions from "../../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { mapUids } = body;
+    const mapUid = request.nextUrl.searchParams.get("mapUid");
     const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/delete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify({ maps: mapUids }),
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/cms/map/${mapUid}/delete`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       console.error(
