@@ -36,8 +36,8 @@ export function Dropzone({ onChange, className, fileExtension, ...props }) {
 
     const fileSizeInKB = Math.round(uploadedFile.size / 1024);
 
-    const fileList = Array.from(files).map((file) => URL.createObjectURL(file));
-    onChange((prevFiles) => [...prevFiles, ...fileList]);
+    // const fileList = Array.from(files).map((file) => URL.createObjectURL(file));
+    onChange((prevFiles) => [...prevFiles, ...files]);
 
     setFileInfo(`Uploaded file: ${uploadedFile.name} (${fileSizeInKB} KB)`);
     setError(null);

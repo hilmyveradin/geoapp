@@ -65,11 +65,32 @@ const LayersDashboard = () => {
 
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
-    console.log(files);
+    // console.log(files);
+    const formData = new FormData()
+    // var file = new File([files[-1]], "file.zip");
+    console.log(files[0])
+    formData.append('vector_zip', files[0])
+    async function postVectorData(formData) {
+      try {
+        const response = await fetch("/api/upload-vectordata", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const temp = await response.json();
+        console.log(temp)
+      } catch (error) {
+        console.error("Error during fetch:", error.message);
+      }
+    }
+    postVectorData(formData)
   }, [files]);
 
   return (
-    <div className="ml-20">
+    <div className="px-6">
       {/* TODO: Add Upload Layers Button */}
       <div className="py-2">
         <Dialog>
@@ -95,10 +116,8 @@ const LayersDashboard = () => {
           // Define key so each Card has unique id
           <Card key={layersData.layer_id}>
             <CardContent className="p-2 pt-6">
-              <Image
+              <img
                 src={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
-                width={350}
-                height={350}
                 alt="Thumbnail"
               />
             </CardContent>
