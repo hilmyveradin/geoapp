@@ -28,7 +28,7 @@ const ChangePropDialog = ({
 }) => {
   const { toggleRefetchMaps, toggleRefetchLayers } = useRefetchStore();
 
-  const { replaceMapLayersLayerProp } = useMapViewStore();
+  const { replaceMapLayersLayerProp, currentViewBbox } = useMapViewStore();
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [submittingData, setSubmittingData] = useState(false);
@@ -79,6 +79,7 @@ const ChangePropDialog = ({
         map_description: descriptionValue,
         map_tags: selectedTags,
       };
+
       setSubmittingData(true);
 
       try {
