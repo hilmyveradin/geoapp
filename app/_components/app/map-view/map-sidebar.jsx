@@ -257,7 +257,7 @@ const MapSidebar = () => {
             }
           )}
         >
-          <GeojsonCard></GeojsonCard>
+          <GeojsonCard/>
         </div>
       )}
       {/* TODO: Add this sidebar div <div

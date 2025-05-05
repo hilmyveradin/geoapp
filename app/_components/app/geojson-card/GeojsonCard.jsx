@@ -33,11 +33,12 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
-const objects = ["obj1", "obj2"];
-
-export function ComboboxDemo({layerTitles, value, setValue, setPageIdx}) {
+export function Combobox({layerTitles, value, setValue, setPageIdx}) {
   const [open, setOpen] = useState(false)
- 
+  const titleText = value
+    ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
+    : "Select layer title"
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -46,9 +47,7 @@ export function ComboboxDemo({layerTitles, value, setValue, setPageIdx}) {
           role="combobox"
           aria-expanded={open}
           className="w-[100%] flex justify-between"
-          title={value
-            ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
-            : "Select layer title"}
+          title={titleText}
         >
           <div className="w-[90%] flex items-center">
             <span className="text-ellipsis overflow-hidden truncate">{value
@@ -60,7 +59,7 @@ export function ComboboxDemo({layerTitles, value, setValue, setPageIdx}) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
-        <Command>
+        <Command className="w-full">
           <CommandInput placeholder="Select layer title..." />
           <CommandEmpty>No layer title found.</CommandEmpty>
           <CommandGroup>
@@ -92,7 +91,7 @@ export function ComboboxDemo({layerTitles, value, setValue, setPageIdx}) {
   )
 }
 
-export function DemoTable({inputLayerDataArray, value, layerTitles, pageIdx}) {
+export function Table({inputLayerDataArray, value, layerTitles, pageIdx}) {
   let rows = [];
   
   // Column Definitions: Defines the columns to be displayed.
@@ -188,7 +187,7 @@ export default function GeojsonCard() {
             </button>
           </div>
         </div>
-        <ComboboxDemo 
+        <Combobox 
           layerTitles={layerTitles}
           value={value} // Pass value prop
           setValue={setValue} // Pass setValue prop
@@ -196,7 +195,7 @@ export default function GeojsonCard() {
         />
       </div>
       <CardContent className="flex flex-col">
-        <DemoTable 
+        <Table 
           inputLayerDataArray={newObjects}
           value={value}
           layerTitles={layerTitles}
