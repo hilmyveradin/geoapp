@@ -3,6 +3,7 @@
 import GroupButtons from "@/app/_components/app/group-buttons";
 import GroupCards from "@/app/_components/app/group-cards";
 import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
+import useSearchQueryStore from "@/helpers/hooks/store/use-search-query-store";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -11,6 +12,13 @@ const GruopsDashboard = () => {
   const [groupsData, setGroupsData] = useState([]);
 
   const { refetchGroups } = useRefetchStore();
+  const { searchedGroupTitle, setSearchedGroupTitle } = useSearchQueryStore(); // Added state for search term
+
+  useEffect(() => {
+    return () => {
+      setSearchedGroupTitle("");
+    };
+  }, [setSearchedGroupTitle]);
 
   useEffect(() => {
     async function getGroupInfo(groupUid) {
@@ -65,6 +73,10 @@ const GruopsDashboard = () => {
       .catch(console.error);
   }, [refetchGroups]);
 
+  const filteredGroups = groupsData.filter((group) =>
+    group.groupName.toLowerCase().includes(searchedGroupTitle.toLowerCase())
+  );
+
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
@@ -76,7 +88,7 @@ const GruopsDashboard = () => {
   return (
     <div className="w-full h-full px-8 mt-4">
       <GroupButtons />
-      {groupsData.map((group, index) => {
+      {filteredGroups.map((group, index) => {
         return <GroupCards key={group.groupUid} group={group} />;
       })}
     </div>
