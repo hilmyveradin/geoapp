@@ -1,6 +1,6 @@
 "use strict";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
   Check,
   ChevronLeft,
@@ -33,6 +33,8 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import "./styles.css";
+import Draggable from "react-draggable";
+import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
 
 export function Combobox({ layerTitles, value, setValue, setPageIdx }) {
   const [open, setOpen] = useState(false);
@@ -174,6 +176,61 @@ export default function GeojsonCard() {
     setZoomedLayerBbox,
   } = useMapViewStore();
 
+  const {
+    showRightSidebar,
+    expandedRightSidebarContent,
+    setShowLeftSidebar,
+    showLeftSidebar,
+    expandedLeftSidebarContent,
+    setExpandedLeftSidebarContent,
+  } = useMapSidebarStore();
+
+  const ref = useRef();
+  const [bounds, setBounds] = useState({
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  });
+
+  const calculateBounds = (ref) => {
+    if (!ref.current)
+      return { top: -1000, left: -1000, right: -1000, bottom: -1000 };
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const { left, width, height } = ref.current.getBoundingClientRect();
+
+    let leftBoundary = 48; // Default left margin
+    if (showLeftSidebar) {
+      if (expandedLeftSidebarContent) {
+        leftBoundary = 160 + 240; // Sidebar visible and content expanded
+      } else {
+        leftBoundary = 160; // Sidebar visible but content not expanded
+      }
+    } else if (expandedLeftSidebarContent) {
+      leftBoundary = 240 + 48; // Sidebar not visible but content expanded
+    }
+
+    let rightBoundary = 48; // Default right margin
+    if (showRightSidebar) {
+      if (expandedRightSidebarContent) {
+        rightBoundary = 112 + 240; // Right sidebar visible and content expanded
+      } else {
+        rightBoundary = 112; // Right sidebar visible but content not expanded
+      }
+    } else if (expandedRightSidebarContent) {
+      rightBoundary = 240 + 48; // Right sidebar not visible but content expanded
+    }
+
+    return {
+      left: -left + leftBoundary,
+      top: 0, // Fixed top boundary as per your previous instructions
+      right: viewportWidth - left - width - rightBoundary,
+      bottom: 999999,
+    };
+  };
+
   const layerTitles = objectInfoData.data
     .filter((layer) => {
       const matchingLayer = mapLayers.find(
@@ -204,6 +261,25 @@ export default function GeojsonCard() {
   );
   const [pageIdx, setPageIdx] = useState(0);
   const [isExpanded, setIsExpanded] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+        setBounds(calculateBounds(ref));
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    showLeftSidebar,
+    expandedLeftSidebarContent,
+    showRightSidebar,
+    expandedRightSidebarContent,
+  ]); // Dependencies that trigger re-calculation
 
   const index = layerTitles.findIndex(
     (layerTitle) => layerTitle.value === value
@@ -263,7 +339,6 @@ export default function GeojsonCard() {
           // Access the specific data slice for the current page index
           const selectedLayerData = layerDataArray[layerIndex][pageIdx];
 
-          debugger;
           if (selectedLayerData) {
             const highlightedLayerGeoJSON = {
               type: "FeatureCollection",
@@ -277,9 +352,9 @@ export default function GeojsonCard() {
   };
 
   return (
-    <>
+    <div>
       {layerTitles.length > 0 && (
-        <Card className="bg-nileBlue-50 rounded-md w-[35vw]">
+        <Card className="bg-nileBlue-50 rounded-md w-[35vw] handle">
           <div className="flex flex-col py-3 space-y-3">
             <div className="flex flex-row justify-between px-6">
               <Combobox
@@ -340,6 +415,6 @@ export default function GeojsonCard() {
           )}
         </Card>
       )}
-    </>
+    </div>
   );
 }

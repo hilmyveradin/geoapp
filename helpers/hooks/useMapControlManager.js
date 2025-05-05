@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import useMapViewStore from "./store/useMapViewStore";
-import useMapRightSidebar from "./store/useMapRightSidebarStore";
+import useMapSidebarStore from "./store/useMapSidebarStore";
 import MapLibreGL from "maplibre-gl";
 
 const useMapControlManager = () => {
   const { map } = useMapViewStore();
-  const { showRightSidebar } = useMapRightSidebar();
+  const { showRightSidebar } = useMapSidebarStore();
   const navControlRef = useRef(null);
 
   useEffect(() => {

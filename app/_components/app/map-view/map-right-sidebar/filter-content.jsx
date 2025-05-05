@@ -39,7 +39,6 @@ const FilterContent = () => {
   useEffect(() => {
     const saveFilter = async () => {
       try {
-        debugger;
         setIsSavingChanges(true);
         const body = JSON.stringify({
           fts_input: ftsQuery.value,

@@ -32,12 +32,11 @@ import SaveAlertDialog from "../shared/save-alert-dialog";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import GeojsonCard from "@/app/_components/app/geojson-card/GeojsonCard";
-import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
+import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
 
 const MapSidebar = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
+
   const {
     tableLoaded,
     setTableLoaded,
@@ -47,6 +46,7 @@ const MapSidebar = () => {
     setMapClicked,
     setHighlightedLayer,
   } = useMapViewStore();
+
   const {
     ftsQuery,
     setFtsQuery,
@@ -54,14 +54,21 @@ const MapSidebar = () => {
     setReloadTable,
     setSearchSubmit,
   } = useTableQueryStore();
-  const { showRightSidebar, expandedRightSidebarButtons } =
-    useMapRightSidebar();
+
+  const {
+    showRightSidebar,
+    expandedRightSidebarContent,
+    setShowLeftSidebar,
+    showLeftSidebar,
+    expandedLeftSidebarContent,
+    setExpandedLeftSidebarContent,
+  } = useMapSidebarStore();
 
   const handleFtsQuery = (e) => {
     // Destructure the name and value from
     // the changed element
     const { name, value } = e.target;
-    if (value === '') {
+    if (value === "") {
       setSearchSubmit(false);
     }
     setFtsQuery({ ...ftsQuery, value });
@@ -81,9 +88,9 @@ const MapSidebar = () => {
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
     if (selectedButton == buttonName) {
-      setExpandedSidebarButtons(false);
+      setExpandedLeftSidebarContent(false);
     } else {
-      setExpandedSidebarButtons(true);
+      setExpandedLeftSidebarContent(true);
     }
   };
 
@@ -93,7 +100,7 @@ const MapSidebar = () => {
         className={cn(
           "flex flex-col fixed top-14 h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-nileBlue-900 w-12 text-white text-xs p-1",
           {
-            "w-[160px]": showSidebar,
+            "w-[160px]": showLeftSidebar,
           }
         )}
       >
@@ -103,7 +110,7 @@ const MapSidebar = () => {
             onClick={() => handleButtonClick("addLayer")}
             className={cn("flex justify-start text-blackHaze-500", {
               "text-white bg-nileBlue-700": selectedButton === "addLayer",
-              "p-0 justify-center": !showSidebar,
+              "p-0 justify-center": !showLeftSidebar,
             })}
           >
             <PlusCircle
@@ -111,7 +118,7 @@ const MapSidebar = () => {
                 "stroke-white stroke-2": selectedButton === "addLayer",
               })}
             />
-            {showSidebar && (
+            {showLeftSidebar && (
               <span className="inline-block ml-2">Add Layer</span>
             )}
           </Button>
@@ -122,7 +129,7 @@ const MapSidebar = () => {
           onClick={() => handleButtonClick("layers")}
           className={cn("flex justify-start text-blackHaze-500", {
             "text-white bg-nileBlue-700": selectedButton === "layers",
-            "p-0 justify-center": !showSidebar,
+            "p-0 justify-center": !showLeftSidebar,
           })}
         >
           <Layers3
@@ -130,7 +137,7 @@ const MapSidebar = () => {
               "stroke-white stroke-2": selectedButton === "layers",
             })}
           />
-          {showSidebar && <span className="inline-block ml-2">Layers</span>}
+          {showLeftSidebar && <span className="inline-block ml-2">Layers</span>}
         </Button>
 
         {/* <Button
@@ -145,7 +152,7 @@ const MapSidebar = () => {
               "stroke-white stroke-2": selectedButton === "tables",
             })}
           />
-          {!showSidebar && <span className="inline-block ml-2">Tables</span>}
+          {!showLeftSidebar && <span className="inline-block ml-2">Tables</span>}
         </Button> */}
 
         <Separator className="my-2" />
@@ -155,7 +162,7 @@ const MapSidebar = () => {
             variant="ghost"
             className={cn("flex justify-start text-blackHaze-500", {
               // "text-white": selectedButton === "save",
-              "p-0 justify-center": !showSidebar,
+              "p-0 justify-center": !showLeftSidebar,
             })}
           >
             <Save
@@ -163,7 +170,7 @@ const MapSidebar = () => {
                 // "stroke-white stroke-2": selectedButton === "save",
               })}
             />
-            {showSidebar && <span className="inline-block ml-2">Save</span>}
+            {showLeftSidebar && <span className="inline-block ml-2">Save</span>}
           </Button>
         </SaveAlertDialog>
 
@@ -184,7 +191,7 @@ const MapSidebar = () => {
                     // "stroke-white stroke-2": selectedButton === "save",
                   })}
                 />
-                {!showSidebar && (
+                {!showLeftSidebar && (
                   <span className="inline-block ml-2">Save</span>
                 )}
               </Button>
@@ -208,7 +215,7 @@ const MapSidebar = () => {
               "stroke-white stroke-2": selectedButton === "share",
             })}
           />
-          {!showSidebar && <span className="inline-block ml-2">Share</span>}
+          {!showLeftSidebar && <span className="inline-block ml-2">Share</span>}
         </Button> */}
 
         <Separator className="my-2" />
@@ -218,18 +225,20 @@ const MapSidebar = () => {
 
         <Button
           variant="ghost"
-          onClick={() => setShowSidebar((prev) => !prev)}
+          onClick={() => setShowLeftSidebar(!showLeftSidebar)}
           className={cn("flex justify-start text-blackHaze-500", {
-            "p-0 justify-center": !showSidebar,
+            "p-0 justify-center": !showLeftSidebar,
           })}
         >
           <ChevronLeft
             className={cn("w-4 h-4 stroke-blackHaze-500 transition-all", {
-              "rotate-0": showSidebar,
-              "rotate-180": !showSidebar,
+              "rotate-0": showLeftSidebar,
+              "rotate-180": !showLeftSidebar,
             })}
           />
-          {showSidebar && <span className="inline-block ml-2">Collapse</span>}
+          {showLeftSidebar && (
+            <span className="inline-block ml-2">Collapse</span>
+          )}
         </Button>
       </div>
       {(selectedButton === "addLayer" || selectedButton === "layers") && (
@@ -237,8 +246,8 @@ const MapSidebar = () => {
           className={cn(
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-blackHaze-50",
             {
-              "left-12 w-60": !showSidebar,
-              "left-40 w-60": showSidebar,
+              "left-12 w-60": !showLeftSidebar,
+              "left-40 w-60": showLeftSidebar,
             }
           )}
         >
@@ -246,7 +255,7 @@ const MapSidebar = () => {
         </div>
       )}
       {/* Cara baca logic di bawah: */}
-      {/* Ada 4 bool: showSidebar, expandedSidebarButtons, showRightSidebar, expandedRightSidebarButtons */}
+      {/* Ada 4 bool: showLeftSidebar, expandedLeftSidebarContent, showRightSidebar, expandedRightSidebarContent */}
       {/* Value default awal false semua */}
       {/* Saat sidebar atau right sidebar bertambah panjang, salah satu bool ini jadi true */}
       {/* Maka perlu dicek variabel yang true aja */}
@@ -257,46 +266,51 @@ const MapSidebar = () => {
           className={cn(
             "fixed rounded-md top-[58vh] h-[calc(100vh-60vh-24px)] pb-8 z-10 left-[60px] w-[calc(100vw-60px-60px)]",
             {
-              "left-[172px] w-[calc(100vw-172px-60px)]": showSidebar,
+              "left-[172px] w-[calc(100vw-172px-60px)]": showLeftSidebar,
               "left-[60px] w-[calc(100vw-60px-124px)]": showRightSidebar,
-              "left-[300px] w-[calc(100vw-300px-60px)]": expandedSidebarButtons,
+              "left-[300px] w-[calc(100vw-300px-60px)]":
+                expandedLeftSidebarContent,
               "left-[60px] w-[calc(100vw-60px-300px)]":
-                expandedRightSidebarButtons,
+                expandedRightSidebarContent,
 
               "left-[412px] w-[calc(100vw-412px-60px)]":
-                showSidebar && expandedSidebarButtons,
+                showLeftSidebar && expandedLeftSidebarContent,
               "left-[172px] w-[calc(100vw-172px-124px)]":
-                showSidebar && showRightSidebar,
+                showLeftSidebar && showRightSidebar,
               "left-[172px] w-[calc(100vw-172px-300px)]":
-                showSidebar && expandedRightSidebarButtons,
+                showLeftSidebar && expandedRightSidebarContent,
 
               "left-[300px] w-[calc(100vw-300px-124px)]":
-                showRightSidebar && expandedSidebarButtons,
+                showRightSidebar && expandedLeftSidebarContent,
               "left-[60px] w-[calc(100vw-60px-364px)]":
-                showRightSidebar && expandedRightSidebarButtons,
+                showRightSidebar && expandedRightSidebarContent,
 
               "left-[300px] w-[calc(100vw-240px-364px)]":
-                expandedSidebarButtons && expandedRightSidebarButtons,
+                expandedLeftSidebarContent && expandedRightSidebarContent,
 
               "left-[412px] w-[calc(100vw-412px-124px)]":
-                showSidebar && showRightSidebar && expandedSidebarButtons,
+                showLeftSidebar &&
+                showRightSidebar &&
+                expandedLeftSidebarContent,
               "left-[172px] w-[calc(100vw-172px-364px)]":
-                showSidebar && showRightSidebar && expandedRightSidebarButtons,
+                showLeftSidebar &&
+                showRightSidebar &&
+                expandedRightSidebarContent,
               "left-[412px] w-[calc(100vw-412px-300px)]":
-                showSidebar &&
-                expandedSidebarButtons &&
-                expandedRightSidebarButtons,
+                showLeftSidebar &&
+                expandedLeftSidebarContent &&
+                expandedRightSidebarContent,
 
               "left-[300px] w-[calc(100vw-300px-364px)]":
                 showRightSidebar &&
-                expandedSidebarButtons &&
-                expandedRightSidebarButtons,
+                expandedLeftSidebarContent &&
+                expandedRightSidebarContent,
 
               "left-[412px] w-[calc(100vw-416px-364px)]":
-                showSidebar &&
-                expandedSidebarButtons &&
+                showLeftSidebar &&
+                expandedLeftSidebarContent &&
                 showRightSidebar &&
-                expandedRightSidebarButtons,
+                expandedRightSidebarContent,
             }
           )}
         >
@@ -344,17 +358,6 @@ const MapSidebar = () => {
             </Button>
           </div>
           {reloadTable && <PaginationLayerTable />}
-        </div>
-      )}
-      {mapClicked && (
-        <div
-          className={cn("fixed z-10 top-[68px] left-[60px]", {
-            "left-[300px]": expandedSidebarButtons,
-            "left-[172px]": showSidebar,
-            "left-[412px]": expandedSidebarButtons && showSidebar,
-          })}
-        >
-          <GeojsonCard />
         </div>
       )}
       {/* TODO: Add this sidebar div <div

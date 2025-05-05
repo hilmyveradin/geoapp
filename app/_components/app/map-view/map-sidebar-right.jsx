@@ -9,7 +9,7 @@ import { FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import FieldAliasContent from "./map-right-sidebar/field-alias-content";
 import StyleContent from "./map-right-sidebar/style-content";
-import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
+import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
 import FilterContent from "./map-right-sidebar/filter-content";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
@@ -20,8 +20,8 @@ const MapSidebarRight = () => {
   const {
     showRightSidebar,
     setShowRightSidebar,
-    setExpandedRightSidebarButtons,
-  } = useMapRightSidebar();
+    setExpandedRightSidebarContent,
+  } = useMapSidebarStore();
 
   const { selectedLayer } = useMapViewStore();
 
@@ -41,9 +41,9 @@ const MapSidebarRight = () => {
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
     if (selectedButton == buttonName) {
-      setExpandedRightSidebarButtons(false);
+      setExpandedRightSidebarContent(false);
     } else {
-      setExpandedRightSidebarButtons(true);
+      setExpandedRightSidebarContent(true);
     }
   };
 

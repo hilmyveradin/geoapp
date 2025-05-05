@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
@@ -6,10 +6,19 @@ import useLayerManager from "@/helpers/hooks/useLayerManager";
 import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 import usePopUpManager from "@/helpers/hooks/usePopUpManager";
 import useHighlightManager from "@/helpers/hooks/useHighlightManager";
-import useMapRightSidebar from "@/helpers/hooks/store/useMapRightSidebarStore";
+import useMapSidebarStore from "@/helpers/hooks/store/useMapSidebarStore";
 import useMapControlManager from "@/helpers/hooks/useMapControlManager";
+import GeojsonCard from "../geojson-card/GeojsonCard";
+import { cn } from "@/lib/utils";
+import Draggable from "react-draggable";
 
 const MapMain = () => {
+  const [bounds, setBounds] = useState({
+    top: 68,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  });
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
@@ -19,10 +28,70 @@ const MapMain = () => {
   useHighlightManager();
   useMapControlManager();
 
-  const { setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox } =
-    useMapViewStore();
+  const {
+    setMap,
+    setMapLoaded,
+    setZoomedLayerBbox,
+    setCurrentViewBbox,
+    mapClicked,
+  } = useMapViewStore();
 
-  const { showRightSidebar } = useMapRightSidebar();
+  const {
+    showLeftSidebar,
+    expandedLeftSidebarContent,
+    showRightSidebar,
+    expandedRightSidebarContent,
+  } = useMapSidebarStore();
+
+  const calculateBounds = () => {
+    const parentRect = mapContainerRef.current.getBoundingClientRect(); // Get the parent container's dimensions
+    const consistentTop = 68; // Consistent top boundary in pixels
+
+    // Initialize right boundary to be within the parent by default
+    let adjustedRight = 0; // Default setting for no sidebar interference
+
+    // Adjust the right boundary based on the right sidebar state
+    if (expandedRightSidebarContent && showRightSidebar) {
+      adjustedRight = 372; // Both sidebar visible and content expanded
+    } else if (showRightSidebar) {
+      adjustedRight = 124; // Only sidebar visible
+    } else if (expandedRightSidebarContent) {
+      adjustedRight = 300; // Only content expanded
+    }
+
+    // Initialize right boundary to be within the parent by default
+    let adjustedLeft = 0; // Default setting for no sidebar interference
+
+    // Adjust the right boundary based on the right sidebar state
+    if (expandedLeftSidebarContent && showLeftSidebar) {
+      adjustedLeft = 412; // Both sidebar visible and content expanded
+    } else if (showLeftSidebar) {
+      adjustedLeft = 172; // Only sidebar visible
+    } else if (expandedLeftSidebarContent) {
+      adjustedLeft = 300; // Only content expanded
+    }
+
+    return {
+      left: 0, // Allow full horizontal movement within the parent
+      top: parentRect.top - consistentTop + 12, // Fixed top position relative to the parent
+      right: parentRect.width - (adjustedRight + adjustedLeft), // Adjusted based on sidebar
+      bottom: parentRect.height, // Full height use, no restriction here since only top is set
+    };
+  };
+
+  useEffect(() => {
+    const updateBounds = () => {
+      if (mapContainerRef.current) {
+        const newBounds = calculateBounds();
+        setBounds(newBounds);
+      }
+    };
+
+    updateBounds();
+    window.addEventListener("resize", updateBounds); // Recalculate bounds on window resize
+    return () => window.removeEventListener("resize", updateBounds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expandedLeftSidebarContent, showLeftSidebar]); // Recalculate when sidebar states change
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
@@ -81,7 +150,23 @@ const MapMain = () => {
     };
   }, [setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox]);
 
-  return <div ref={mapContainerRef} className="w-full h-full" />;
+  return (
+    <div ref={mapContainerRef} className="w-full h-full">
+      {mapClicked && (
+        <Draggable handle=".handle" bounds={bounds}>
+          <div
+            className={cn("fixed z-10 top-[68px] left-[60px] handle", {
+              "left-[300px]": expandedLeftSidebarContent,
+              "left-[172px]": showLeftSidebar,
+              "left-[412px]": expandedLeftSidebarContent && showLeftSidebar,
+            })}
+          >
+            <GeojsonCard />
+          </div>
+        </Draggable>
+      )}
+    </div>
+  );
 };
 
 export default MapMain;
