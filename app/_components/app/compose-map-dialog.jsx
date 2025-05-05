@@ -21,14 +21,12 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import useLayerStore from "@/helpers/hooks/useLayerStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const ComposeMapDialog = (props) => {
   const { children } = props;
 
-  const { layersData, setLayers } = useLayerStore();
-  const [localLayersData, setLocalLayersData] = useState();
+  const [LayersData, setLayersData] = useState();
 
   const [titleValue, setTitleValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
@@ -40,10 +38,6 @@ const ComposeMapDialog = (props) => {
   const [searchInput, setSearchInput] = useState("");
 
   const [selectedLayersData, setSelectedLayersData] = useState([]);
-
-  useEffect(() => {
-    setLocalLayersData(layersData);
-  }, [layersData]);
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -59,29 +53,14 @@ const ComposeMapDialog = (props) => {
         }
         const temp = await response.json();
 
-        const mockUser = {
-          fullName: "Shadcn",
-          avatar: "https://github.com/shadcn.png",
-        };
-
-        const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be";
-
-        const mockLayers = temp.map((layers) => {
-          return {
-            ...layers,
-            user: mockUser,
-            thumbnail_url: `${IMAGE_BASE_URL}/gs/thumbnail/${layers.thumbnail_url}`,
-          };
-        });
-        setLayers(mockLayers);
+        setLayersData(temp.data);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
     }
-    if (layersData.length === 0) {
-      getLayersData().catch(console.error);
-    }
-  }, [layersData, setLayers]);
+
+    getLayersData().catch(console.error);
+  }, []);
 
   useEffect(() => {
     function handleOutsideClick(event) {
@@ -100,7 +79,7 @@ const ComposeMapDialog = (props) => {
   }, [openSearchCommand]);
 
   useEffect(() => {
-    if (localLayersData) {
+    if (LayersData) {
       const filteredAndSorted = localLayersData
         .filter((user) => {
           return !selectedLayersData.some(
@@ -109,7 +88,7 @@ const ComposeMapDialog = (props) => {
           );
         })
         .sort((a, b) => a.layer_title.localeCompare(b.layer_title));
-      setLocalLayersData(filteredAndSorted);
+      setLayersData(filteredAndSorted);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLayersData]);
@@ -344,15 +323,14 @@ export default ComposeMapDialog;
 
 const SearchLayerPills = (props) => {
   const { data } = props;
-  console.log(data.thumbnail_url);
   return (
     <div className="flex items-center w-full space-x-2">
-      <img src={data.thumbnail_url} alt="search pills" className="w-10 h-8" />
+      <img src={data.thumbnaillUrl} alt="search pills" className="w-10 h-8" />
       <div className="flex flex-col space-y-2">
         <p className="max-w-full truncate">{data.layer_title}</p>
         <div className="flex items-center space-x-1">
           <UserAvatar user={data.creator} className="w-7 h-7" />
-          <p>{data.user.fullName}</p>
+          <p>{data.creator.fullName}</p>
         </div>
       </div>
     </div>
@@ -373,7 +351,7 @@ const SelectedLayerPills = (props) => {
       )}
     >
       <img
-        src={data.thumbnail_url}
+        src={data.thumbnaillUrl}
         alt="search pills"
         className="w-10 h-8 ml-4"
       />
