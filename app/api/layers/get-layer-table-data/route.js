@@ -1,21 +1,25 @@
 import { NextResponse } from "next/server";
-import authOptions from "../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
+import authOptions from "../../auth/[...nextauth]/options";
 
-export async function POST(request) {
+export async function GET(request) {
+  const layerUid = request.nextUrl.searchParams.get("layerUid");
+  const offset = request.nextUrl.searchParams.get("offset");
+  const length = request.nextUrl.searchParams.get("length");
+
   try {
-    const body = await request.json();
-    const { mapUids } = body;
     const session = await getServerSession(authOptions);
 
-    const res = await fetch(`${process.env.API_BASE_URL}/cms/map/delete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify({ maps: mapUids }),
-    });
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/cms/layer/data/${layerUid}/${offset}/${length}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       console.error(
@@ -24,7 +28,7 @@ export async function POST(request) {
         await res.text()
       );
       // Instead of throwing an error, we are returning a NextResponse object with a status code
-      return new NextResponse(null, { status: res.status });
+      return new NextResponse(layerUid, offset, length, { status: res.status });
     }
 
     const data = await res.json();

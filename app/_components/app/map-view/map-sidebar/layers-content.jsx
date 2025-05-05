@@ -171,7 +171,7 @@ const MultiLayerSelection = ({ resetCtrlPressed }) => {
         mapUid: mapData.mapUid,
       };
 
-      const response = await fetch("/api/remove-layer", {
+      const response = await fetch("/api/layers/remove-layer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -452,7 +452,7 @@ const OptionsSection = ({ data, resetCollapsibleContent }) => {
           mapUid: mapData.mapUid,
         };
 
-        const response = await fetch("/api/remove-layer", {
+        const response = await fetch("/api/layers/remove-layer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

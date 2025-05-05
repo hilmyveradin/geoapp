@@ -1,22 +1,21 @@
 import { NextResponse } from "next/server";
-import authOptions from "../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
+import authOptions from "../../auth/[...nextauth]/options";
 
-export async function POST(request) {
+export async function GET(request) {
+  const mapUid = request.nextUrl.searchParams.get("mapUid");
+
   try {
-    const body = await request.json();
-    const { layers, mapUid } = body;
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/map/del_layer/${mapUid}`,
+      `${process.env.API_BASE_URL}/cms/map/info/${mapUid}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        body: JSON.stringify({ layers: layers }),
       }
     );
 
@@ -27,7 +26,7 @@ export async function POST(request) {
         await res.text()
       );
       // Instead of throwing an error, we are returning a NextResponse object with a status code
-      return new NextResponse(null, { status: res.status });
+      return new NextResponse(mapUid, { status: res.status });
     }
 
     const data = await res.json();
