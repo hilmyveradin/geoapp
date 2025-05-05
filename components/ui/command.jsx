@@ -31,7 +31,7 @@ const CommandDialog = ({ children, ...props }) => {
 };
 
 const CommandInput = React.forwardRef(
-  ({ className, useMagnifiyGlassIcon = true, ...props }, ref) => (
+  ({ className, useMagnifiyGlassIcon = false, ...props }, ref) => (
     <div className="flex items-center" cmdk-input-wrapper="">
       {useMagnifiyGlassIcon && (
         <MagnifyingGlassIcon className="w-4 h-4 mr-2 opacity-50 shrink-0" />

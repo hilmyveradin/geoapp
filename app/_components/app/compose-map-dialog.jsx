@@ -271,7 +271,7 @@ const ComposeMapDialog = (props) => {
             value={descriptionValue}
           />
 
-          <div className="flex flex-wrap items-center w-full bg-red-500 border rounded-lg">
+          <div className="flex flex-wrap items-center w-full border rounded-lg">
             {selectedTagsDisplay()}
             <Input
               className={cn("border-none focus-visible:ring-0", {
