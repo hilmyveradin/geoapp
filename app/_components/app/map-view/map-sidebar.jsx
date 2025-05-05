@@ -113,6 +113,7 @@ const MapSidebar = () => {
 
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
+    setShowButtonSidebar((prev) => !prev);
   };
 
   return (
