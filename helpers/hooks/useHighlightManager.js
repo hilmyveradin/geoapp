@@ -21,7 +21,7 @@ const useHighlightManager = () => {
             layerType = "circle";
             paintProperties = {
               "circle-color": "#EBA0DB",
-              "circle-radius": 6,
+              "circle-radius": 10,
               "circle-stroke-color": "#EBA0DB",
               "circle-stroke-width": 2,
             };
