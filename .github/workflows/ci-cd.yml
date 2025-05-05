@@ -47,8 +47,8 @@ jobs:
           script: |
             source ~/.bashrc || source ~/.profile
             cd /home/ubuntu/var/www/geoportal/geoportal-webapp
-            # Stash all changes to ensure a clean state for pulling
-            git stash push -m "Stash local changes"
+            # Stash all changes including pnpm-lock.yaml
+            git stash push -m "Stash local changes" pnpm-lock.yaml
             # Attempt to pull changes and handle possible conflicts
             if git pull origin main; then
               echo "Successfully pulled from main."
