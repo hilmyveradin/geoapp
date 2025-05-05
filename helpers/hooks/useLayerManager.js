@@ -2,30 +2,62 @@ import { useEffect, useRef, useState } from "react";
 import useMapViewStore from "./store/useMapViewStore";
 
 const useLayerManager = () => {
-  const { mapLoaded, map, selectedLayers, mapData } = useMapViewStore();
-  const layerOrderRef = useRef([]); // Tracks the intended order of layers
+  const { mapLoaded, map, mapData, mapLayers, reorderLayer, addedLayerUids } =
+    useMapViewStore();
   const [firstRender, setFirstRender] = useState(true);
+  const layerOrderRef = useRef([]); // Tracks the intended order of all layers, initialized once
+  const layerReorderRef = useRef(false); // Tracks the intended trigger reorder layer
+  const addedLayerUidsRef = useRef([]); // Tracks the intended trigger reorder layer
+
+  useEffect(() => {
+    // Reset and reinitialize layers when reorderMaps changes
+    // Remove all layers
+    if (
+      layerReorderRef.current !== reorderLayer ||
+      addedLayerUidsRef !== addedLayerUids
+    ) {
+      layerOrderRef.current.forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.removeLayer(layerId);
+          map.removeSource(layerId);
+        }
+      });
+
+      layerOrderRef.current = mapLayers
+        .map((layer) => layer.layerUid)
+        .reverse();
+
+      layerReorderRef.current = reorderLayer;
+      addedLayerUidsRef.current = addedLayerUids;
+    }
+  }, [, map, mapLayers, reorderLayer, addedLayerUids]);
 
   useEffect(() => {
     if (mapLoaded && map) {
-      console.log(layerOrderRef);
       const updateLayers = () => {
-        // Remove layers that are not in selectedLayers
+        // Initialize layerOrderRef only once on first effective load
+        if (layerOrderRef.current.length === 0 && mapLayers.length > 0) {
+          layerOrderRef.current = mapLayers
+            .map((layer) => layer.layerUid)
+            .reverse();
+        }
+
+        // Process each layer in mapLayers according to the initial order in layerOrderRef
         layerOrderRef.current.forEach((layerId) => {
-          if (!selectedLayers.some((layer) => layer.layerUid === layerId)) {
+          const layer = mapLayers.find((l) => l.layerUid === layerId);
+          if (!layer) {
+            // If layer is not present in current mapLayers but exists on the map, hide it
             if (map.getLayer(layerId)) {
-              map.setLayoutProperty(layerId, "visibility", "none"); // Hide layer instead of removing
+              map.setLayoutProperty(layerId, "visibility", "none");
             }
+            return;
           }
-        });
 
-        // Add or show layers from selectedLayers
-        selectedLayers.forEach((layer, index) => {
-          const layerId = layer.layerUid;
-          const url = `http://dev3.webgis.co.id/geoserver/geoportal/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`; // your existing URL construction
+          const url = `http://dev3.webgis.co.id/geoserver/geoportal/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`;
 
+          // Add or update existing layer
           if (!map.getSource(layerId)) {
-            // Add new source and layer
+            // Add new source and layer if it does not exist
             map.addSource(layerId, {
               type: "raster",
               tiles: [url],
@@ -36,32 +68,24 @@ const useLayerManager = () => {
               id: layerId,
               type: "raster",
               source: layerId,
-              layout: { visibility: "visible" },
+              layout: { visibility: layer.isShown ? "visible" : "none" },
             });
-
-            layerOrderRef.current.push(layerId); // Add to order tracking
           } else {
-            // Ensure layer is visible
-            map.setLayoutProperty(layerId, "visibility", "visible");
+            // Update visibility of existing layers
+            map.setLayoutProperty(
+              layerId,
+              "visibility",
+              layer.isShown ? "visible" : "none"
+            );
           }
-
-          // // Reorder layers according to layerOrderRef
-          // if (index > 0) {
-          //   map.moveLayer(layerId, layerOrderRef.current[index - 1]);
-          // }
         });
-
-        // Update layerOrderRef to match selectedLayers
-        layerOrderRef.current = selectedLayers.map((layer) => layer.layerUid);
       };
 
-      if (selectedLayers.length === 0) {
+      if (mapLayers.length === 0) {
         // Optionally clear layers if no selection
         layerOrderRef.current.forEach((layerId) => {
           if (map.getLayer(layerId)) {
             map.removeLayer(layerId);
-          }
-          if (map.getSource(layerId)) {
             map.removeSource(layerId);
           }
         });
@@ -75,7 +99,7 @@ const useLayerManager = () => {
         setFirstRender(false);
       }
     }
-  }, [firstRender, map, mapData.mapBbox, mapLoaded, selectedLayers]);
+  }, [firstRender, map, mapData.mapBbox, mapLoaded, mapLayers, reorderLayer]);
 };
 
 export default useLayerManager;

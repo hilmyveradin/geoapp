@@ -14,119 +14,16 @@ import { useToast } from "@/components/ui/use-toast";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import useUpdateLayer from "@/helpers/hooks/useUpdateLayer";
 
-const LayersContent = ({ layers }) => {
-  useUpdateLayer();
-
-  return (
-    <div className="flex flex-col gap-4">
-      {layers.map((item) => (
-        <AddLayerCard key={item.layerUid} data={item} />
-      ))}
-    </div>
-  );
-};
-
-const AddLayerCard = ({ data }) => {
-  const { mapData, addSelectedLayers, addLayersData } = useMapViewStore();
-  // const { addSelectedLayers, addLayersData } = useRefetchStore();
-  const [addingLayerLoading, setAddingLayerLoading] = useState(false);
-  const { toast } = useToast();
-  const addLayerContent = () => {
-    // Define function to get layers API
-    async function addLayerContent() {
-      setAddingLayerLoading(true);
-      try {
-        const body = {
-          layers: [{ layer_uid: data.layerUid }],
-          mapUid: mapData.mapUid,
-        };
-
-        const response = await fetch("/api/maps/add-map-layer", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const modifiedData = {
-          ...data,
-          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
-        };
-
-        addSelectedLayers(modifiedData);
-        addLayersData(modifiedData);
-        toast({ title: "Success Adding Layer", variant: "success" });
-        // setRefetchMapLayers(!refetchMapLayers);
-      } catch (error) {
-        toast({
-          title: "Error adding layer",
-          description: "Please try again",
-          variant: "destructive",
-        });
-        console.error("Error during fetch:", error.message);
-      } finally {
-        setAddingLayerLoading(false);
-      }
-    }
-
-    addLayerContent();
-  };
-
-  const generateDate = () => {
-    if (data?.updatedAt) {
-      return `Updated: ${dayjs(data.updatedAt).format("DD/MM/YYYY")}`;
-    } else {
-      return `Created: ${dayjs(data.createdAt).format("DD/MM/YYYY")}`;
-    }
-  };
-  return (
-    <div className="flex flex-col gap-4 p-2 border rounded-lg shadow-md">
-      <div className="flex items-center justify-center gap-3">
-        <div className="flex flex-col w-full gap-1">
-          <AspectRatio ratio={450 / 200} className="flex items-center">
-            <img
-              src={data.thumbnailUrl}
-              alt="map image"
-              className="rounded-md "
-            />
-          </AspectRatio>
-          <TooltipText content={data.layerTitle} side="top" align="start">
-            <p className="w-full text-base font-bold truncate cursor-pointer">
-              {data.layerTitle}
-            </p>
-          </TooltipText>
-          <p>
-            by <span className="font-bold">{data.creator.fullName}</span>
-          </p>
-          <p>{generateDate()}</p>
-        </div>
-      </div>
-      <div className="flex justify-end">
-        {addingLayerLoading ? (
-          <Loader2 className="w-4 h-4 stroke-blackHaze-500 animate-spin" />
-        ) : (
-          <PlusCircle
-            className="w-4 h-4 cursor-pointer"
-            onClick={addLayerContent}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
 const AddLayersContent = () => {
   const { toast } = useToast();
+  const { mapLayers } = useMapViewStore();
+
   const [layers, setLayers] = useState([]);
   const [contentLoading, setContentLoading] = useState(true);
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [refetchLayers, setRefetchLayers] = useState(false);
   const [searchedTitle, setSearchedTitle] = useState(""); // Added state for search term
-  const { layersData } = useMapViewStore();
   const [progressValue, setProgressValue] = useState(0);
 
   // Define for rendering thumbnails every time page is changed
@@ -147,12 +44,14 @@ const AddLayersContent = () => {
           return {
             ...data,
             thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
+            isShown: true,
           };
         });
 
         const filtered = tempLayers.filter(
           (localLayer) =>
-            !layersData.some(
+            !mapLayers.some(
               (layerData) => layerData.layerUid === localLayer.layerUid
             )
         );
@@ -166,7 +65,7 @@ const AddLayersContent = () => {
     }
 
     getLayersData().catch(console.error);
-  }, [refetchLayers, layersData]);
+  }, [refetchLayers, mapLayers]);
 
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
@@ -238,8 +137,6 @@ const AddLayersContent = () => {
     layer.layerTitle.toLowerCase().includes(searchedTitle.toLowerCase())
   );
 
-  layersData;
-
   if (contentLoading) {
     return (
       <div className="flex items-center justify-center w-full h-full">
@@ -277,9 +174,60 @@ const AddLayersContent = () => {
         </div>
         {/* <ArrowDownWideNarrow className="w-4 h-4" /> */}
       </div>
-      <LayersContent layers={filteredLayers} />
+
+      <div className="flex flex-col gap-4">
+        {filteredLayers.map((layer) => (
+          <AddLayerCard key={layer.layerUid} layer={layer} />
+        ))}
+      </div>
     </div>
   );
 };
 
 export default AddLayersContent;
+
+const AddLayerCard = ({ layer }) => {
+  const { addAddedLayerUids, addMapLayers } = useMapViewStore();
+  const addLayerContent = () => {
+    addMapLayers(layer);
+    addAddedLayerUids({ layer_uid: layer.layerUid });
+  };
+
+  const generateDate = () => {
+    if (layer?.updatedAt) {
+      return `Updated: ${dayjs(layer.updatedAt).format("DD/MM/YYYY")}`;
+    } else {
+      return `Created: ${dayjs(layer.createdAt).format("DD/MM/YYYY")}`;
+    }
+  };
+  return (
+    <div className="flex flex-col gap-4 p-2 border rounded-lg shadow-md">
+      <div className="flex items-center justify-center gap-3">
+        <div className="flex flex-col w-full gap-1">
+          <AspectRatio ratio={450 / 200} className="flex items-center">
+            <img
+              src={layer.thumbnailUrl}
+              alt="map image"
+              className="rounded-md "
+            />
+          </AspectRatio>
+          <TooltipText content={layer.layerTitle} side="top" align="start">
+            <p className="w-full text-base font-bold truncate cursor-pointer">
+              {layer.layerTitle}
+            </p>
+          </TooltipText>
+          <p>
+            by <span className="font-bold">{layer.creator.fullName}</span>
+          </p>
+          <p>{generateDate()}</p>
+        </div>
+      </div>
+      <div className="flex justify-end">
+        <PlusCircle
+          className="w-4 h-4 cursor-pointer"
+          onClick={addLayerContent}
+        />
+      </div>
+    </div>
+  );
+};

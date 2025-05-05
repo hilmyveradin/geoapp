@@ -5,7 +5,7 @@ const useMapViewStore = create((set) => ({
   mapLoaded: false,
   selectedLayers: null,
   mapData: null,
-  layersData: null,
+  mapLayers: null,
   layerInfo: {
     layerUid: null,
     layerTitle: null,
@@ -14,6 +14,9 @@ const useMapViewStore = create((set) => ({
   tableLoaded: true,
   zoomedLayerBbox: null,
   multiSelectedLayers: [],
+  deletedLayerUids: [],
+  addedLayerUids: [],
+  reorderLayer: false,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -27,19 +30,26 @@ const useMapViewStore = create((set) => ({
       mapData: data,
     })),
 
-  addLayersData: (data) =>
-    set((state) => ({
-      layersData: [data, ...(state.layersData || [])],
-    })),
-
-  removeLayersData: (data) =>
-    set((state) => ({
-      layersData: state.layersData.filter((layer) => layer !== data),
-    })),
-
-  setLayersData: (data) =>
+  setMapLayers: (data) =>
     set(() => ({
-      layersData: data,
+      mapLayers: data,
+    })),
+
+  addMapLayers: (data) =>
+    set((state) => ({
+      mapLayers: [data, ...(state.mapLayers || [])],
+    })),
+
+  removeMapLayers: (data) =>
+    set((state) => ({
+      mapLayers: state.mapLayers.filter((layer) => layer !== data),
+    })),
+
+  toggleLayerVisibility: (layerUid, visible) =>
+    set((state) => ({
+      mapLayers: state.mapLayers.map((layer) =>
+        layer.layerUid === layerUid ? { ...layer, isShown: visible } : layer
+      ),
     })),
 
   setSelectedLayers: (data) =>
@@ -93,6 +103,22 @@ const useMapViewStore = create((set) => ({
         (layer) => layer.layerUid !== data.layerUid
       ),
     })),
+
+  addDeletedLayerUids: (data) =>
+    set((state) => ({
+      deletedLayerUids: [...(state.deletedLayerUids || []), data],
+    })),
+
+  addAddedLayerUids: (data) =>
+    set((state) => ({
+      addedLayerUids: [...(state.addedLayerUids || []), data],
+    })),
+
+  toggleReorderLayer: () => {
+    set((state) => ({
+      reorderLayer: !state.reorderLayer,
+    }));
+  },
 }));
 
 export default useMapViewStore;

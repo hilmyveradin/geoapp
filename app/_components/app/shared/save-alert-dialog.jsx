@@ -11,6 +11,12 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const SaveAlertDialog = ({ children }) => {
+  const saveMapChanges = () => {
+    // Add layer
+    // Remove Layer
+    // Reorder Layer
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -27,7 +33,9 @@ const SaveAlertDialog = ({ children }) => {
           <AlertDialogCancel className="hover:bg-red-500">
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={saveMapChanges}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -8,13 +8,13 @@ import { useSession } from "next-auth/react";
 import UserAvatar from "../shared/user-avatar";
 
 const MapHeader = () => {
-  const { mapData, setMapData, setLayersData, setSelectedLayers } =
+  const { mapData, setMapData, setMapLayers, setSelectedLayers } =
     useMapViewStore();
   const { data: session } = useSession();
 
   const resetData = () => {
     setSelectedLayers(null);
-    setLayersData(null);
+    setMapLayers(null);
     setMapData(null);
   };
   return (

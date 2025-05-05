@@ -13,13 +13,14 @@ import { X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const LayersDashboard = () => {
-  const [layersData, setLayers] = useState([]);
+  const [mapLayers, setLayers] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const { refetchLayers, toggleRefetchLayers } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
     useCardStore();
 
   const { toast } = useToast();
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.ctrlKey || e.metaKey) setIsCtrlPressed(true);
@@ -125,7 +126,6 @@ const LayersDashboard = () => {
             </div>
             <DestructiveDialog
               title="Are you sure you want to delete these layers?"
-              description="This action cannot be undone"
               actionText="Yes, I'm sure"
               action={() => deleteLayers()}
             >
@@ -138,8 +138,8 @@ const LayersDashboard = () => {
         )}
       </div>
       {/* Pagination */}
-      {layersData.length > 0 ? (
-        <ClientPagination data={layersData} />
+      {mapLayers.length > 0 ? (
+        <ClientPagination data={mapLayers} />
       ) : (
         <div className="flex items-center justify-center w-full h-96">
           <p>
