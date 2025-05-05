@@ -109,7 +109,6 @@ const ShareDialog = ({ children }) => {
 
       setUserList(usersData.data);
       setGroupList(groupsData.data);
-      debugger;
       setOwner(mapsData.data.owner);
       setSharedGroupList(mapsData.data.groups);
       setSharedUserList(mapsData.data.users);

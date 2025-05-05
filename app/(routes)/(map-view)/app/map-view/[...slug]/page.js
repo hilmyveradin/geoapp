@@ -3,7 +3,7 @@
 import MapHeader from "@/app/_components/app/map-view/map-header";
 import MapMain from "@/app/_components/app/map-view/map-main";
 import MapSidebar from "@/app/_components/app/map-view/map-sidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MapViewLayout from "../../../layout";
 import { Loader2 } from "lucide-react";
 import MapRightSidebar from "@/app/_components/app/map-view/map-right-sidebar";
@@ -13,6 +13,7 @@ import useUserStore from "@/helpers/hooks/store/use-user-store";
 const MapView = ({ params }) => {
   const mapType = params.slug[0];
   const mapUid = params.slug[1];
+  const [isLoading, setIsLoading] = useState(true);
 
   const { mapData, mapLayers, setMapData, setSelectedLayers, setMapLayers } =
     useMapViewStore();
@@ -112,9 +113,11 @@ const MapView = ({ params }) => {
     } else {
       loadLayerData();
     }
+
+    isLoading(false);
   }, [mapType, mapUid, setMapLayers, setMapData, setSelectedLayers]);
 
-  if (!mapData && !mapLayers)
+  if ((!mapData && !mapLayers) || isLoading)
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
