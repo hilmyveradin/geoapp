@@ -172,6 +172,182 @@ const BaseMapContent = () => {
         ],
       },
     },
+    {
+      name: "Google Imagery With Rain Viewer",
+      image: "/images/basemaps/google-imagery-rain.png",
+      style: {
+        version: 8,
+        sources: {
+          "google-satellite": {
+            type: "raster",
+            tiles: ["https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"],
+            tileSize: 256,
+            attribution: "© Google",
+          },
+          "rain-viewer": {
+            type: "raster",
+            tiles: [
+              "https://tilecache.rainviewer.com/v2/radar/{time}/256/{z}/{x}/{y}/2/1_1.png",
+            ],
+            tileSize: 256,
+            attribution: "© RainViewer",
+          },
+        },
+        layers: [
+          {
+            id: "google-satellite",
+            type: "raster",
+            source: "google-satellite",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+          {
+            id: "rain-viewer",
+            type: "raster",
+            source: "rain-viewer",
+            paint: {
+              "raster-opacity": 0.7,
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "Google Maps",
+      image: "/images/basemaps/google-maps.png",
+      style: {
+        version: 8,
+        sources: {
+          "google-maps": {
+            type: "raster",
+            tiles: ["https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"],
+            tileSize: 256,
+            attribution: "© Google",
+          },
+        },
+        layers: [
+          {
+            id: "google-maps",
+            type: "raster",
+            source: "google-maps",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Google Terrain",
+      image: "/images/basemaps/google-terrain.png",
+      style: {
+        version: 8,
+        sources: {
+          "google-terrain": {
+            type: "raster",
+            tiles: ["https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"],
+            tileSize: 256,
+            attribution: "© Google",
+          },
+        },
+        layers: [
+          {
+            id: "google-terrain",
+            type: "raster",
+            source: "google-terrain",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Dark Gray Canvas",
+      image: "/images/basemaps/dark-gray-canvas.png",
+      style: `https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json`,
+    },
+    {
+      name: "Bing Map Aerial",
+      image: "/images/basemaps/bing-aerial.png",
+      style: {
+        version: 8,
+        sources: {
+          "bing-aerial": {
+            type: "raster",
+            tiles: [
+              "https://ecn.t3.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=1",
+            ],
+            tileSize: 256,
+            attribution: "© Microsoft",
+          },
+        },
+        layers: [
+          {
+            id: "bing-aerial",
+            type: "raster",
+            source: "bing-aerial",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Bing Map Hybrid",
+      image: "/images/basemaps/bing-hybrid.png",
+      style: {
+        version: 8,
+        sources: {
+          "bing-hybrid": {
+            type: "raster",
+            tiles: [
+              "https://ecn.t3.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1",
+            ],
+            tileSize: 256,
+            attribution: "© Microsoft",
+          },
+        },
+        layers: [
+          {
+            id: "bing-hybrid",
+            type: "raster",
+            source: "bing-hybrid",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Bing Map Road",
+      image: "/images/basemaps/bing-road.png",
+      style: {
+        version: 8,
+        sources: {
+          "bing-road": {
+            type: "raster",
+            tiles: [
+              "https://ecn.t3.tiles.virtualearth.net/tiles/r{quadkey}.jpeg?g=1",
+            ],
+            tileSize: 256,
+            attribution: "© Microsoft",
+          },
+        },
+        layers: [
+          {
+            id: "bing-road",
+            type: "raster",
+            source: "bing-road",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+    },
+    {
+      name: "Oceans",
+      image: "/images/basemaps/oceans.png",
+      style: `https://api.maptiler.com/maps/ocean/style.json?key=${MAPTILER_KEY}`,
+    },
   ];
 
   return (
