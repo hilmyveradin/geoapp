@@ -9,7 +9,7 @@ export async function GET(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/adm/group/info/${groupUid}`,
+      `${process.env.API_BASE_URL}/adm/group/${groupUid}/info`,
       {
         method: "GET",
         headers: {

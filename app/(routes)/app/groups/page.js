@@ -4,7 +4,6 @@ import GroupButtons from "@/app/_components/app/group-buttons";
 import GroupCards from "@/app/_components/app/group-cards";
 import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 import { Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 const GruopsDashboard = () => {
@@ -26,7 +25,7 @@ const GruopsDashboard = () => {
       );
       const responseeData = await response.json();
 
-      return responseeData.data[0];
+      return responseeData.data;
     }
     // Define function to get layers API
     async function getGroupLists() {
