@@ -173,7 +173,7 @@ const ControlledTable = ({
     // var response;
     const arrObjectId = [];
     selectedRows.forEach(function (selectedRow, index) {
-      const id = parseInt(selectedRow.ogc_fid)
+      const id = parseInt(Object.values(selectedRow)[0]);
       arrObjectId.push(id);
     });
     async function zoomToSelectedObjects() {
