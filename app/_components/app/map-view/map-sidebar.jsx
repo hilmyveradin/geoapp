@@ -177,7 +177,7 @@ const MapSidebar = () => {
           {!showLeftSidebar && <span className="inline-block ml-2">Tables</span>}
         </Button> */}
 
-        <Separator className="my-2" />
+        {(isAdmin || isEditor) && <Separator className="my-2" />}
 
         {(isAdmin || isEditor) && (
           <SaveAlertDialog>
