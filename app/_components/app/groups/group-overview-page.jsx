@@ -1,5 +1,13 @@
-import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  Loader2,
+  MapPin,
+  Calendar,
+  User,
+  UserCog,
+  Trash2,
+  UserPlus,
+} from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,55 +19,65 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MapPin, Calendar, User } from "lucide-react";
-import { UserCog } from "lucide-react";
-import { Trash2 } from "lucide-react";
-import { UserPlus } from "lucide-react";
+import DestructiveDialog from "../../shared/destructive-dialog";
+import { toast } from "@/components/ui/use-toast";
 
 const GroupOverviewPage = ({ groupUid }) => {
   const [loading, setLoading] = useState(true);
   const [groupData, setGroupData] = useState(null);
   const [error, setError] = useState(null);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  useEffect(() => {
-    const getGroupInfo = async () => {
-      try {
-        const response = await fetch(
-          `/api/groups/get-group-info?groupUid=${groupUid}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch group info");
+  const fetchGroupInfo = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/groups/get-group-info?groupUid=${groupUid}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         }
-        const responseData = await response.json();
-        setGroupData(responseData.data);
-      } catch (err) {
-        console.error("Error during fetch:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getGroupInfo();
+      );
+      if (!response.ok) throw new Error("Failed to fetch group info");
+      const responseData = await response.json();
+      setGroupData(responseData.data);
+    } catch (err) {
+      console.error("Error during fetch:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, [groupUid]);
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+  useEffect(() => {
+    fetchGroupInfo();
+  }, [fetchGroupInfo, refetchTrigger]);
 
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
+  const deleteUser = async (userUid) => {
+    try {
+      const response = await fetch(
+        `/api/groups/remove-group-user?groupUid=${groupUid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userUids: [userUid] }),
+        }
+      );
 
-  if (!groupData) {
-    return <ErrorMessage message="No group data available" />;
-  }
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      toast({ title: "Successfully removed user", variant: "success" });
+      setRefetchTrigger((prev) => prev + 1); // Trigger a refetch
+    } catch (error) {
+      console.error("Error removing user:", error.message);
+      toast({ title: "Error removing user", variant: "destructive" });
+    }
+  };
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!groupData) return <ErrorMessage message="No group data available" />;
 
   return (
     <div className="space-y-6">
@@ -158,13 +176,20 @@ const GroupOverviewPage = ({ groupUid }) => {
                         <Button variant="ghost" size="sm" className="mr-2">
                           <UserCog className="h-4 w-4" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-600 hover:text-red-800 hover:bg-red-100"
+                        <DestructiveDialog
+                          title="Are you sure you want to remove this user from Group?"
+                          description="This action cannot be undone"
+                          actionText="Yes, I'm sure"
+                          action={() => deleteUser(user)}
                         >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-800 hover:bg-red-100"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </DestructiveDialog>
                       </>
                     )}
                   </TableCell>
