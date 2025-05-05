@@ -20,6 +20,13 @@ import { X } from "lucide-react";
 import { ChevronUp } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { Square } from "lucide-react";
+import { Circle } from "lucide-react";
+import { Triangle } from "lucide-react";
+import { Star } from "lucide-react";
+import { Cross } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 
 const StyleContent = () => {
   const { mapLayers, selectedPopupLayer, setSelectedPopupLayer } =
@@ -36,9 +43,6 @@ const StyleContent = () => {
 
   // POINT STYLES STATES
   const [symbolSize, setSymbolSize] = useState(0);
-  const [outlineColor, setOutlineColor] = useState("#fff");
-
-  //
 
   useEffect(() => {
     if (!selectedPopupLayer) {
@@ -72,8 +76,6 @@ const StyleContent = () => {
   if (!selectedPopupLayer) {
     return null;
   }
-
-  console.log("SELECTED POPUP LAYER: ", selectedPopupLayer.layerType);
 
   return (
     <div className="flex flex-col w-full h-full gap-4 p-2">
@@ -114,6 +116,8 @@ const StyleContent = () => {
       </DropdownMenu>
       {selectedPopupLayer.layerType === "Point" && (
         <>
+          <p className="font-bold">Current Symbol</p>
+          <SymbolComponent />
           <p className="font-bold">Size</p>
           <SliderComponent
             sliderValue={symbolSize}
@@ -158,9 +162,133 @@ const StyleContent = () => {
 
 export default StyleContent;
 
+const SymbolComponent = (props) => {
+  const { color, setColorChange } = props;
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedDropdownChoice, setSelectedDropdownChoice] =
+    useState("Standard");
+  const [selectedShapeSymbol, setSelectedShapeSymbol] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(false);
+
+  const handleChangeComplete = (color) => {
+    setColorChange(color.hex);
+  };
+
+  const handlePickerClick = (event) => {
+    event.stopPropagation(); // Stops the click from closing the picker
+  };
+
+  const togglePopup = () => {
+    setShowPopup((show) => !show);
+  };
+
+  const handleClose = () => {
+    setShowPopup(false);
+  };
+  return (
+    <div className="z-30 flex flex-col items-center w-full gap-4">
+      <button
+        className="flex justify-between w-full gap-2 p-2 mb-4 text-base rounded-md shadow-md cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          togglePopup();
+        }}
+      >
+        <img className="w-5 h-5" src="https://github.com/shadcn.png" />
+        <Pencil className="w-5 h-5" />
+      </button>
+      {showPopup && (
+        <div
+          className="absolute left-0 right-0 flex flex-col items-center gap-2 p-2 bg-white rounded-md"
+          onClick={handlePickerClick}
+        >
+          <div className="flex items-center justify-between w-full gap-2 p-2">
+            <span className="font-bold">Change Symbol</span>
+            <X onClick={handleClose} className="w-5 h-5 cursor-pointer" />
+          </div>
+          <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
+            <DropdownMenuTrigger asChild className="w-full">
+              <button className="flex items-center gap-2 px-3 py-2 text-white rounded-md bg-nileBlue-900">
+                <p className="w-full truncate">{selectedDropdownChoice}</p>
+                <ChevronDownIcon
+                  className={cn("w-5 h-5 transition-all", {
+                    "-rotate-180": openDropdown,
+                  })}
+                />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onSelect={() => {
+                  setSelectedDropdownChoice("Standard");
+                }}
+              >
+                Standard
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  setSelectedDropdownChoice("Image");
+                  setSelectedShapeSymbol(null);
+                }}
+              >
+                Image
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="w-full">
+            {selectedDropdownChoice === "Standard" ? (
+              <div className="flex items-center w-full gap-2">
+                <Square
+                  className={cn("w-5 h-5 cursor-pointer fill-nileBlue-500", {
+                    "outline outline-red-200": selectedShapeSymbol === "square",
+                  })}
+                  onClick={() => setSelectedShapeSymbol("square")}
+                />
+                <Circle
+                  className={cn("w-5 h-5 cursor-pointer fill-nileBlue-500", {
+                    "outline outline-red-200": selectedShapeSymbol === "circle",
+                  })}
+                  onClick={() => setSelectedShapeSymbol("circle")}
+                />
+                <Triangle
+                  className={cn("w-5 h-5 cursor-pointer fill-nileBlue-500", {
+                    "outline outline-red-200":
+                      selectedShapeSymbol === "triangle",
+                  })}
+                  onClick={() => setSelectedShapeSymbol("triangle")}
+                />
+                <Star
+                  className={cn("w-5 h-5 cursor-pointer fill-nileBlue-500", {
+                    "outline outline-red-200": selectedShapeSymbol === "star",
+                  })}
+                  onClick={() => setSelectedShapeSymbol("star")}
+                />
+                <Cross
+                  className={cn("w-5 h-5 cursor-pointer fill-nileBlue-500", {
+                    "outline outline-red-200": selectedShapeSymbol === "cross",
+                  })}
+                  onClick={() => setSelectedShapeSymbol("cross")}
+                />
+                <Cross
+                  className={cn("w-5 h-5 cursor-pointer fill-nileBlue-500", {
+                    "outline outline-red-200": selectedShapeSymbol === "x",
+                  })}
+                  onClick={() => setSelectedShapeSymbol("x")}
+                />
+              </div>
+            ) : (
+              <ImageUpload />
+            )}
+          </div>
+          <Button onClick={handleClose}>Done</Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ColorComponent = (props) => {
   const { color, setColorChange } = props;
-  // const [color, setColor] = useState("#fff");
   const [showPopup, setShowPopup] = useState(false);
 
   const handleChangeComplete = (color) => {
@@ -243,6 +371,64 @@ const SliderComponent = (props) => {
         </div>
       </div>
       <p>{sliderUnit}</p>
+    </div>
+  );
+};
+
+const ImageUpload = () => {
+  const [imageSrc, setImageSrc] = useState(""); // State for the image source for preview
+
+  useEffect(() => {
+    console.log(imageSrc);
+  }, [imageSrc]);
+
+  // Handle URL input and fetch image
+  const handleImageUrlChange = async (event) => {
+    const imageUrl = event.target.value;
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const localUrl = URL.createObjectURL(blob);
+      setImageSrc(localUrl); // Set image source for preview
+    } catch (error) {
+      console.error("Error loading image:", error);
+    }
+  };
+
+  // Handle local file input
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const localUrl = URL.createObjectURL(file);
+      setImageSrc(localUrl); // Set image source for preview
+    }
+  };
+
+  // Custom icon click to trigger file input
+  const handleIconClick = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full gap-3">
+      <div className="flex items-center justify-center w-full gap-2">
+        <Input
+          type="text"
+          placeholder="Image URL"
+          onChange={handleImageUrlChange}
+        />
+        <input
+          type="file"
+          id="fileInput"
+          style={{ display: "none" }} // Hide the default file input
+          onChange={handleFileChange}
+        />
+        <Plus
+          className="cursor-pointer stroke-2 w-7 h-7"
+          onClick={handleIconClick}
+        />
+      </div>
+      {imageSrc && <img src={imageSrc} alt="Preview" className="w-20 h-20" />}
     </div>
   );
 };
