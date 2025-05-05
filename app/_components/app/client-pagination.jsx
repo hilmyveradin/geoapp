@@ -20,6 +20,8 @@ export default function ClientPagination({ data, ...props }) {
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = data.slice(firstPostIndex, lastPostIndex);
 
+  console.log(data);
+
   return (
     <>
       {" "}
@@ -32,7 +34,7 @@ export default function ClientPagination({ data, ...props }) {
                   key={currentPosts.layer_id}
                   source={currentPosts.thumbnail_url}
                   title={currentPosts.layer_title}
-                  user={currentPosts.user}
+                  user={currentPosts.creator}
                 />
               );
             })}

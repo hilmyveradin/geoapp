@@ -69,7 +69,7 @@ const authOptions = {
 async function refreshAccessToken(token) {
   try {
     const refreshedTokens = await fetch(
-      `${process.env.API_BASE_URL}/iam/refresh`,
+      `${process.env.API_BASE_URL}/iam/refresh_token`,
       {
         method: "POST",
         body: JSON.stringify({ token: token.refreshToken }),

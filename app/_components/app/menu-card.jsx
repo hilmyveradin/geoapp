@@ -14,13 +14,10 @@ import MenuCardDropdown from "./menu-card-dropdown";
 
 const MenuCard = (props) => {
   const { key, source, title, user, moreAction, viewAction } = props;
-  const [hovered, setHovered] = useState(false);
   return (
     <Card
       key={key}
       className="px-2 py-3 shadow-lg hover:bg-lime-500 bg-lime-300"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <CardContent className="relative flex items-center justify-center p-0">
         <img src={source} alt="Thumbnail" className="w-full" />
