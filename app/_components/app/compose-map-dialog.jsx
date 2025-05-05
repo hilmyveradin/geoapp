@@ -22,9 +22,15 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
+import { AspectRatio } from "@radix-ui/react-aspect-ratio";
+import useRefetchStore from "@/helpers/hooks/store/useRefetchStore";
 
 const ComposeMapDialog = (props) => {
   const { children } = props;
+  const { toast } = useToast();
+  const { refetchMaps, setRefetchMaps } = useRefetchStore();
 
   const [layersData, setLayersData] = useState();
 
@@ -38,6 +44,8 @@ const ComposeMapDialog = (props) => {
   const [searchInput, setSearchInput] = useState("");
 
   const [selectedLayersData, setSelectedLayersData] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [submittingData, setSubmittingData] = useState(false);
 
   // Define for rendering thumbnails every time page is changed
   useEffect(() => {
@@ -53,12 +61,14 @@ const ComposeMapDialog = (props) => {
         }
         const temp = await response.json();
 
-        const tempLayers = temp.data.map((data) => {
-          return {
-            ...data,
-            thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-          };
-        });
+        const tempLayers = temp.data
+          .map((data) => {
+            return {
+              ...data,
+              thumbnailUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            };
+          })
+          .sort((a, b) => a.layerTitle.localeCompare(b.layerTitle));
 
         setLayersData(tempLayers);
       } catch (error) {
@@ -155,7 +165,8 @@ const ComposeMapDialog = (props) => {
           layer_uid: layer.layerUid,
         })),
       };
-      console.log("BODY: ", body);
+
+      setSubmittingData(true);
       try {
         const response = await fetch("/api/compose-map", {
           method: "POST",
@@ -166,7 +177,6 @@ const ComposeMapDialog = (props) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const result = await response();
 
         // Reset all the states
         setDescriptionValue("");
@@ -176,8 +186,20 @@ const ComposeMapDialog = (props) => {
         setSelectedLayersData([]);
         setSearchInput("");
         setOpenSearchCommand(false);
+        toast({ title: "Success Creating Map Layer", variant: "success" });
+        setRefetchMaps(!refetchMaps);
+        setTimeout(() => {
+          setOpenDialog(false);
+        }, 1000);
       } catch (error) {
+        toast({
+          title: "Error creating layer",
+          description: "Please try again",
+          variant: "destructive",
+        });
         console.error("Error during fetch:", error.message);
+      } finally {
+        setSubmittingData(false);
       }
     }
 
@@ -230,7 +252,7 @@ const ComposeMapDialog = (props) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         onPointerDownOutside={(e) => e.preventDefault()}
@@ -311,15 +333,20 @@ const ComposeMapDialog = (props) => {
               Cancel
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button
-              className="w-full font-bold border-none disabled:bg-neutral-100 disabled:text-neutral-400 disabled:opacity-100"
-              onClick={composeMapAction}
-              disabled={selectedLayersData.length === 0}
-            >
-              Compose Map
-            </Button>
-          </DialogClose>
+          <Button
+            className="w-full font-bold border-none disabled:bg-neutral-100 disabled:text-neutral-400 disabled:opacity-100"
+            onClick={composeMapAction}
+            disabled={selectedLayersData.length === 0 || submittingData}
+          >
+            {submittingData ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 stroke-2 stroke-blackHaze-500 animate-spin" />
+                <span className="font-bold">Please wait</span>
+              </span>
+            ) : (
+              <span> Compose Map</span>
+            )}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -334,7 +361,7 @@ const SearchLayerPills = (props) => {
     <div className="flex items-center w-full space-x-2">
       <img src={data.thumbnailUrl} alt="search pills" className="w-10 h-8" />
       <div className="flex flex-col space-y-2">
-        <p className="max-w-full truncate">{data.layerTitle}</p>
+        <p className="w-[350px] truncate ">{data.layerTitle}</p>
         <div className="flex items-center space-x-1">
           <UserAvatar user={data.creator} className="w-7 h-7" />
           <p>{data.creator.fullName}</p>

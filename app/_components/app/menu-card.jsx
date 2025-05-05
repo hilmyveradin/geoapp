@@ -25,11 +25,7 @@ const MenuCard = (props) => {
             ratio={450 / 200}
             className="flex items-center justify-center"
           >
-            <img
-              src={cardData.thumbnailUrl}
-              alt="Thumbnail"
-              className="w-fit"
-            />
+            <img src={cardData.thumbnailUrl} alt="Thumbnail" />
           </AspectRatio>
           <MenuCardDropdown>
             <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
