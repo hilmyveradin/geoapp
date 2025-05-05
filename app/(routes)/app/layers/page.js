@@ -19,7 +19,7 @@ const LayersDashboard = () => {
   const { refetchLayers, toggleRefetchLayers } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
     useCardStore();
-  const { searchedTitle } = useSearchQueryStore(); // Added state for search term
+  const { searchedTitle, setSearchedTitle } = useSearchQueryStore(); // Added state for search term
 
   const { toast } = useToast();
 
@@ -85,6 +85,12 @@ const LayersDashboard = () => {
 
     getLayersData();
   }, [refetchLayers]);
+
+  useEffect(() => {
+    return () => {
+      setSearchedTitle("")
+    }
+  }, [setSearchedTitle]);
 
   const deleteLayers = async () => {
     const layerUids = selectedCards.map((e) => ({ layer_uid: e }));
