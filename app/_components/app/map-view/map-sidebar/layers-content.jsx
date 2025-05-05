@@ -30,7 +30,7 @@ import { List } from "lucide-react";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 import DestructiveDialog from "@/app/_components/shared/destructive-dialog";
 import useTableQueryStore from "@/helpers/hooks/store/use-table-query-store";
-
+import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
 const LayersContent = () => {
   const {
     mapLayers,
@@ -160,6 +160,11 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
     setChangedLayerStyleUid,
   } = useMapViewStore();
 
+  const {
+    expandedRightSidebarContent,
+    setExpandedRightSidebarContent
+  } = useMapSidebarStore();
+
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
   const [imageLoaded, setImageLoaded] = useState(false);
   const [multipleSelectedLayerChecked, setMultipleSelectedLayerChecked] =
@@ -243,6 +248,9 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
             } else {
               if (selectedLayer?.layerUid === layer.layerUid) {
                 setSelectedLayer(null);
+                if (expandedRightSidebarContent) {
+                  setExpandedRightSidebarContent(false);
+                }
               } else {
                 setSelectedLayer(layer);
               }
