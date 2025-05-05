@@ -2,7 +2,6 @@
 
 import TooltipText from "@/app/_components/shared/tooltipText";
 import { Skeleton } from "@/components/ui/skeleton";
-import useLayerStore from "@/helpers/hooks/store/useLayerStore";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { cn } from "@/lib/utils";
 import { EyeOff } from "lucide-react";
@@ -173,37 +172,57 @@ const LayersCard = ({ data }) => {
           />
         </div>
       )}
-      {collapsibleContent === "options" && <OptionsSection />}
+      {collapsibleContent === "options" && <OptionsSection layerUid={data.layerUid}/>}
     </div>
   );
 };
 
-const OptionsSection = () => {
+const OptionsSection = (layerUid, layerTitle) => {
+  const { selectedLayerTableUid, setSelectedLayerTableUid, tableLoaded,setTableLoaded } = useMapViewStore();
+  const str = JSON.stringify(layerUid)
+  const obj = JSON.parse(str)
+  const id = obj.layerUid
+
   const buttonLists = [
     {
       icon: <ZoomIn className="w-3 h-3 stroke-2" />,
       name: "Zoom to",
+      onClick: null,
     },
     {
       icon: <Table className="w-3 h-3 stroke-2" />,
       name: "Show Table",
+      onClick: (e) => handleTableButtonClick(e.currentTarget.name),
     },
     {
       icon: <PencilIcon className="w-3 h-3 stroke-2" />,
       name: "Rename",
+      onClick: null,
     },
     {
       icon: <Trash className="w-3 h-3 stroke-2" />,
       name: "Remove",
+      onClick: null,
     },
   ];
 
+  const handleTableButtonClick = (key) => {
+    if (key == selectedLayerTableUid) {
+      setTableLoaded(!tableLoaded)
+    } else {
+      setTableLoaded(true)
+    } 
+    setSelectedLayerTableUid(key);
+  };
+  
   return (
     <div className="flex flex-col gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
       {buttonLists.map((item, index) => (
         <button
-          key={`button-${item}-${index}`}
+          key={`button-${item.name}-${id}`}
+          name={id}
           className="flex items-center justify-start gap-2 p-1"
+          onClick={item.onClick}
         >
           <span>{item.icon}</span>
           {item.name}
@@ -212,3 +231,4 @@ const OptionsSection = () => {
     </div>
   );
 };
+

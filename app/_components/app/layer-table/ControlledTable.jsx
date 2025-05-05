@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
+
 
 const LoadingBlock = ({ getRows, pageSize, startRow, onLoaded }) => {
   const [rows, setRows] = useState();
@@ -46,12 +47,19 @@ const ControlledTable = ({
   const [gridApi, setGridApi] = useState();
   const [loadingBlocks, setLoadingBlocks] = useState([]);
   let paginationProps = {};
+  const autoSizeStrategy = useMemo(() => {
+    return {
+      type: 'fitCellContents',
+    };
+  }, []);
+  
 
   if (pagination) {
     paginationProps = {
       pagination,
       paginationPageSize: pageSize,
-      cacheBlockSize: pageSize
+      cacheBlockSize: pageSize,
+      paginationPageSizeSelector: false,
     };
   }
 
@@ -169,10 +177,6 @@ const ControlledTable = ({
       }}
     >
       <AgGridReact
-        defaultColDef={{
-          flex: 1,
-          minWidth: 100
-        }}
         columnDefs={columnDefs}
         components={components}
         rowData={rows}
@@ -184,6 +188,7 @@ const ControlledTable = ({
         onGridReady={onGridReady}
         rowHeight={rowHeight}
         headerHeight={headerHeight}
+        autoSizeStrategy={autoSizeStrategy}
         {...paginationProps}
       />
       {loadingBlocks.map((startRow) => (

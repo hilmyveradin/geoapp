@@ -16,14 +16,16 @@ import AddLayersContent from "./map-sidebar/add-layer-content";
 import TablesContent from "./map-sidebar/tables-content";
 import { Separator } from "@/components/ui/separator";
 import { ButtonSidebar } from '@/components/ui/button-sidebar';
-import DemoPaginationTable from '../layer-table/dummydata';
+import PaginationLayerTable from '../layer-table/PaginationLayerTable';
 import SaveAlertDialog from "../shared/save-alert-dialog";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [expandedSidebarButtons, setExpandedSidebarButtons] = useState(true);
   const [selectedButton, setSelectedButton] = useState(null);
   const [showSidebarRight, setShowSidebarRight] = useState(true);
+  const { tableLoaded } = useMapViewStore();
 
   // Button data
   const BUTTONS_CONSTANTS = [
@@ -171,7 +173,7 @@ const MapSidebar = () => {
       {/* TODO: Fix this grid views and remove the 48px if there's already a style sidebar */}
       <div
         className={cn(
-          "fixed rounded-md border bottom-6 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
+          "fixed rounded-md bottom-6 top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 z-10",
           {
             "left-[300px] w-[calc(100vw-300px-60px+48px)]":
               !expandedSidebarButtons && showSidebar,
@@ -186,7 +188,7 @@ const MapSidebar = () => {
           }
         )}
       >
-        <DemoPaginationTable></DemoPaginationTable>
+        {tableLoaded && <PaginationLayerTable/>}
       </div>
       {/* TODO: Add this sidebar div <div
         className={cn(

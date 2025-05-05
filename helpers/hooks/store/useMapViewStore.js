@@ -6,6 +6,8 @@ const useMapViewStore = create((set) => ({
   selectedLayers: null,
   mapData: null,
   layersData: null,
+  selectedLayerTableUid: null,
+  tableLoaded: false,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -43,6 +45,16 @@ const useMapViewStore = create((set) => ({
     set((state) => ({
       selectedLayers: state.selectedLayers.filter((layer) => layer !== data),
     })),
+
+  setSelectedLayerTableUid: (data) =>
+    set(() => ({
+      selectedLayerTableUid: data,
+    })),
+
+  setTableLoaded: (data) =>
+    set(() => ({
+      tableLoaded: data,
+    }))
 }));
 
 export default useMapViewStore;
