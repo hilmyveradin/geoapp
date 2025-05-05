@@ -178,11 +178,7 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
       setImageLoaded(true);
       setDateHash(Date.now());
     };
-  }, [layer.legendUrl]);
-
-  useEffect(() => {
-    setDateHash(Date.now());
-  }, [changedLayerStyleUid, layer.layerUid]);
+  }, [layer.legendUrl, changedLayerStyleUid]);
 
   useEffect(() => {
     if (multiSelectedLayers) {

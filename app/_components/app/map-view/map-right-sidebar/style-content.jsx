@@ -32,6 +32,7 @@ import {
   handleErrorMessage,
 } from "@/helpers/string-helpers";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import "ace-builds";
 import AceEditor from "react-ace";
 
 const StyleContent = () => {
@@ -333,7 +334,9 @@ const StyleContent = () => {
     saveFunction
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(response.status);
+          const error = new Error(response.statusText || "Unknown error");
+          error.status = response.status;
+          throw error;
         }
 
         const responseJson = await response.json();
@@ -348,7 +351,7 @@ const StyleContent = () => {
         setAdvancedJson("");
       })
       .catch((error) => {
-        const { title, description } = handleErrorMessage(error);
+        const { title, description } = handleErrorMessage(error.status);
         toast({
           title: title,
           description: description, // Provides more specific error detail
