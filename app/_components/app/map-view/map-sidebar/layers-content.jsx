@@ -160,6 +160,19 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
   const [multipleSelectedLayerChecked, setMultipleSelectedLayerChecked] =
     useState(false);
 
+  const [isSquare, setIsSquare] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = layer.legendUrl;
+    img.onload = () => {
+      if (img.width === img.height) {
+        setIsSquare(true);
+      }
+      setImageLoaded(true);
+    };
+  }, [layer.legendUrl]);
+
   useEffect(() => {
     if (multiSelectedLayers) {
       setMultipleSelectedLayerChecked(
@@ -271,15 +284,19 @@ const LayersCard = ({ layer, isCtrlPressed }) => {
       </TooltipText>
       {collapsibleContent === "layer" && (
         <div className="flex items-center gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
-          {!imageLoaded && <Skeleton className="w-5 h-5 rounded-full" />}
-          <img
-            key={`${layer.layerUid}`}
-            src={layer.legendUrl}
-            className="w-5 h-5"
-            alt="legend logo"
-            onLoad={() => setImageLoaded(true)}
-            style={{ display: imageLoaded ? "block" : "none" }}
-          />
+          {!imageLoaded && <Skeleton className="h-5 rounded-full w-fit" />}
+          <div
+            className={isSquare ? "w-5 h-5" : "overflow-y-auto max-h-60 w-full"}
+          >
+            <img
+              key={`${layer.layerUid}`}
+              src={layer.legendUrl}
+              className="w-full"
+              alt="legend logo"
+              onLoad={() => setImageLoaded(true)}
+              style={{ display: imageLoaded ? "block" : "none" }}
+            />
+          </div>
         </div>
       )}
       {collapsibleContent === "options" && (
@@ -405,7 +422,13 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
     removeMapLayers,
   } = useMapViewStore();
 
-  const { reloadTable, setReloadTable, setFtsQuery, searchSubmit, setSearchSubmit } = useTableQueryStore();
+  const {
+    reloadTable,
+    setReloadTable,
+    setFtsQuery,
+    searchSubmit,
+    setSearchSubmit,
+  } = useTableQueryStore();
 
   const id = layer.layerUid;
 
