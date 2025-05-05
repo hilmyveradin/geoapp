@@ -19,7 +19,7 @@ const MenuCard = (props) => {
   return (
     <Card
       key={key}
-      className="px-2 py-3 shadow-lg hover:bg-lime-500 bg-lime-300"
+      className="px-2 py-3 shadow-lg cursor-pointer hover:bg-zinc-50 bg-zinc-100"
       onClick={() => {
         router.push(`/app/overview/${cardData.cardType}/${cardData.cardUid}`);
       }}
@@ -37,7 +37,9 @@ const MenuCard = (props) => {
             <UserAvatar user={cardData.creator} />
             <p> {cardData.creator.fullName} </p>
           </div>
-          <Button className="bg-green-700 hover:bg-green-600">View</Button>
+          <Button className="bg-gableGreen-500 hover:bg-gableGreen-400">
+            View
+          </Button>
         </CardDescription>
       </CardHeader>
     </Card>

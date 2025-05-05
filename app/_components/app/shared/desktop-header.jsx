@@ -55,7 +55,7 @@ const DesktopHeader = () => {
             <Link href={item.path} key={`topbar-item-${index}`}>
               <button
                 className={cn("rounded-xl font-bold px-3 py-1", {
-                  "bg-green-400": pathName.includes(item.path),
+                  "text-gableGreen-100": pathName.includes(item.path),
                 })}
               >
                 {item.name}

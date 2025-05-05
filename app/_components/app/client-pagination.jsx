@@ -25,7 +25,7 @@ export default function ClientPagination({ data, ...props }) {
       {" "}
       {currentPosts.length > 0 ? (
         <>
-          <div class="sm:grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 flex flex-col">
+          <div class="sm:grid grid-cols-3 grid-rows-2 gap-x-4 gap-y-6 flex flex-col">
             {currentPosts.map((currentPost) => {
               return (
                 <MenuCard
@@ -39,7 +39,7 @@ export default function ClientPagination({ data, ...props }) {
               );
             })}
           </div>
-          <div className="pt-2">
+          <div className="mt-6">
             <PaginationSection
               totalPosts={data.length}
               postsPerPage={postsPerPage}

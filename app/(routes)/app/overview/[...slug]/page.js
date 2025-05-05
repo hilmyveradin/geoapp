@@ -96,7 +96,7 @@ const MapOverview = ({ params }) => {
     );
 
   return (
-    <div className="flex w-full h-full gap-16 p-10 bg-blue-100">
+    <div className="flex w-full h-full gap-16 p-10">
       <img
         src={overviewData.imageUrl}
         alt="map image"
@@ -108,7 +108,7 @@ const MapOverview = ({ params }) => {
             <Button
               onClick={item.action}
               key={`button-${item.title}`}
-              className="w-full gap-4 bg-gn-500"
+              className="w-full gap-4 bg-gableGreen-500"
             >
               {item.title}
             </Button>
@@ -122,7 +122,7 @@ const MapOverview = ({ params }) => {
           <div className="flex justify-between space-x-2 ">
             <p>Owner</p>
             <button
-              className="flex items-center space-x-2 text-gn-500 stroke-gn-500"
+              className="flex items-center space-x-2 text-gableGreen-500 stroke-gableGreen-500"
               onClick={handleChangeOwner}
             >
               <UserRound className="w-7 h-7" />

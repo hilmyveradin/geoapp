@@ -76,7 +76,7 @@ const MobileHeader = () => {
                 <button
                   key={`topbar-item-${index}`}
                   className={cn("rounded-xl font-bold px-2 py-1", {
-                    "bg-green-400": pathName.includes(item.path),
+                    "text-gableGreen-100": pathName.includes(item.path),
                   })}
                   onClick={() => {
                     router.push(item.path);
