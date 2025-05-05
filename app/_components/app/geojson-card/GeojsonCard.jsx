@@ -42,9 +42,6 @@ import "./styles.css"
 
 export function Combobox({layerTitles, value, setValue, setPageIdx}) {
   const [open, setOpen] = useState(false)
-  // const titleText = value
-  //   ? layerTitles.find((layerTitles) => layerTitles.value === value)?.label
-  //   : "Select layer title"
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -54,7 +51,6 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
           role="combobox"
           aria-expanded={open}
           className="w-[50%] flex justify-between bg-nileBlue-50 hover:bg-nileBlue-50 shadow-md"
-          // title={titleText}
         >
           <div className="w-[90%] flex items-center">
             <TooltipText 
@@ -102,9 +98,6 @@ export function Combobox({layerTitles, value, setValue, setPageIdx}) {
                     {layerTitle.label}
                   </p>
                 </TooltipText>
-                {/* <span className="w-[80%] text-ellipsis overflow-hidden truncate">
-                  {layerTitle.label}
-                </span> */}
               </CommandItem>
             ))}
           </CommandGroup>
