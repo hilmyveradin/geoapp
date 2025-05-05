@@ -1,47 +1,34 @@
 "use client";
 
-import GroupButtons from "@/app/_components/app/group-buttons";
-import GroupMembersPage from "@/app/_components/app/groups/group-members-page";
-import GroupOverviewPage from "@/app/_components/app/groups/group-overview-page";
-import useRefetchStore from "@/helpers/hooks/store/use-refetch-store";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import GroupOverviewPage from "@/app/_components/app/groups/group-overview-page";
+import GroupMembersPage from "@/app/_components/app/groups/group-members-page";
 
 const GroupOverview = ({ params }) => {
   const groupUid = params.slug;
-
   const [currentTab, setCurrentTab] = useState("overview");
 
   return (
-    <div className="flex flex-col w-full h-full gap-2">
-      <div className="flex justify-between px-4 bg-nileBlue-600">
-        <p className="text-lg font-semibold text-white">Group Admin</p>
-        <div className="flex gap-8">
-          <button
-            className={cn("", {
-              "text-white font-semibold": currentTab === "overview",
-            })}
-            onClick={() => {
-              setCurrentTab("overview");
-            }}
+    <div className="flex flex-col w-full h-full">
+      <div className="flex flex-col sm:flex-row justify-between px-4 py-3 bg-nileBlue-600 text-white rounded-lg">
+        <p className="text-lg font-semibold mb-2 sm:mb-0">Group Admin</p>
+        <div className="flex gap-4">
+          <TabButton
+            active={currentTab === "overview"}
+            onClick={() => setCurrentTab("overview")}
           >
             Overview
-          </button>
-          <button
-            className={cn("", {
-              "text-white font-semibold": currentTab === "member",
-            })}
-            onClick={() => {
-              setCurrentTab("member");
-            }}
+          </TabButton>
+          <TabButton
+            active={currentTab === "member"}
+            onClick={() => setCurrentTab("member")}
           >
             Member
-          </button>
+          </TabButton>
         </div>
       </div>
-      <div>
+      <div className="p-4">
         {currentTab === "overview" ? (
           <GroupOverviewPage groupUid={groupUid} />
         ) : (
@@ -51,5 +38,19 @@ const GroupOverview = ({ params }) => {
     </div>
   );
 };
+
+const TabButton = ({ active, onClick, children }) => (
+  <button
+    className={cn(
+      "px-3 py-1 rounded transition-colors",
+      active
+        ? "bg-white text-nileBlue-600 font-semibold"
+        : "text-white hover:bg-nileBlue-500"
+    )}
+    onClick={onClick}
+  >
+    {children}
+  </button>
+);
 
 export default GroupOverview;
