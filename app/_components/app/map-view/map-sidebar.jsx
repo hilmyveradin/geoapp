@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image'
 import { cn } from "@/lib/utils";
 import {
   ChevronRight,
@@ -57,38 +58,40 @@ const MapSidebar = () => {
   // Button data
   const buttons = [
     {
-      icon: <PlusCircle className={cn("w-4 h-4")} />,
+      icon: <PlusCircle className={cn("w-4 h-4")} color = "#fff"/>,
       label: "Add",
       onClick: () => handleButtonClick("add"),
     },
     {
-      icon: <Layers3 className={cn("w-4 h-4")} />,
+      icon: <Layers3 className={cn("w-4 h-4")} color = "#fff"/>,
       label: "Layers",
       onClick: () => handleButtonClick("layers"),
     },
     {
       icon: (
-        <img
+        <Image
           className={cn("w-4 h-4")}
           src="/app/basemap-svgrepo-com.svg"
           alt="basemap icon"
+          width={16}
+          height={16}
         />
       ),
       label: "Basemap",
       onClick: () => handleButtonClick("basemap"),
     },
     {
-      icon: <Save className={cn("w-4 h-4")} />,
+      icon: <Save className={cn("w-4 h-4")} color = "#fff" />,
       label: "Save",
       onClick: () => handleButtonClick("save"),
     },
     {
-      icon: <Share2 className={cn("w-4 h-4")} />,
+      icon: <Share2 className={cn("w-4 h-4")} color = "#fff"/>,
       label: "Share",
       onClick: () => handleButtonClick("share"),
     },
     {
-      icon: <Printer className={cn("w-4 h-4")} />,
+      icon: <Printer className={cn("w-4 h-4")} color = "#fff"/>,
       label: "Print",
       onClick: () => handleButtonClick("print"),
     },
@@ -96,6 +99,7 @@ const MapSidebar = () => {
       icon: (
         <ChevronLeft
           className={cn("w-4 h-4", { "-rotate-180": showSidebar })}
+          color = "#fff"
         />
       ),
       label: "Collapse",
@@ -107,7 +111,7 @@ const MapSidebar = () => {
     <div className="flex flex-row">
       <div
         className={cn(
-          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gn-400 w-[48px]",
+          "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] left-0 bottom-10 z-10 bg-gableGreen-500 w-[48px]",
           {
             "w-[160px]": !showSidebar,
           }
@@ -152,15 +156,17 @@ const MapSidebar = () => {
           },
         )}
       >
-        <ButtonSidebar variant="ghost">
-          <img
+        <ButtonSidebar variant="ghostLeft">
+          <Image
             className={cn("w-4 h-4")}
             src="/app/style-icon.svg"
             alt="style icon"
+            width={16}
+            height={16}
           />
           {!showSidebarRight && <span className="ml-2 inline-block">Style</span>}
         </ButtonSidebar>
-        <ButtonSidebar variant="ghost" onClick={() => setShowSidebarRight((prev) => !prev)}>
+        <ButtonSidebar variant="ghostLeft" onClick={() => setShowSidebarRight((prev) => !prev)}>
           <ChevronRight
             className={cn("w-4 h-4", {
               "-rotate-180": showSidebarRight,
