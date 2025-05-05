@@ -33,7 +33,8 @@ const LayersContent = () => {
     setMapLayers,
     multiSelectedLayers,
     setMultiSelectedLayers,
-    toggleReorderLayer,
+    setIsLayerReordered,
+    toggleRefreshLayerOrder,
   } = useMapViewStore();
 
   const [enabled, setEnabled] = useState(false);
@@ -92,7 +93,8 @@ const LayersContent = () => {
     reorderedItems.splice(result.destination.index, 0, removed);
 
     setMapLayers(reorderedItems);
-    toggleReorderLayer();
+    toggleRefreshLayerOrder();
+    setIsLayerReordered(true);
   };
 
   if (!enabled) {
@@ -310,7 +312,7 @@ const MultiLayerSelection = ({ resetCtrlPressed }) => {
 
     // Add deleted layer data
     multiSelectedLayers.forEach((layer) => {
-      addDeletedLayerUids({ layer_uid: layer.layerUid });
+      addDeletedLayerUids(layer.layerUid);
     });
 
     setMapLayers(filteredLayersData);
@@ -396,7 +398,7 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
 
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const deleteLayerAction = () => {
-    addDeletedLayerUids({ layer_uid: layer.layerUid });
+    addDeletedLayerUids(layer.layerUid);
     removeMapLayers(layer);
   };
 

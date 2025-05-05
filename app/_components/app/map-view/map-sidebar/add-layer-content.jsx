@@ -190,7 +190,7 @@ const AddLayerCard = ({ layer }) => {
   const { addAddedLayerUids, addMapLayers } = useMapViewStore();
   const addLayerContent = () => {
     addMapLayers(layer);
-    addAddedLayerUids({ layer_uid: layer.layerUid });
+    addAddedLayerUids(layer.layerUid);
   };
 
   const generateDate = () => {
