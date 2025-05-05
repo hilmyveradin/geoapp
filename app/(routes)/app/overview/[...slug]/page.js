@@ -90,7 +90,22 @@ const MapOverview = ({ params }) => {
 
   const handleChangeOwner = () => {};
 
-  console.log(overviewData);
+  const generateOverviewName = () => {
+    console.log(overviewData);
+    if (overviewType === "layer") {
+      return (
+        <p className="flex items-center pl-4 text-2xl font-bold text-white border shadow-xl text-start bg-nileBlue-600 h-14">
+          {overviewData.layerTitle}
+        </p>
+      );
+    } else {
+      return (
+        <p className="flex items-center pl-4 text-2xl font-bold text-white border shadow-xl text-start bg-nileBlue-600 h-14">
+          {overviewData.mapTitle}
+        </p>
+      );
+    }
+  };
 
   if (!overviewData)
     return (
@@ -100,72 +115,75 @@ const MapOverview = ({ params }) => {
     );
 
   return (
-    <div className="flex gap-16 p-10">
-      <div className="w-[1700px]">
-        <AspectRatio ratio={450 / 200}>
-          <img
-            src={overviewData.imageUrl}
-            alt="map image"
-            className="w-[1700px]"
-          />
-        </AspectRatio>
-      </div>
-      <div className="flex flex-col gap-12 !w-1/4">
-        <div className="flex flex-col gap-6">
-          {BUTTON_CONSTANTS.map((item) => (
-            <Button
-              onClick={item.action}
-              key={`button-${item.title}`}
-              className="w-full gap-4 bg-gableGreen-500"
-            >
-              {item.title}
-            </Button>
-          ))}
+    <div className="flex flex-col w-full h-full gap-2">
+      {generateOverviewName()}
+      <div className="flex gap-16 p-10">
+        <div className="w-[1700px]">
+          <AspectRatio ratio={450 / 200}>
+            <img
+              src={overviewData.imageUrl}
+              alt="map image"
+              className="w-[1700px]"
+            />
+          </AspectRatio>
         </div>
-        <div className="flex items-center space-x-2">
-          <Map className="w-7 h-7" />
-          <p>Feature Layer</p>
-        </div>
-        <div className="flex flex-col gap-5">
-          <div className="flex justify-between space-x-2 ">
-            <p>Owner</p>
-            <button
-              className="flex items-center space-x-2 text-gableGreen-500 stroke-gableGreen-500"
-              onClick={handleChangeOwner}
-            >
-              <UserRound className="w-7 h-7" />
-              <p>Change owner</p>
-            </button>
+        <div className="flex flex-col gap-12 !w-1/4">
+          <div className="flex flex-col gap-6">
+            {BUTTON_CONSTANTS.map((item) => (
+              <Button
+                onClick={item.action}
+                key={`button-${item.title}`}
+                className="w-full gap-4"
+              >
+                {item.title}
+              </Button>
+            ))}
           </div>
           <div className="flex items-center space-x-2">
-            <UserAvatar user={overviewData.creator} />
-            <p>{overviewData.creator.fullName}</p>
+            <Map className="w-7 h-7" />
+            <p>Feature Layer</p>
           </div>
-        </div>
+          <div className="flex flex-col gap-5">
+            <div className="flex justify-between space-x-2 ">
+              <p>Owner</p>
+              <button
+                className="flex items-center space-x-2 text-gableGreen-500 stroke-gableGreen-500"
+                onClick={handleChangeOwner}
+              >
+                <UserRound className="w-7 h-7" />
+                <p>Change owner</p>
+              </button>
+            </div>
+            <div className="flex items-center space-x-2">
+              <UserAvatar user={overviewData.creator} />
+              <p>{overviewData.creator.fullName}</p>
+            </div>
+          </div>
 
-        <div className="flex flex-col gap-4">
-          <p> Date</p>
-          <div className="flex items-center justify-between">
-            <p>Item created</p>
-            <p>{dayjs(overviewData.createdAt).format("MMM, DD, YYYY")}</p>
+          <div className="flex flex-col gap-4">
+            <p> Date</p>
+            <div className="flex items-center justify-between">
+              <p>Item created</p>
+              <p>{dayjs(overviewData.createdAt).format("MMM, DD, YYYY")}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Item updated</p>
+              {overviewData.updatedAt ? (
+                <p>{dayjs(overviewData.updatedAt).format("MMM, DD, YYYY")}</p>
+              ) : (
+                <p>-</p>
+              )}
+            </div>
           </div>
-          <div className="flex items-center justify-between">
-            <p>Item updated</p>
-            {overviewData.updatedAt ? (
-              <p>{dayjs(overviewData.updatedAt).format("MMM, DD, YYYY")}</p>
-            ) : (
-              <p>-</p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <p>Tags</p>
-          <div className="flex items-center justify-between">
-            {overviewData.tags ? (
-              <p>{overviewData.tags}</p>
-            ) : (
-              <p>This items has no tags</p>
-            )}
+          <div className="flex flex-col gap-4">
+            <p>Tags</p>
+            <div className="flex items-center justify-between">
+              {overviewData.tags ? (
+                <p>{overviewData.tags}</p>
+              ) : (
+                <p>This items has no tags</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
