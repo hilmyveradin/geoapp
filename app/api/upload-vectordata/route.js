@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import authOptions from "../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
     const formData = await request.formData()
     console.log(formData.get('vector_zip'))
-    const cookieStore = cookies();
-    const token = cookieStore.get("accessToken");
+    const session = await getServerSession(authOptions);
 
     const res = await fetch(`${process.env.API_BASE_URL}/gs/upload_vectordata`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${session.accessToken}`,
       },
       body: formData
     });
