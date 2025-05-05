@@ -153,7 +153,7 @@ const MapSidebar = () => {
             "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] bottom-10 z-10 bg-gray-500",
             {
               "left-12 w-fit": showSidebar,
-              "left-40 w-fit": !showSidebar,
+              "left-40 w-60": !showSidebar,
             }
           )}
         >
