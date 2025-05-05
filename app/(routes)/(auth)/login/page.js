@@ -14,63 +14,104 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Login = () => {
   // TODO: Change this to shadcn Form
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const { toast } = useToast();
+
   const handleLogin = async () => {
-    signIn("credentials", {
+    const signInResult = await signIn("credentials", {
       username: username,
       password: password,
-      redirect: true,
-      callbackUrl: "/app/maps",
+      redirect: false,
     });
+
+    console.log("SIGN IN RESULT: ", signInResult);
+    debugger;
+    if (signInResult?.error) {
+      debugger;
+      toast({
+        variant: "destructive",
+        title: "Invalid username/password",
+        description: "Please try again",
+      });
+    }
+
+    if (signInResult?.ok) {
+      router.push("/app/maps");
+    }
   };
 
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-24">
-      <Card className="max-w-md p-6 mx-auto mt-10 space-y-4 bg-white shadow-md rounded-xl">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Login</CardTitle>
-          <CardDescription className="text-center">
-            Please enter your username and password to login.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              placeholder="Username"
-              required
-              type="text"
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
-            />
+    <div className="flex items-center justify-center min-h-screen min-w-screen">
+      <div className="flex flex-col items-start w-2/3 p-8 border rounded-lg shadow-lg h-4/5">
+        <img src="/geoportal-logo.svg" alt="logo" className="h-20 mb-4" />
+        <div className="flex w-full h-full gap-4">
+          <img
+            src="/login-image.svg"
+            alt="user avatar"
+            className="rounded-lg"
+          />
+          <div className="flex flex-col flex-grow gap-12 text-center">
+            <p className="text-3xl font-bold">Welcome to Geoportal</p>
+            <div className="flex flex-col gap-4 text-start">
+              <div className="">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="email"
+                >
+                  Username
+                </label>
+                <div className="gap-2">
+                  <input
+                    id="username"
+                    autoComplete="email"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" // Added some styling to the input
+                    name="email"
+                    placeholder="Enter username"
+                    required
+                    type="email"
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    autoComplete="current-password"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" // Added some styling to the input
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    required
+                    type="password"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <Button className="w-full" onClick={handleLogin}>
+              Login
+            </Button>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              required
-              type="password"
-              placeholder="Password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" onClick={() => handleLogin()}>
-            Login
-          </Button>
-        </CardFooter>
-      </Card>
-    </main>
+        </div>
+      </div>
+    </div>
   );
 };
 

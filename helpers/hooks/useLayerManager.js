@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import useMapViewStore from "./store/useMapViewStore";
 
 const useLayerManager = () => {
-  const { mapLoaded, map, selectedLayers } = useMapViewStore();
+  const { mapLoaded, map, selectedLayers, mapData } = useMapViewStore();
   const currentLayersRef = useRef([]);
   const [firstRender, setFirstRender] = useState(true);
 
@@ -27,20 +27,11 @@ const useLayerManager = () => {
       // // Clear the ref and repopulate it with the current selectedLayers' ids
       currentLayersRef.current = [];
 
-      let BBoxValue = [0, 0, 0, 0];
       selectedLayers.forEach((layer) => {
-        // const layerId = `${layer.layerUid}-id`;
         currentLayersRef.current.push(layer.layerUid); // Track the layer being added
-
-        const tempBbox0 = Math.max(layer.layerBbox[0], BBoxValue[0]);
-        const tempBbox1 = Math.min(layer.layerBbox[1], BBoxValue[1]);
-        const tempBbox2 = Math.max(layer.layerBbox[2], BBoxValue[2]);
-        const tempBbox3 = Math.min(layer.layerBbox[3], BBoxValue[3]);
-
-        BBoxValue = [tempBbox0, tempBbox1, tempBbox2, tempBbox3];
         const url = `http://dev3.webgis.co.id/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.pgTableName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`;
 
-        if (!map.getSource(layer.layerUid)) {
+        if (!map?.getSource(layer.layerUid)) {
           map.addSource(layer.layerUid, {
             type: "raster",
             tiles: [url],
@@ -59,14 +50,12 @@ const useLayerManager = () => {
         }
       });
 
-      // TODO: Need to confirm the BBox value
       if (firstRender) {
-        map.fitBounds(BBoxValue, { padding: 40, maxZoom: 12 }); // Adjust padding as needed
+        map.fitBounds(mapData.mapBbox, { padding: 40, maxZoom: 12 }); // Adjust padding as needed
         setFirstRender(false);
       }
-      // map.fitBounds(BBoxValue, { padding: 40 }); // Adjust padding as needed
     }
-  }, [mapLoaded, selectedLayers, map]); // Ensure map is a dependency if it's coming from a store or context
+  }, [mapLoaded, selectedLayers, map, mapData.mapBbox]); // Ensure map is a dependency if it's coming from a store or context
 };
 
 export default useLayerManager;

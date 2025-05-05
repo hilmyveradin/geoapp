@@ -28,6 +28,7 @@ const MapView = ({ params }) => {
         return {
           ...data,
           imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+          legendUrl: `http://dev3.webgis.co.id/be/cms/layer/legend/${data.layerUid}`,
         };
       });
 

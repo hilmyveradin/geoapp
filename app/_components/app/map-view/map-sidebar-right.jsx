@@ -3,9 +3,6 @@
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LegendContent from "./map-sidebar/legend-content";
-import LayersContent from "./map-sidebar/layers-content";
 import { ButtonSidebar } from "@/components/ui/button-sidebar";
 
 const MapSidebarRight = () => {
@@ -16,7 +13,7 @@ const MapSidebarRight = () => {
         "flex flex-col fixed top-[56px] h-[calc(100vh-56px)] right-0 bottom-10 z-10 bg-white w-[48px]",
         {
           "w-[180px]": !showSidebar,
-        },
+        }
       )}
     >
       <ButtonSidebar variant="ghost">
@@ -25,15 +22,18 @@ const MapSidebarRight = () => {
           src="/app/style-icon.svg"
           alt="style icon"
         />
-        {!showSidebar && <span className="ml-2 inline-block">Style</span>}
+        {!showSidebar && <span className="inline-block ml-2">Style</span>}
       </ButtonSidebar>
-      <ButtonSidebar variant="ghost" onClick={() => setShowSidebar((prev) => !prev)}>
+      <ButtonSidebar
+        variant="ghost"
+        onClick={() => setShowSidebar((prev) => !prev)}
+      >
         <ChevronRight
           className={cn("w-4 h-4", {
             "-rotate-180": showSidebar,
           })}
         />
-        {!showSidebar && <span className="ml-2 inline-block">Collapse</span>}
+        {!showSidebar && <span className="inline-block ml-2">Collapse</span>}
       </ButtonSidebar>
       {/* <div
         className={cn(
@@ -41,7 +41,7 @@ const MapSidebarRight = () => {
         )}
         onClick={() => setShowSidebar((prev) => !prev)}
       > */}
-        {/* <ChevronRight
+      {/* <ChevronRight
           className={cn("w-6 h-6 transition-all duration-200", {
             "-rotate-180": showSidebar,
           })}
