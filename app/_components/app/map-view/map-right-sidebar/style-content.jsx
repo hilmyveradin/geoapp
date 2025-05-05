@@ -285,7 +285,7 @@ const SymbolComponent = (props) => {
   };
 
   return (
-    <div className="z-30 flex flex-col items-center w-full gap-4">
+    <div className="z-20 flex flex-col items-center w-full gap-4">
       <button
         className="flex justify-between w-full gap-2 p-2 mb-4 text-base rounded-md shadow-md cursor-pointer"
         onClick={(e) => {
@@ -323,7 +323,7 @@ const SymbolComponent = (props) => {
                 />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className=" text-white w-[224px] bg-nileBlue-900">
               <DropdownMenuItem
                 onSelect={() => {
                   setStyle("marker");
@@ -425,7 +425,7 @@ const ColorComponent = (props) => {
   };
 
   return (
-    <div className="z-20 flex flex-col items-center w-full gap-4">
+    <div className="flex flex-col items-center w-full gap-4">
       <button
         className="flex w-full gap-2 p-2 mb-4 text-base rounded-md shadow-md cursor-pointer"
         onClick={(e) => {
@@ -441,7 +441,7 @@ const ColorComponent = (props) => {
       </button>
       {showPopup && (
         <div
-          className="absolute left-0 right-0 flex flex-col items-center gap-2 p-2 bg-white rounded-md"
+          className="absolute left-0 right-0 z-50 flex flex-col items-center gap-2 p-2 bg-white rounded-md"
           onClick={handlePickerClick}
         >
           <div className="flex items-center justify-between w-full gap-2 p-2">
