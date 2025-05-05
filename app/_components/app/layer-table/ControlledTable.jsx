@@ -224,7 +224,6 @@ const ControlledTable = ({
         headerHeight={headerHeight}
         autoSizeStrategy={autoSizeStrategy}
         rowSelection={"multiple"}
-        rowMultiSelectWithClick={true}
         onSelectionChanged={onSelectionChanged}
         {...paginationProps}
       />
