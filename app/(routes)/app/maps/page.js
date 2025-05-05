@@ -89,8 +89,8 @@ const MapsDashboard = () => {
 
   useEffect(() => {
     return () => {
-      setSearchedMapTitle("")
-    }
+      setSearchedMapTitle("");
+    };
   }, [setSearchedMapTitle]);
 
   const deleteMaps = async () => {
@@ -118,7 +118,7 @@ const MapsDashboard = () => {
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
+        <Loader2 className="w-8 h-8 md:w-10 md:h-10 stroke-blackHaze-500 animate-spin" />
       </div>
     );
   }
@@ -128,17 +128,17 @@ const MapsDashboard = () => {
   );
 
   return (
-    <div className="w-full h-full px-8 mt-4">
-      <div className="mb-4">
+    <div className="w-full h-full px-4 md:px-8 mt-2 md:mt-4">
+      <div className="mb-2 md:mb-4">
         {selectedCards.length > 0 ? (
-          <div className="flex items-center w-full gap-3 h-9">
+          <div className="flex items-center w-full gap-2 md:gap-3 h-8 md:h-9">
             <X
               className="w-4 h-4 cursor-pointer"
               onClick={() => clearSelection()}
-            />{" "}
-            <div className="flex items-center gap-2">
+            />
+            <div className="flex items-center gap-1 md:gap-2 text-sm md:text-base">
               <p>{selectedCards.length}</p>
-              <p> selected </p>
+              <p>selected</p>
             </div>
             <DestructiveDialog
               title="Are you sure you want to delete these maps?"
@@ -151,15 +151,17 @@ const MapsDashboard = () => {
             <Share2Icon className="w-4 h-4 cursor-pointer" />
           </div>
         ) : (
-          <MapsButtons />
+          <div className="w-full overflow-x-auto">
+            <MapsButtons />
+          </div>
         )}
       </div>
       {/* Pagination */}
       {filteredMaps.length > 0 ? (
         <ClientPagination data={filteredMaps} />
       ) : (
-        <div className="flex items-center justify-center w-full h-96">
-          <p> You do not have any maps. Add a new one! </p>
+        <div className="flex items-center justify-center w-full h-64 md:h-96 text-sm md:text-base">
+          <p>You do not have any maps. Add a new one!</p>
         </div>
       )}
     </div>

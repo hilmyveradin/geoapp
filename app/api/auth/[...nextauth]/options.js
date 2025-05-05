@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+const REFRESH_TOKEN_ERROR = "RefreshAccessTokenError";
+const TOKEN_EXPIRY_MINUTES = 60;
+
 const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -11,48 +14,55 @@ const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        if (!credentials?.username || !credentials?.password) {
+          throw new Error("Missing credentials");
+        }
+
         try {
           const res = await fetch(`${process.env.API_BASE_URL}/iam/login`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               username: credentials.username,
               password: credentials.password,
             }),
           });
 
-          const user = await res.json();
-
-          if (res.status === 200 && user) {
-            return user;
+          if (!res.ok) {
+            throw new Error("Invalid credentials");
           }
 
-          throw new Error("Check your credentials");
+          const user = await res.json();
+          return user;
         } catch (error) {
-          console.log(error);
+          console.error("Authorization error:", error);
+          return null;
         }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // If user just signed in, set the expiration time
+      debugger;
       if (user) {
-        token.user = user.data;
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        token.accessTokenExpires = dayjs().add(60, "minute").toDate().getTime();
+        return {
+          ...token,
+          user: user.data,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          accessTokenExpires: dayjs()
+            .add(TOKEN_EXPIRY_MINUTES, "minute")
+            .valueOf(),
+        };
       }
 
-      // If the token hasn't expired yet, just return it
-      if (dayjs().isBefore(dayjs(token.accessTokenExpires))) {
+      debugger;
+      if (dayjs().isBefore(token.accessTokenExpires)) {
         return token;
       }
 
-      // If the token expired, refresh it
-      return await refreshAccessToken(token);
+      debugger;
+      return refreshAccessToken(token);
     },
 
     async session({ session, token }) {
@@ -64,41 +74,32 @@ const authOptions = {
     },
   },
   session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-  },
+  pages: { signIn: "/login" },
 };
 
 async function refreshAccessToken(token) {
   try {
-    const refreshedTokens = await fetch(
-      `${process.env.API_BASE_URL}/iam/refresh`,
-      {
-        method: "POST",
-        body: JSON.stringify({ refresh_token: token.refreshToken }),
-        headers: { "Content-Type": "application/json" },
-      }
-    ).then((res) => res.json());
+    const response = await fetch(`${process.env.API_BASE_URL}/iam/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: token.refreshToken }),
+    });
 
-    if (!refreshedTokens.error) {
-      return {
-        ...token,
-        accessToken: refreshedTokens.accessToken,
-        refreshToken: refreshedTokens.refreshToken,
-        accessTokenExpires: dayjs().add(60, "minute").toDate().getTime(),
-      };
+    if (!response.ok) {
+      throw new Error("Failed to refresh token");
     }
 
+    const refreshedTokens = await response.json();
+
     return {
       ...token,
-      error: "RefreshAccessTokenError",
+      accessToken: refreshedTokens.accessToken,
+      refreshToken: refreshedTokens.refreshToken,
+      accessTokenExpires: dayjs().add(TOKEN_EXPIRY_MINUTES, "minute").valueOf(),
     };
   } catch (error) {
-    console.error("Error refreshing access token: ", error);
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
+    console.error("Error refreshing access token:", error);
+    return { ...token, error: REFRESH_TOKEN_ERROR };
   }
 }
 
