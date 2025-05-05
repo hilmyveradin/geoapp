@@ -4,9 +4,7 @@ import UserAvatar from "@/app/_components/app/shared/user-avatar";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
-import { Loader2 } from "lucide-react";
-import { UserRound } from "lucide-react";
-import { Map } from "lucide-react";
+import { Loader2, UserRound, Map } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -17,172 +15,130 @@ const MapOverview = ({ params }) => {
   const router = useRouter();
 
   useEffect(() => {
-    async function loadLayerData() {
+    async function loadData() {
       try {
-        const response = await fetch(
-          `/api/layers/get-layer-id?layerUid=${overviewUid}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const datas = await response.json();
-        const modifiedDatas = datas.data.map((data) => {
-          return {
-            ...data,
-            tags: data.layerTags,
-            imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-          };
+        const endpoint =
+          overviewType === "layer"
+            ? `/api/layers/get-layer-id?layerUid=${overviewUid}`
+            : `/api/maps/get-map-id?mapUid=${overviewUid}`;
+
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         });
-        setOverviewData(modifiedDatas[0]);
+
+        const data = await response.json();
+        const modifiedData =
+          overviewType === "layer"
+            ? {
+                ...data.data[0],
+                tags: data.data[0].layerTags,
+                imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.data[0].thumbnailUrl}`,
+              }
+            : {
+                ...data.data,
+                imageUrl: `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${data.data.thumbnailUrl}`,
+              };
+
+        setOverviewData(modifiedData);
       } catch (error) {
-        console.log(error);
+        console.error("Error loading data:", error);
+        // Consider adding error state and displaying to user
       }
     }
 
-    async function loadMapData() {
-      try {
-        const response = await fetch(
-          `/api/maps/get-map-id?mapUid=${overviewUid}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const datas = await response.json();
-        const modifiedDatas = datas.data;
-        modifiedDatas[
-          "imageUrl"
-        ] = `http://dev3.webgis.co.id/be/cms/layer/thumbnail/${modifiedDatas.thumbnailUrl}`;
-        setOverviewData(modifiedDatas);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (overviewType === "layer") {
-      loadLayerData();
-    } else {
-      loadMapData();
-    }
+    loadData();
   }, [overviewUid, overviewType]);
 
-  const handleOpenMapViewer = () => {
-    router.push(`/app/map-view/${overviewType}/${overviewUid}`);
-  };
-
-  const handleShareMap = () => {};
-
-  const hanldeMetadata = () => {};
-
-  const handleEditThumbnail = () => {};
-
   const BUTTON_CONSTANTS = [
-    { title: "Open in Map Viewer", action: handleOpenMapViewer },
-    { title: "Share", action: handleShareMap },
-    { title: "Metadata", action: hanldeMetadata },
-    { title: "Edit Thumbnail", action: handleEditThumbnail },
+    {
+      title: "Open in Map Viewer",
+      action: () => router.push(`/app/map-view/${overviewType}/${overviewUid}`),
+    },
+    { title: "Share", action: () => {} },
+    { title: "Metadata", action: () => {} },
+    { title: "Edit Thumbnail", action: () => {} },
   ];
 
-  const handleChangeOwner = () => {};
-
-  const generateOverviewName = () => {
-    if (overviewType === "layer") {
-      return (
-        <p className="flex items-center pl-4 text-2xl font-bold text-white border shadow-xl text-start bg-nileBlue-600 h-14">
-          {overviewData.layerTitle}
-        </p>
-      );
-    } else {
-      return (
-        <p className="flex items-center pl-4 text-2xl font-bold text-white border shadow-xl text-start bg-nileBlue-600 h-14">
-          {overviewData.mapTitle}
-        </p>
-      );
-    }
-  };
-
-  if (!overviewData)
+  if (!overviewData) {
     return (
       <div className="flex items-center justify-center w-full h-96">
         <Loader2 className="w-10 h-10 stroke-blackHaze-500 animate-spin" />
       </div>
     );
+  }
 
   return (
     <div className="flex flex-col w-full h-full gap-2">
-      {generateOverviewName()}
-      <div className="flex gap-16 p-10">
-        <div className="w-full">
+      <h1 className="flex items-center px-4 text-xl sm:text-2xl font-bold text-white border shadow-xl text-start bg-nileBlue-600 h-14 rounded-lg">
+        {overviewData[overviewType === "layer" ? "layerTitle" : "mapTitle"]}
+      </h1>
+      <div className="flex flex-col md:flex-row gap-8 p-4 md:p-10">
+        <div className="w-full md:w-2/3">
           <AspectRatio ratio={450 / 200}>
             <img
               src={overviewData.imageUrl}
-              alt="map image"
-              className="w-full"
+              alt="Map overview"
+              className="w-full h-full object-cover"
             />
           </AspectRatio>
         </div>
-        <div className="flex flex-col gap-12 min-w-[288px]">
-          <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 w-full md:w-1/3 min-w-[288px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
             {BUTTON_CONSTANTS.map((item) => (
               <Button
                 onClick={item.action}
                 key={`button-${item.title}`}
-                className="w-full gap-4"
+                className="w-full"
               >
                 {item.title}
               </Button>
             ))}
           </div>
           <div className="flex items-center space-x-2">
-            <Map className="w-7 h-7" />
-            <p>Feature Layer</p>
+            <Map className="w-6 h-6 sm:w-7 sm:h-7" />
+            <p className="text-sm sm:text-base">Feature Layer</p>
           </div>
-          <div className="flex flex-col gap-5">
-            <div className="flex justify-between space-x-2 ">
-              <p>Owner</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center">
+              <p className="text-sm sm:text-base">Owner</p>
               <button
                 className="flex items-center space-x-2 text-gableGreen-500 stroke-gableGreen-500"
-                onClick={handleChangeOwner}
+                onClick={() => {}}
               >
-                <UserRound className="w-7 h-7" />
-                <p>Change owner</p>
+                <UserRound className="w-5 h-5" />
+                <span className="text-sm sm:text-base">Change owner</span>
               </button>
             </div>
             <div className="flex items-center space-x-2">
               <UserAvatar user={overviewData.creator} />
-              <p>{overviewData.creator.fullName}</p>
+              <p className="text-sm sm:text-base">
+                {overviewData.creator.fullName}
+              </p>
             </div>
           </div>
-
-          <div className="flex flex-col gap-4">
-            <p> Date</p>
-            <div className="flex items-center justify-between">
-              <p>Item created</p>
-              <p>{dayjs(overviewData.createdAt).format("MMM, DD, YYYY")}</p>
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold text-sm sm:text-base">Date</p>
+            <div className="flex justify-between">
+              <p className="text-sm sm:text-base">Item created</p>
+              <p className="text-sm sm:text-base">
+                {dayjs(overviewData.createdAt).format("MMM DD, YYYY")}
+              </p>
             </div>
-            <div className="flex items-center justify-between">
-              <p>Item updated</p>
-              {overviewData.updatedAt ? (
-                <p>{dayjs(overviewData.updatedAt).format("MMM, DD, YYYY")}</p>
-              ) : (
-                <p>-</p>
-              )}
+            <div className="flex justify-between">
+              <p className="text-sm sm:text-base">Item updated</p>
+              <p className="text-sm sm:text-base">
+                {overviewData.updatedAt
+                  ? dayjs(overviewData.updatedAt).format("MMM DD, YYYY")
+                  : "-"}
+              </p>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <p>Tags</p>
-            <div className="flex items-center justify-between">
-              {overviewData.tags ? (
-                <p>{overviewData.tags}</p>
-              ) : (
-                <p>This items has no tags</p>
-              )}
-            </div>
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold text-sm sm:text-base">Tags</p>
+            <p className="text-sm sm:text-base">
+              {overviewData.tags || "This item has no tags"}
+            </p>
           </div>
         </div>
       </div>
