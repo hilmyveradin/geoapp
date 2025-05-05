@@ -6,6 +6,8 @@ import MapSidebar from "@/app/_components/app/map-view/map-sidebar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useMapViewStore from "@/helpers/hooks/useMapViewStore";
+import MapViewLayout from "../../../layout";
+import MapSidebarRight from "@/app/_components/app/map-view/map-sidebar-right";
 
 const MapView = ({ params }) => {
   const layerUid = params.slug;
@@ -50,12 +52,18 @@ const MapView = ({ params }) => {
       <MapHeader />
       <div className="flex items-center justify-center">
         <MapSidebar />
-        <div className="w-screen h-[calc(100vh-112px)]">
+        <MapSidebarRight />
+        <div className="px-12 w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
       </div>
     </div>
   );
+};
+
+
+MapView.getLayout = function(page) {
+  return <MapViewLayout>{page}</MapViewLayout>;
 };
 
 export default MapView;

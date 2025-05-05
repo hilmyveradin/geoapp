@@ -25,7 +25,7 @@ const MenuCard = (props) => {
       }}
     >
       <CardContent className="relative flex items-center justify-center p-0">
-        <img src={cardData.thumbnaillUrl} alt="Thumbnail" className="w-full" />
+        <img src={cardData.thumbnailUrl} alt="Thumbnail" className="w-full" />
         <MenuCardDropdown>
           <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
         </MenuCardDropdown>
