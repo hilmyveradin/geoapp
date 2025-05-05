@@ -73,7 +73,7 @@ const MapOverview = ({ params }) => {
   }, [overviewUid, overviewType]);
 
   const handleOpenMapViewer = () => {
-    router.push(`/app/map-view/${layerUid}`);
+    router.push(`/app/map-view/${overviewUid}`);
   };
 
   const handleShareMap = () => {};
