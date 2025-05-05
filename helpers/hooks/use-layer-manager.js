@@ -14,6 +14,7 @@ const useLayerManager = () => {
     mapLayers,
     refreshLayerOrder,
     addedLayerUids,
+    mapStyle,
   } = useMapViewStore();
   const [firstRender, setFirstRender] = useState(true);
   const layerOrderRef = useRef([]); // Tracks the intended order of all layers, initialized once
@@ -23,9 +24,11 @@ const useLayerManager = () => {
   useEffect(() => {
     // Reset and reinitialize layers when reorderMaps changes
     // Remove all layers
+    // print("CALLED");
     if (
       refreshLayerReorderRef.current !== refreshLayerOrder ||
-      addedLayerUidsRef !== addedLayerUids
+      addedLayerUidsRef !== addedLayerUids ||
+      mapStyle
     ) {
       layerOrderRef.current.forEach((layerId) => {
         if (map.getLayer(layerId)) {
@@ -40,13 +43,20 @@ const useLayerManager = () => {
 
       refreshLayerReorderRef.current = refreshLayerOrder;
       addedLayerUidsRef.current = addedLayerUids;
+      console.log("CALLED");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, refreshLayerOrder, addedLayerUids]);
+  }, [map, refreshLayerOrder, addedLayerUids, mapStyle]);
 
   useEffect(() => {
     if (mapLoaded && map) {
+      if (map && mapStyle) {
+        console.log("FOOBAR");
+        map.setStyle(mapStyle);
+      }
+
       const updateLayers = () => {
+        console.log("FOOBAR 2");
         // Initialize layerOrderRef only once on first effective load
         if (layerOrderRef.current.length === 0 && mapLayers.length > 0) {
           layerOrderRef.current = mapLayers
@@ -122,6 +132,7 @@ const useLayerManager = () => {
     mapLoaded,
     mapLayers,
     refreshLayerOrder,
+    mapStyle,
   ]);
 };
 
