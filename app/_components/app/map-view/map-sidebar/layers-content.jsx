@@ -2,6 +2,7 @@
 
 import TooltipText from "@/app/_components/shared/tooltipText";
 import { Skeleton } from "@/components/ui/skeleton";
+import useLayerStore from "@/helpers/hooks/store/useLayerStore";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { cn } from "@/lib/utils";
 import { EyeOff } from "lucide-react";
@@ -161,7 +162,6 @@ const LayersCard = ({ data }) => {
       </TooltipText>
       {collapsibleContent === "layer" && (
         <div className="flex items-center gap-2 p-2 bg-white border-b border-l border-r rounded-md shadow-md">
-          <p>Legend symbol: </p>
           {!imageLoaded && <Skeleton className="w-5 h-5 rounded-full" />}
           <img
             key={`${data}`}

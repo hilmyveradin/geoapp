@@ -15,15 +15,15 @@ import {
 import { Fragment, useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
-import AddLayerContent from "./map-sidebar/add-layer-content";
+import AddLayersContent from "./map-sidebar/add-layer-content";
 import TablesContent from "./map-sidebar/tables-content";
 import SaveContent from "./map-sidebar/save-content";
 import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
-import { DataTableDemo } from '../layer-table/layer-table';
-import { ButtonSidebar } from '@/components/ui/button-sidebar';
-import { GridExample } from '@/app/_components/app/layer-table/ag-grid-react';
-import DemoPaginationTable from '../layer-table/dummydata';
+import { DataTableDemo } from "../layer-table/layer-table";
+import { ButtonSidebar } from "@/components/ui/button-sidebar";
+import { GridExample } from "@/app/_components/app/layer-table/ag-grid-react";
+import DemoPaginationTable from "../layer-table/dummydata";
 
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -67,7 +67,7 @@ const MapSidebar = () => {
 
   // Define content for each button
   const BUTTON_CONTENT = {
-    addLayer: <AddLayerContent />,
+    addLayer: <AddLayersContent />,
     layers: <LayersContent />,
     tables: <TablesContent />,
     save: <SaveContent />,
@@ -177,8 +177,9 @@ const MapSidebar = () => {
             "left-[60px] w-[calc(100vw-60px-192px)]":
               expandedSidebarButtons && showSidebar && !showSidebarRight,
           }
-        )}>
-          <DemoPaginationTable></DemoPaginationTable>
+        )}
+      >
+        <DemoPaginationTable></DemoPaginationTable>
       </div>
       <div
         className={cn(

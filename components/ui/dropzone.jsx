@@ -1,9 +1,15 @@
-import React, { useRef, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import React, { useRef, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { TailSpin } from "react-loader-spinner";
 
-export function Dropzone({ onChange, className, fileExtension, progress, ...props }) {
+export function Dropzone({
+  onChange,
+  className,
+  fileExtension,
+  progress,
+  ...props
+}) {
   const fileInputRef = useRef(null);
   const [fileInfo, setFileInfo] = useState(null);
   const [error, setError] = useState(null);
@@ -54,20 +60,23 @@ export function Dropzone({ onChange, className, fileExtension, progress, ...prop
       {...props}
     >
       <CardContent
-        className="flex flex-col items-center justify-center space-y-2 px-2 py-4 text-xs"
+        className="flex flex-col items-center justify-center px-2 py-4 space-y-2 text-xs"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
         <div className="flex items-center justify-center text-muted-foreground">
-          <span className="font-medium">Drag Files to Upload or</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="ml-auto flex h-8 space-x-2 px-0 pl-1 text-xs"
-            onClick={handleButtonClick}
-          >
-            Click Here
-          </Button>
+          <span className="font-medium">
+            Drag Files to Upload or{" "}
+            <span
+              variant="ghost"
+              size="sm"
+              className="text-xs font-bold cursor-pointer"
+              onClick={handleButtonClick}
+            >
+              Click Here
+            </span>
+          </span>
+
           <input
             ref={fileInputRef}
             type="file"
