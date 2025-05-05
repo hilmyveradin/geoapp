@@ -10,14 +10,16 @@ import { Share2Icon } from "lucide-react";
 import { Trash2 } from "lucide-react";
 import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import { X } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const LayersDashboard = () => {
   const [layersData, setLayers] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
-  const { refetchLayers } = useRefetchStore();
+  const { refetchLayers, toggleRefetchLayers } = useRefetchStore();
   const { setIsCtrlPressed, selectedCards, clearSelection, isCtrlPressed } =
     useCardStore();
 
+  const { toast } = useToast();
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.ctrlKey || e.metaKey) setIsCtrlPressed(true);
@@ -79,6 +81,28 @@ const LayersDashboard = () => {
     getLayersData();
   }, [refetchLayers]);
 
+  const deleteLayers = async () => {
+    const layerUids = selectedCards.map((e) => ({ layer_uid: e }));
+    debugger;
+    try {
+      const response = await fetch("/api/delete-layer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ layerUids: layerUids }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast({ title: "Success deleting layers", variant: "success" });
+      toggleRefetchLayers();
+      clearSelection();
+    } catch (error) {
+      console.error("Error during fetch:", error.message);
+    }
+  };
+
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center w-full h-96">
@@ -104,7 +128,7 @@ const LayersDashboard = () => {
               title="Are you sure you want to delete these layers?"
               description="This action cannot be undone"
               actionText="Yes, I'm sure"
-              action={() => console.log("delete action clicked")}
+              action={() => deleteLayers()}
             >
               <Trash2 className="w-4 h-4 cursor-pointer" />
             </DestructiveDialog>
