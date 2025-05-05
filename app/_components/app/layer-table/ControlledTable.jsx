@@ -2,7 +2,8 @@ import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
-
+import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
+import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const LoadingBlock = ({ getRows, pageSize, startRow, onLoaded }) => {
   const [rows, setRows] = useState();
@@ -47,6 +48,8 @@ const ControlledTable = ({
   const [gridApi, setGridApi] = useState();
   const [loadingBlocks, setLoadingBlocks] = useState([]);
   let paginationProps = {};
+  const { layerInfo, setZoomedLayerBbox } = useMapViewStore();
+  useZoomToLayer();
   const autoSizeStrategy = useMemo(() => {
     return {
       type: 'fitCellContents',
@@ -164,6 +167,37 @@ const ControlledTable = ({
       setLoadingBlocks([...loadingBlocks, startRow]);
     }
   }, [loadingBlocks, pageNumber, pageSize, needsLoading]);
+
+  const onSelectionChanged = useCallback(() => {
+    var selectedRows = gridApi.getSelectedRows();
+    // var response;
+    const arrObjectId = [];
+    selectedRows.forEach(function (selectedRow, index) {
+      const id = parseInt(selectedRow.ogc_fid)
+      arrObjectId.push(id);
+    });
+    async function zoomToSelectedObjects() {
+      try {
+        const body = {
+          layerUid: layerInfo.layerUid,
+          objectid: arrObjectId,
+        }
+        const response = await fetch("/api/zoom-to-object/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await response.json();
+        setZoomedLayerBbox(data.bbox);
+    } catch (error) {
+        console.log(error);
+      }
+    }
+    console.log(selectedRows)
+    if (selectedRows.length != 0) {
+      zoomToSelectedObjects();
+    }
+  })
   const rowHeight = 25;
   const headerHeight = 30;
   return (
@@ -189,6 +223,9 @@ const ControlledTable = ({
         rowHeight={rowHeight}
         headerHeight={headerHeight}
         autoSizeStrategy={autoSizeStrategy}
+        rowSelection={"multiple"}
+        rowMultiSelectWithClick={true}
+        onSelectionChanged={onSelectionChanged}
         {...paginationProps}
       />
       {loadingBlocks.map((startRow) => (

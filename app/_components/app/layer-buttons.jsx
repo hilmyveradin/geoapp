@@ -47,13 +47,19 @@ const LayersButtons = () => {
           try {
             const responseData = JSON.parse(xhr.responseText);
 
-            console.log('Success! Status:', responseData.status);
-            console.log('Message:', responseData.msg);
-            
-            toast({
-              title: responseData.status,
-              description: responseData.msg,
-            });
+            if (responseData.status == "success") {
+              toast({
+                title: responseData.status,
+                description: responseData.msg,
+                variant: "success"
+              });
+            } else {
+              toast({
+                title: responseData.status,
+                description: responseData.msg,
+                variant: "destructive"
+              })
+            }
             setRefetchLayers(!refetchLayers);
           } catch (error) {
             console.error("Error during fetch:", error.message);
