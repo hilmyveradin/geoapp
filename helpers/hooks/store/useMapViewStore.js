@@ -19,6 +19,7 @@ const useMapViewStore = create((set) => ({
   deletedLayerUids: [],
   refreshLayerOrder: false,
   isLayerReordered: false,
+  currentViewBbox: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -156,6 +157,12 @@ const useMapViewStore = create((set) => ({
   setIsLayerReordered: (data) => {
     set(() => ({
       isLayerReordered: data,
+    }));
+  },
+
+  setCurrentViewBbox: (data) => {
+    set(() => ({
+      currentViewBbox: data,
     }));
   },
 }));

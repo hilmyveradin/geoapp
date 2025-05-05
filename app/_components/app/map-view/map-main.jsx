@@ -14,7 +14,8 @@ const MapMain = () => {
   useZoomToLayer();
   usePopUpManager();
 
-  const { setMap, setMapLoaded, setZoomedLayerBbox } = useMapViewStore();
+  const { setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox } =
+    useMapViewStore();
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
@@ -57,12 +58,22 @@ const MapMain = () => {
       mapRef.current.getCanvas().style.cursor = ""; // Reset cursor on mouse leave
     });
 
+    const updateBbox = () => {
+      const bounds = mapRef.current.getBounds();
+      const ne = bounds.getNorthEast();
+      const sw = bounds.getSouthWest();
+      const bboxArray = [sw.lng, sw.lat, ne.lng, ne.lat];
+      setCurrentViewBbox(bboxArray);
+    };
+
+    mapRef.current.on("moveend", updateBbox);
+
     return () => {
       setMapLoaded(false);
       setMap(null);
       setZoomedLayerBbox(null);
     };
-  }, [setMap, setMapLoaded, setZoomedLayerBbox]);
+  }, [setMap, setMapLoaded, setZoomedLayerBbox, setCurrentViewBbox]);
 
   return <div ref={mapContainerRef} className="w-full h-full" />;
 };

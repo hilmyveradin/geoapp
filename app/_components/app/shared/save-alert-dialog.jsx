@@ -2,8 +2,6 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -14,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
 const SaveAlertDialog = ({ children }) => {
@@ -26,133 +25,174 @@ const SaveAlertDialog = ({ children }) => {
     resetDeletedLayerUids,
     resetAddedLayerUids,
     setIsLayerReordered,
+    currentViewBbox,
   } = useMapViewStore();
   const { toast } = useToast();
   const [alertOpen, setAlertOpen] = useState(false);
+  const [submittingData, setSubmittingData] = useState(false);
 
   const addMapLayers = async () => {
-    if (addedLayerUids?.length === 0) {
-      return;
+    if (!addedLayerUids || addedLayerUids?.length === 0) {
+      return Promise.resolve();
     }
 
-    try {
-      const body = {
-        addedLayerUids,
-      };
-
-      const response = await fetch(
-        `/api/maps/add-layer?mapUid=${mapData.mapUid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+    debugger;
+    return fetch(`/api/maps/add-layer?mapUid=${mapData.mapUid}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ addedLayerUids }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      toast({ title: "Success Adding Layer", variant: "success" });
-      resetAddedLayerUids();
-    } catch (error) {
-      toast({
-        title: "Error adding layer",
-        description: "Please try again",
-        variant: "destructive",
+        toast({ title: "Success Adding Layer", variant: "success" });
+        resetAddedLayerUids();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error adding layer",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        console.error("Error during fetch:", error.message);
+        throw error; // Ensure the promise is rejected by throwing the error
       });
-      console.error("Error during fetch:", error.message);
-    }
   };
 
   const deleteMapLayers = async () => {
-    if (deletedLayerUids?.length === 0) {
-      return;
+    if (!deletedLayerUids || deletedLayerUids?.length === 0) {
+      return Promise.resolve();
     }
 
-    try {
-      const body = {
-        deletedLayerUids,
-      };
-
-      const response = await fetch(
-        `/api/maps/delete-layer?mapUid=${mapData.mapUid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+    return fetch(`/api/maps/delete-layer?mapUid=${mapData.mapUid}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deletedLayerUids }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      toast({ title: "Success Deleting Layer", variant: "success" });
-      resetDeletedLayerUids();
-    } catch (error) {
-      toast({
-        title: "Error adding layer",
-        description: "Please try again",
-        variant: "destructive",
+        toast({ title: "Success Deleting Layer", variant: "success" });
+        resetDeletedLayerUids();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error deleting layer",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        console.error("Error during fetch:", error.message);
+        throw error; // Ensure the promise is rejected by throwing the error
       });
-      console.error("Error during fetch:", error.message);
-    }
   };
 
   const reorderMapLayers = async () => {
     const isLayerNotReorderd = !isLayerReordered;
 
     if (isLayerNotReorderd) {
-      return;
+      return Promise.resolve();
     }
 
-    try {
-      const reorderedLayerUids = mapLayers.map((layer) => {
-        return layer.layerUid;
+    const reorderedLayerUids = mapLayers.map((layer) => {
+      return layer.layerUid;
+    });
+
+    return fetch(`/api/maps/reorder-layer?mapUid=${mapData.mapUid}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reorderedLayerUids }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        toast({ title: "Success Reordering Layer", variant: "success" });
+        setIsLayerReordered(false);
+      })
+      .catch((error) => {
+        toast({
+          title: "Error reordering layer",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        console.error("Error during fetch:", error.message);
+        throw error; // Ensure the promise is rejected by throwing the error
+      });
+  };
+  const saveViewBbox = async () => {
+    if (!currentViewBbox || !mapData) {
+      return Promise.resolve();
+    }
+
+    const changeMapProp = () =>
+      fetch(`/api/maps/change-prop?mapUid=${mapData.mapUid}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ view_bbox: currentViewBbox }),
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        toggleRefetchMaps();
+        toast({ title: "Success Update Map Bbox", variant: "success" });
+        return response.json();
       });
 
-      const body = {
-        reorderedLayerUids,
-      };
-
-      const response = await fetch(
-        `/api/maps/reorder-layer?mapUid=${mapData.mapUid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+    const changeLayerProp = () =>
+      fetch(`/api/layers/change-prop?layerUid=${mapData.mapUid}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ view_bbox: currentViewBbox }),
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      );
+        toast({ title: "Success Change Layer Properties", variant: "success" });
+        return response.json();
+      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      if (mapData.mapType === "map") {
+        await changeMapProp();
+      } else {
+        await changeLayerProp();
       }
-
-      toast({ title: "Success Reordering Layer", variant: "success" });
-      // setRefetchMapLayers(!refetchMapLayers);
-      setIsLayerReordered(false);
     } catch (error) {
       toast({
-        title: "Error adding layer",
+        title: "Error updating map view properties",
         description: "Please try again",
         variant: "destructive",
       });
-      console.error("Error during fetch:", error.message);
     }
   };
 
   const saveMapChanges = () => {
-    // Add layer
-    addMapLayers();
+    setSubmittingData(true);
 
-    // Remove Layer
-    deleteMapLayers();
-
-    // Reorder Layer
-    reorderMapLayers();
-
-    setAlertOpen(false);
+    Promise.all([
+      addMapLayers(),
+      deleteMapLayers(),
+      reorderMapLayers(),
+      saveViewBbox(),
+    ])
+      .then(() => {
+        toast({ title: "All changes saved successfully!", variant: "success" });
+        setAlertOpen(false); // Close the alert only when all promises resolve
+      })
+      .catch((error) => {
+        console.error("Error during operations:", error);
+        toast({
+          title: "Error saving changes",
+          description: "Not all changes were saved successfully.",
+          variant: "destructive",
+        });
+      })
+      .finally(() => {
+        setSubmittingData(false);
+      });
   };
 
   return (
@@ -175,7 +215,20 @@ const SaveAlertDialog = ({ children }) => {
           >
             Cancel
           </Button>
-          <Button onClick={saveMapChanges}>Continue</Button>
+          <Button
+            className="font-bold border-none disabled:bg-neutral-100 disabled:text-neutral-400 disabled:opacity-100"
+            onClick={saveMapChanges}
+            disabled={submittingData}
+          >
+            {submittingData ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 stroke-2 stroke-blackHaze-500 animate-spin" />
+                <span className="font-bold">Please wait</span>
+              </span>
+            ) : (
+              <span>Continue</span>
+            )}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
