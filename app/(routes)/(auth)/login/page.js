@@ -32,9 +32,7 @@ const Login = () => {
     });
 
     console.log("SIGN IN RESULT: ", signInResult);
-    debugger;
     if (signInResult?.error) {
-      debugger;
       toast({
         variant: "destructive",
         title: "Invalid username/password",

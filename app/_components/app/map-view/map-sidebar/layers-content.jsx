@@ -36,7 +36,6 @@ const LayersContent = () => {
       });
 
       if (!response.ok) {
-        debugger;
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {

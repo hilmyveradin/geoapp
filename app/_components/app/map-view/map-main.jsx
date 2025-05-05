@@ -58,6 +58,7 @@ const MapMain = () => {
     return () => {
       if (mapRef.current && mapRef.current.remove()) {
         setMapLoaded(false);
+        setMap(null);
       }
     };
   }, [centerLat, centerLong, setMap, setMapLoaded]);
