@@ -22,7 +22,7 @@ const useLayerManager = () => {
         // Add or show layers from selectedLayers
         selectedLayers.forEach((layer, index) => {
           const layerId = layer.layerUid;
-          const url = `http://dev3.webgis.co.id/geoserver/geocms/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.pgTableName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`; // your existing URL construction
+          const url = `http://dev3.webgis.co.id/geoserver/geoportal/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layer.layerName}&bbox={bbox-epsg-3857}&width=512&height=512&srs=EPSG:3857&styles=&format=image%2Fpng&transparent=true`; // your existing URL construction
 
           if (!map.getSource(layerId)) {
             // Add new source and layer
