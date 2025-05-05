@@ -8,8 +8,9 @@ import useLayerManager from "@/helpers/hooks/useLayerManager";
 const MapMain = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const [centerLat] = useState(1);
-  const [centerLong] = useState(1);
+  // Indonesian center lat and long value
+  const [centerLat] = useState(-2.548926);
+  const [centerLong] = useState(118.0148634);
 
   useLayerManager();
 
@@ -43,8 +44,8 @@ const MapMain = () => {
             },
           ],
         },
-        center: [centerLat, centerLong], // This will be updated below
-        zoom: 8, // This might be adjusted based on the BBoxes
+        center: [centerLong, centerLat], // This will be updated below
+        zoom: 4, // This might be adjusted based on the BBoxes
       });
 
       setMap(mapRef.current);
