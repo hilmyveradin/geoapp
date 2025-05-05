@@ -49,33 +49,30 @@ jobs:
             source ~/.bashrc || source ~/.profile
             cd /home/***/var/www/geoportal/geoportal-webapp
 
-            # Check for conflicts in pnpm-lock.yaml and resolve them
-            if git diff --name-only --diff-filter=U | grep -q "pnpm-lock.yaml"; then
-              echo "pnpm-lock.yaml has unresolved conflicts. Attempting to resolve."
-              git merge --abort || true
-              git reset --hard HEAD
-            fi
-
-            # Stash all changes including pnpm-lock.yaml
+            # Stash any local changes before running pnpm install
             git stash push -m "Stash local changes"
+
+            # Stash any remaining changes (if any)
+            git stash push -m "Stash remaining local changes"
 
             # Force pull changes from main
             git fetch origin main
             git reset --hard origin/main
 
-            # Apply stashed changes
-            git stash pop
+            # Ensure the lockfile is up to date again after resolving conflicts
+            /home/***/.nvm/versions/node/v18.20.2/bin/pnpm install
 
-            # Check for conflicts again and resolve them
+            # Apply stashed changes and resolve conflicts if necessary
+            git stash pop || true
             if git diff --name-only --diff-filter=U | grep -q "pnpm-lock.yaml"; then
-              echo "pnpm-lock.yaml has unresolved conflicts. Please resolve them."
+              echo "pnpm-lock.yaml has unresolved conflicts. Automatically resolving conflicts."
               git checkout --theirs pnpm-lock.yaml
               git add pnpm-lock.yaml
-              git commit -m "Resolve conflicts in pnpm-lock.yaml"
+              git commit -m "Automatically resolved conflicts in pnpm-lock.yaml"
             fi
 
-            # Ensure the lockfile is up to date
-            /home/***/.nvm/versions/node/v18.20.2/bin/pnpm install
+            git add pnpm-lock.yaml
+            git commit -m "Update pnpm-lock.yaml after pnpm install"
 
             # Build the project
             /home/***/.nvm/versions/node/v18.20.2/bin/pnpm build
