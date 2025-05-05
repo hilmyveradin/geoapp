@@ -1,12 +1,23 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import Image from 'next/image'
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils"
 
 const MapsDashboard = () => {
-
-  const [layers, setLayers] = useState([])
-  const [curPage, setCurPage] = useState(1)
+  const [layersData, setLayersData] = useState([])
+  const IMAGE_BASE_URL = "http://dev3.webgis.co.id/be"
+  let curTotalPages = 0
+  const numOfThumbnailsPerPage = 6
 
   const handleUploadData = async () => {
     // try {
@@ -30,29 +41,38 @@ const MapsDashboard = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const layersData = await response.json()
-        // set layers data globally
-        setLayers(layersData)
+        const temp = await response.json()
+        setLayersData(temp)
+        curTotalPages = Math.ceil(layersData.length / numOfThumbnailsPerPage)
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
     }
-    // Call API only when layers is not fetched
-    if (layers.length == 0) {
-      getLayersData()
-        // make sure to catch any error
-        .catch(console.error)
-    }
-    else {
-      const startIdx = layers.length / 6 
-    }
-
-  }, [curPage])
-
+    getLayersData()
+      // make sure to catch any error
+      .catch(console.error)
+  }, [])
 
   return (
-    <div>
-      CI-CD berhasil
+    <div className>
+      <div className="grid grid-rows-2 grid-cols-3 gap-x-2 gap-y-3 ml-20">
+        {layersData.slice(0, 6).map((layersData) => (
+          <Card>
+            <CardContent className="p-2 pt-6">
+              <Image 
+                src={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
+                width={350}
+                height={350}
+                alt="Thumbnail"
+              />
+            </CardContent>
+            <CardHeader className="p-2">
+              <h3 className={cn("font-semibold overflow-x-auto")}>{layersData.layer_title}</h3>
+              <CardDescription>{layersData.creator}</CardDescription>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
