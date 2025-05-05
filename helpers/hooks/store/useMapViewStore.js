@@ -6,6 +6,7 @@ const useMapViewStore = create((set) => ({
   selectedLayers: null,
   mapData: null,
   layersData: null,
+  zoomedLayerBbox: null,
 
   setMap: (data) => set(() => ({ map: data })),
 
@@ -42,6 +43,11 @@ const useMapViewStore = create((set) => ({
   removeSelectedLayers: (data) =>
     set((state) => ({
       selectedLayers: state.selectedLayers.filter((layer) => layer !== data),
+    })),
+
+  setZoomedLayerBbox: (data) =>
+    set(() => ({
+      zoomedLayerBbox: data,
     })),
 }));
 

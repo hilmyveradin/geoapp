@@ -4,14 +4,16 @@ import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 import { useShallow } from "zustand/react/shallow";
 import useLayerManager from "@/helpers/hooks/useLayerManager";
+import useZoomToLayer from "@/helpers/hooks/useZoomToLayer";
 
 const MapMain = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
   useLayerManager();
+  useZoomToLayer();
 
-  const { setMap, setMapLoaded } = useMapViewStore();
+  const { setMap, setMapLoaded, setZoomedLayerBbox } = useMapViewStore();
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
@@ -48,8 +50,9 @@ const MapMain = () => {
     return () => {
       setMapLoaded(false);
       setMap(null);
+      setZoomedLayerBbox(null);
     };
-  }, [setMap, setMapLoaded]);
+  }, [setMap, setMapLoaded, setZoomedLayerBbox]);
 
   return <div ref={mapContainerRef} className="w-full h-full" />;
 };
