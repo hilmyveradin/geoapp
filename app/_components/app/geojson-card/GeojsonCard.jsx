@@ -35,9 +35,8 @@ import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
 
 const objects = ["obj1", "obj2"];
 
-export function ComboboxDemo({layerTitles}) {
+export function ComboboxDemo({layerTitles, value, setValue}) {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
  
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -92,7 +91,8 @@ export function ComboboxDemo({layerTitles}) {
   )
 }
 
-export function DemoTable() {
+export function DemoTable({inputLayerDataArray, value, layerTitles}) {
+  let rows = [];
   const [rowData, setRowData] = useState([
     { make: "Ford", model: "F-Series"},
     { make: "Tesla", model: "Model Y"},
@@ -101,42 +101,68 @@ export function DemoTable() {
   
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
-    { field: "make" },
-    { field: "model" },
+    { 
+      field: "key",
+      tooltipValueGetter: (p) => p.value,
+      minWidth: 100,
+    },
+    { 
+      field: "value",
+      tooltipValueGetter: (p) => p.value,
+      minWidth: 175,
+    },
   ]);
 
+  if (value) {
+    const index = layerTitles.findIndex(
+      (layerTitle) => layerTitle.value === value
+    );
+    rows = inputLayerDataArray[index][0];
+  } else {
+    rows = [];
+  }
+  console.log(rows);
   const autoSizeStrategy = useMemo(() => {
     return {
-      type: "fitGridWidth",
+      type: "fitCellContents",
     };
   }, []);
-  
   return (
     <div
-      className="ag-theme-quartz" // applying the grid theme
-      style={{ height: 170, maxWidth: 400 }} // the grid will fill the size of the parent container
+      className="ag-theme-quartz-dark" // applying the grid theme
+      style={{ height: 150 }} // the grid will fill the size of the parent container
     >
       <AgGridReact
-        rowData={rowData}
+        rowData={rows}
         columnDefs={colDefs}
         autoSizeStrategy={autoSizeStrategy}
+        tooltipShowDelay={0}
+        tooltipHideDelay={2000}
       />
     </div>
   )
 }
 
 export default function GeojsonCard() {
-  const [curObjIdx, setCurObjIdx] = useState(0)
+  const [curObjIdx, setCurObjIdx] = useState(0);
   const { objectInfoData } = useMapViewStore();
-  console.log(objectInfoData.data);
   const layerTitles = objectInfoData.data.map((layer) => ({
     value: layer.layerTitle.toLowerCase(),
     label: layer.layerTitle,
   }));
-  console.log(layerTitles);
+  const layerDataArray = objectInfoData.data.map(layer => [...layer.layerData]);
+  const newObjects = layerDataArray.map(objArray => 
+    objArray.map(obj => {
+      const { geom, ...rest } = obj;
+      return Object.entries(rest).map(([key, value]) => ({ 
+        key, 
+        value: value.toString() }));
+    })
+  )
+  const [value, setValue] = useState("")
 
   return (
-    <Card className="w-[35vw] h-[50vh]">
+    <Card className="w-[35vw] h-[45vh]">
       <div className="flex flex-col space-y-3 px-6 pt-6 pb-3">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
@@ -151,10 +177,16 @@ export default function GeojsonCard() {
         </div>
         <ComboboxDemo 
           layerTitles={layerTitles}
+          value={value} // Pass value prop
+          setValue={setValue} // Pass setValue prop
         />
       </div>
       <CardContent className="flex flex-col">
-        <DemoTable/>
+        <DemoTable 
+          inputLayerDataArray={newObjects}
+          value={value}
+          layerTitles={layerTitles}
+          />
       </CardContent>
     </Card>
   )
