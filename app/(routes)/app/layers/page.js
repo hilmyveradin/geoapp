@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Dropzone } from "@/components/ui/dropzone";
 import ClientPagination from "@/components/client-pagination";
+import MenuCard from "@/app/_components/app/menu-card";
 
 const LayersDashboard = () => {
   const [layersData, setLayersData] = useState([]);
@@ -62,10 +63,10 @@ const LayersDashboard = () => {
   // remove this useEffect hook if you don't need to do anything with the uploaded files
   useEffect(() => {
     // console.log(files);
-    const formData = new FormData()
+    const formData = new FormData();
     // var file = new File([files[-1]], "file.zip");
-    console.log(files[0])
-    formData.append('vector_zip', files[0])
+    console.log(files[0]);
+    formData.append("vector_zip", files[0]);
     async function postVectorData(formData) {
       try {
         const response = await fetch("/api/upload-vectordata", {
@@ -77,12 +78,12 @@ const LayersDashboard = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const temp = await response.json();
-        console.log(temp)
+        console.log(temp);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       }
     }
-    postVectorData(formData)
+    postVectorData(formData);
   }, [files]);
 
   return (
@@ -107,6 +108,25 @@ const LayersDashboard = () => {
       <ClientPagination
         data={layersData}
       />
+      <div class="sm:grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 flex flex-col">
+        {/* Create a loop to render every thumbnail image */}
+        {/* TODO: Add Pagination Handling */}
+        {layersData.slice(0, 6).map((layersData) => {
+          // TODO: Fix the avatar with a new data
+          const user = {
+            fullName: layersData.creator,
+            avatar: layersData.creator,
+          };
+          return (
+            <MenuCard
+              key={layersData.layer_id}
+              source={`${IMAGE_BASE_URL}/gs/thumbnail/${layersData.thumbnail_url}`}
+              title={layersData.layer_title}
+              user={user}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
