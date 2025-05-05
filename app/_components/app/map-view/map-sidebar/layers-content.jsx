@@ -1,3 +1,5 @@
+"use client";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import useMapViewStore from "@/helpers/hooks/store/useMapViewStore";
@@ -7,8 +9,6 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const LayersContent = () => {
   const { layersData, setLayersData, mapData } = useMapViewStore();
-
-  console.log("MAP DATA: ", mapData);
 
   if (!layersData) {
     return null;
@@ -25,24 +25,24 @@ const LayersContent = () => {
 
     const body = {
       mapLayerUid: reorderedItems.map((item) => item.layerUid),
+      mapUid: mapData.mapUid,
     };
 
     try {
-      const response = fetch(
-        `/api/post-reorder-layer?mapUid=${mapData.mapUid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }
-      );
+      const response = await fetch(`/api/reorder-layer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
       if (!response.ok) {
+        debugger;
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
       console.log(error);
     }
+
     // Update your state with the new items array
     // For example, if you're managing your state in a store or with useState:
     setLayersData(reorderedItems);

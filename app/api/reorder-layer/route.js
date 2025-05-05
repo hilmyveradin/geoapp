@@ -4,22 +4,21 @@ import authOptions from "../auth/[...nextauth]/options";
 
 export async function POST(request) {
   try {
-    const mapUid = request.nextUrl.searchParams.get("mapUid");
+    // const mapUid = request.nextUrl.searchParams.get("mapUid");
 
     const body = await request.json();
-    const { mapLayerUid } = body;
+    const { mapLayerUid, mapUid } = body;
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.API_BASE_URL}/cms/map/reorder_layer/${mapUid}`,
+      `${process.env.API_BASE_URL}/cms/map/reorder/${mapUid}`,
       {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        body: JSON.stringify({
-          mapLayerUid,
-        }),
+        body: JSON.stringify({ mapLayerUid: mapLayerUid }),
       }
     );
 

@@ -8,6 +8,7 @@ import {
   Sheet,
   Save,
   Share2,
+  List,
 } from "lucide-react";
 import { Fragment, useState } from "react";
 import LayersContent from "./map-sidebar/layers-content";
@@ -43,6 +44,12 @@ const MapSidebar = () => {
       icon: <Sheet className={cn("w-4 h-4")} />,
       label: "Tables",
       onClick: () => handleButtonClick("tables"),
+    },
+    {
+      buttonKey: "legends",
+      icon: <List className={cn("w-4 h-4")} />,
+      label: "Legends",
+      onClick: () => handleButtonClick("legends"),
     },
     {
       buttonKey: "save",
@@ -125,7 +132,7 @@ const MapSidebar = () => {
               <SidebarButton {...data} />
 
               {/* Insert a separator after certain buttons */}
-              {["tables", "share"].includes(data.buttonKey) && (
+              {["legends", "share"].includes(data.buttonKey) && (
                 <Separator className="my-2" /> // Adjust className as needed
               )}
             </Fragment>
