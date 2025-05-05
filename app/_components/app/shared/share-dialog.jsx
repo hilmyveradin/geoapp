@@ -83,16 +83,16 @@ const ShareDialog = ({ children }) => {
   const fetchDataAndResetState = async () => {
     try {
       const [usersResponse, groupsResponse, mapsResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`, {
+        fetch(`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/users/list`, {
           method: "GET",
         }),
-        fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}//api/groups/list`, {
+        fetch(`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}//api/groups/list`, {
           method: "GET",
         }),
         fetch(
           mapData.mapType === "map"
-            ? `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/shared_to?mapUid=${mapData.mapUid}`
-            : `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/shared_to?layerUid=${mapData.mapUid}`,
+            ? `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/shared_to?mapUid=${mapData.mapUid}`
+            : `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/shared_to?layerUid=${mapData.mapUid}`,
           { method: "GET" }
         ),
       ]);
@@ -232,7 +232,7 @@ const ShareDialog = ({ children }) => {
       let response;
       if (mapData.mapType === "map") {
         response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/share?mapUid=${mapData.mapUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/share?mapUid=${mapData.mapUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -241,7 +241,7 @@ const ShareDialog = ({ children }) => {
         );
       } else {
         response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/share?layerUid=${mapData.mapUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/share?layerUid=${mapData.mapUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

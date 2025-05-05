@@ -51,7 +51,7 @@ const CreateGroupDialog = (props) => {
     async function getUsersData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/users/list`,
           {
             method: "GET",
           }
@@ -154,7 +154,7 @@ const CreateGroupDialog = (props) => {
       setSubmittingData(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/create-group`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/create-group`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

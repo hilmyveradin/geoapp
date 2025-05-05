@@ -8,7 +8,7 @@ export async function POST(request) {
     const body = await request.json();
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/adm/group/create`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/be/adm/group/create`,
       {
         method: "POST",
         headers: {

@@ -57,7 +57,7 @@ const AppHeader = () => {
   const handleSignOut = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/auth/logout`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/auth/logout`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -89,7 +89,7 @@ const AppHeader = () => {
       <div className="flex flex-col h-full p-6">
         <div className="flex justify-between items-center mb-8">
           <img
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/geoportal-logo.svg`}
+            src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoportal-logo.svg`}
             alt="Geoportal"
             className="h-8"
           />
@@ -141,7 +141,7 @@ const AppHeader = () => {
       <div className="flex items-center justify-between w-full h-16 px-4 md:px-6">
         <div className="flex items-center">
           <img
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/geoportal-logo.svg`}
+            src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoportal-logo.svg`}
             alt="logo"
             className="w-20 md:w-28"
           />

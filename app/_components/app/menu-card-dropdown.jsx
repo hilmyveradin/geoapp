@@ -33,7 +33,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
     if (cardData.cardType === "map") {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/delete-map?mapUid=${cardData.cardUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/delete-map?mapUid=${cardData.cardUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -68,7 +68,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
       try {
         // TODO: Fix this layer code. The payload shouldn't have any layer_uid from BE
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/delete-layer?layerUid=${cardData.cardUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/delete-layer?layerUid=${cardData.cardUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -117,7 +117,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
         >
           <button className="flex w-full">
             <img
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/app/item-details-icon.svg`}
+              src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/app/item-details-icon.svg`}
               alt="item details"
               className="w-5 h-5 mr-3"
             />

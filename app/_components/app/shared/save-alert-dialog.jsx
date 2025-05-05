@@ -40,7 +40,7 @@ const SaveAlertDialog = ({ children }) => {
       return Promise.resolve();
     }
     return fetch(
-      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/add-layer?mapUid=${mapData.mapUid}`,
+      `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/add-layer?mapUid=${mapData.mapUid}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -71,7 +71,7 @@ const SaveAlertDialog = ({ children }) => {
     }
 
     return fetch(
-      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/delete-layer?mapUid=${mapData.mapUid}`,
+      `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/delete-layer?mapUid=${mapData.mapUid}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -108,7 +108,7 @@ const SaveAlertDialog = ({ children }) => {
     });
 
     return fetch(
-      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/reorder-layer?mapUid=${mapData.mapUid}`,
+      `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/reorder-layer?mapUid=${mapData.mapUid}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -140,7 +140,7 @@ const SaveAlertDialog = ({ children }) => {
 
     const changeMapProp = () =>
       fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/change-prop?mapUid=${mapData.mapUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/change-prop?mapUid=${mapData.mapUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -157,7 +157,7 @@ const SaveAlertDialog = ({ children }) => {
 
     const changeLayerProp = () =>
       fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/change-prop?layerUid=${mapData.mapUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/change-prop?layerUid=${mapData.mapUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

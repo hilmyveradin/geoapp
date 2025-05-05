@@ -8,7 +8,7 @@ export async function POST(request) {
     const groupUid = request.nextUrl.searchParams.get("groupUid");
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/adm/group/${groupUid}/delete`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/be/adm/group/${groupUid}/delete`,
       {
         method: "POST",
         headers: {

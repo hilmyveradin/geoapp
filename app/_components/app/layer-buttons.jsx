@@ -82,7 +82,7 @@ const LayersButtons = () => {
       };
       xhr.open(
         "POST",
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/upload-vectordata`
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/upload-vectordata`
       );
       xhr.send(formData);
     }

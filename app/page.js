@@ -11,6 +11,8 @@ const Home = async () => {
 
   if (!session) {
     redirect(`/login`);
+  } else {
+    redirect(`/app/layers`);
   }
 
   return (

@@ -33,7 +33,7 @@ const GroupOverviewPage = ({ groupUid }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/get-group-info?groupUid=${groupUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/get-group-info?groupUid=${groupUid}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ const GroupOverviewPage = ({ groupUid }) => {
   const deleteUser = async (userUid) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/remove-group-user?groupUid=${groupUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/remove-group-user?groupUid=${groupUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

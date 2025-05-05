@@ -35,7 +35,7 @@ const CreateUserDialog = ({ children }) => {
   const fetchRoles = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/admin/roles`
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/admin/roles`
       );
       if (!response.ok) throw new Error("Failed to fetch roles");
       const responseJson = await response.json();
@@ -73,7 +73,7 @@ const CreateUserDialog = ({ children }) => {
     setSubmittingData(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/admin/user/create`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/admin/user/create`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

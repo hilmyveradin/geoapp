@@ -54,7 +54,7 @@ const LayersDashboard = () => {
     async function getLayersData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layers`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-layers`,
           {
             method: "GET",
           }
@@ -74,7 +74,7 @@ const LayersDashboard = () => {
               cardDescription: data.layerDescription,
               cardTags: data.layerTags,
               cardUid: data.layerUid,
-              thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+              thumbnailUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             };
           })
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -100,7 +100,7 @@ const LayersDashboard = () => {
     const layerUids = selectedCards.map((e) => ({ layer_uid: e }));
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/delete-layer`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/delete-layer`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

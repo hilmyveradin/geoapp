@@ -56,14 +56,14 @@ const Login = () => {
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH}/login-image.png)`,
+        backgroundImage: `url(${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/login-image.png)`,
       }}
     >
       <Card className="w-full max-w-md relative z-10 backdrop-blur-md bg-white/30">
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/geoportal-logo.svg`}
+              src={`${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/geoportal-logo.svg`}
               alt="logo"
               width={120}
               height={40}

@@ -52,7 +52,7 @@ const ComposeMapDialog = (props) => {
     async function getLayersData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layers`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-layers`,
           {
             method: "GET",
           }
@@ -67,7 +67,7 @@ const ComposeMapDialog = (props) => {
           .map((data) => {
             return {
               ...data,
-              thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+              thumbnailUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
             };
           })
           .sort((a, b) => a.layerTitle.localeCompare(b.layerTitle));
@@ -169,7 +169,7 @@ const ComposeMapDialog = (props) => {
       setSubmittingData(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/compose-map`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/compose-map`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

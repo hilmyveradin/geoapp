@@ -11,7 +11,7 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/map/${mapUid}/reorder`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/map/${mapUid}/reorder`,
       {
         method: "POST",
         headers: {

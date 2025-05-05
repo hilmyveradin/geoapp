@@ -28,7 +28,7 @@ const UsersDashboard = () => {
     async function getUsers() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users/list`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/users/list`,
           {
             method: "GET",
           }
@@ -53,7 +53,7 @@ const UsersDashboard = () => {
   const deleteUser = async (userUid) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/admin/user/delete`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/admin/user/delete`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

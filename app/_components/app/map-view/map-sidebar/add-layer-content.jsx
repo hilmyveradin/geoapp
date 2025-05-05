@@ -32,7 +32,7 @@ const AddLayersContent = () => {
     async function getLayersData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layers`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-layers`,
           {
             method: "GET",
           }
@@ -46,8 +46,8 @@ const AddLayersContent = () => {
         const tempLayers = temp.data.map((data) => {
           return {
             ...data,
-            thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
-            legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
+            thumbnailUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.thumbnailUrl}`,
+            legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
             isShown: true,
           };
         });
@@ -121,7 +121,7 @@ const AddLayersContent = () => {
       };
       xhr.open(
         "POST",
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/upload-vectordata`
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/upload-vectordata`
       );
       xhr.send(formData);
     }

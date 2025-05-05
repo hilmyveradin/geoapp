@@ -19,8 +19,8 @@ const MapOverview = ({ params }) => {
       try {
         const endpoint =
           overviewType === "layer"
-            ? `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${overviewUid}`
-            : `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/get-map-id?mapUid=${overviewUid}`;
+            ? `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-layer-id?layerUid=${overviewUid}`
+            : `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/get-map-id?mapUid=${overviewUid}`;
 
         const response = await fetch(endpoint, {
           method: "GET",
@@ -33,11 +33,11 @@ const MapOverview = ({ params }) => {
             ? {
                 ...data.data[0],
                 tags: data.data[0].layerTags,
-                imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.data[0].thumbnailUrl}`,
+                imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.data[0].thumbnailUrl}`,
               }
             : {
                 ...data.data,
-                imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/thumbnail/${data.data.thumbnailUrl}`,
+                imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/thumbnail/${data.data.thumbnailUrl}`,
               };
 
         setOverviewData(modifiedData);

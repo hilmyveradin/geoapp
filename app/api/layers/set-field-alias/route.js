@@ -9,7 +9,7 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${layerUid}/set_field_alias`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${layerUid}/set_field_alias`,
       {
         method: "POST",
         headers: {

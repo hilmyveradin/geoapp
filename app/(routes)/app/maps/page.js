@@ -52,7 +52,7 @@ const MapsDashboard = () => {
     async function getMapsData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}//api/maps/get-maps`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}//api/maps/get-maps`,
           {
             method: "GET",
           }
@@ -73,7 +73,7 @@ const MapsDashboard = () => {
               cardDescription: data.mapDescription,
               cardTags: data.mapTags,
               cardUid: data.mapUid,
-              thumbnailUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/map/thumbnail/${data.thumbnailUrl}`,
+              thumbnailUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/map/thumbnail/${data.thumbnailUrl}`,
             };
           })
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -102,7 +102,7 @@ const MapsDashboard = () => {
     selectedCards.forEach(async (mapUid) => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/delete-map?mapUid=${mapUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/delete-map?mapUid=${mapUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

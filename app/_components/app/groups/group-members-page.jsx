@@ -11,7 +11,7 @@ const GroupMembersPage = ({ groupUid }) => {
       try {
         // Replace with your actual API endpoint
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/${groupUid}/members`
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/${groupUid}/members`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch members");

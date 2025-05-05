@@ -26,7 +26,7 @@ const usePopUpManager = () => {
 
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/get-object-info?mapUid=${mapData.mapUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/get-object-info?mapUid=${mapData.mapUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

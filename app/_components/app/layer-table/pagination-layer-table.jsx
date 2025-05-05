@@ -36,7 +36,7 @@ export default function PaginationLayerTable() {
   const getRows = async (numRows, startRow) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/get-layer-table-data?layerUid=${layerInfo.layerUid}&offset=${startRow}&length=${numRows}`,
         {
           method: "GET",
           headers: {
@@ -72,7 +72,7 @@ export default function PaginationLayerTable() {
         length: numRows,
       });
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/get-fts-query-data?layerUid=${layerInfo.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/get-fts-query-data?layerUid=${layerInfo.layerUid}`,
         {
           method: "POST",
           headers: {
@@ -112,7 +112,7 @@ export default function PaginationLayerTable() {
           force: true,
         });
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/set-fts-prep?layerUid=${layerInfo.layerUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/set-fts-prep?layerUid=${layerInfo.layerUid}`,
           {
             method: "POST",
             headers: {

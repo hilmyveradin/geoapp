@@ -22,7 +22,7 @@ const MapView = ({ params }) => {
   useEffect(() => {
     async function getLayerUid(layerUid) {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-layer-id?layerUid=${layerUid}`,
         {
           method: "GET",
           headers: {
@@ -34,8 +34,8 @@ const MapView = ({ params }) => {
       const modifiedDatas = datas.data.map((data) => {
         return {
           ...data,
-          imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
-          legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
+          imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+          legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
           isShown: true,
         };
       });
@@ -46,7 +46,7 @@ const MapView = ({ params }) => {
     async function loadMapData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/maps/get-map-id?mapUid=${mapUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/maps/get-map-id?mapUid=${mapUid}`,
           {
             method: "GET",
             headers: {
@@ -78,7 +78,7 @@ const MapView = ({ params }) => {
     async function loadLayerData() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-layer-id?layerUid=${mapUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-layer-id?layerUid=${mapUid}`,
           {
             method: "GET",
             headers: {
@@ -92,8 +92,8 @@ const MapView = ({ params }) => {
             ...data,
             mapBbox: data.layerBbox,
             mapTitle: data.layerTitle,
-            imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
-            legendUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
+            imageUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/thumbnail/${data.thumbnailUrl}/layer`,
+            legendUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/be/cms/layer/${data.layerUid}/legend`,
             mapType: mapType,
             mapUid: mapUid,
             isShown: true,

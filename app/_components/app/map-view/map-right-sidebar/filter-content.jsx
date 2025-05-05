@@ -53,7 +53,7 @@ const FilterContent = () => {
             force: true,
           });
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/set-fts-prep?layerUid=${selectedLayer.layerUid}`,
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/set-fts-prep?layerUid=${selectedLayer.layerUid}`,
             {
               method: "POST",
               headers: {
@@ -91,7 +91,7 @@ const FilterContent = () => {
           with_geom: true,
         });
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-fts-query-data?layerUid=${selectedLayer.layerUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-fts-query-data?layerUid=${selectedLayer.layerUid}`,
           {
             method: "POST",
             headers: {

@@ -92,7 +92,7 @@ const StyleContent = () => {
 
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/get-style?layerUid=${selectedLayer.layerUid}`,
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/get-style?layerUid=${selectedLayer.layerUid}`,
             {
               method: "GET",
               headers: {
@@ -209,7 +209,7 @@ const StyleContent = () => {
         };
 
         return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/save-point-marker?layerUid=${selectedLayer.layerUid}`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-point-marker?layerUid=${selectedLayer.layerUid}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -227,7 +227,7 @@ const StyleContent = () => {
           };
 
           return fetch(
-            `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/save-point-image-url?layerUid=${selectedLayer.layerUid}`,
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-point-image-url?layerUid=${selectedLayer.layerUid}`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -240,7 +240,7 @@ const StyleContent = () => {
           formData.append("uploadFile", pointImageData);
 
           return fetch(
-            `${process.env.NEXT_PUBLIC_BASE_PATH}/save-point-image?layerUid=${selectedLayer.layerUid}`,
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/save-point-image?layerUid=${selectedLayer.layerUid}`,
             {
               method: "POST",
               headers: { "Content-Type": "multipart/form-data" },
@@ -259,7 +259,7 @@ const StyleContent = () => {
       };
 
       return fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/save-line?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/save-line?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -278,7 +278,7 @@ const StyleContent = () => {
       };
 
       return fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/save-polygon?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-polygon?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -289,7 +289,7 @@ const StyleContent = () => {
 
     const saveAdvancedSymbolStyle = async () => {
       return fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/save-point-advanced?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-point-advanced?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -300,7 +300,7 @@ const StyleContent = () => {
 
     const saveAdvancedLineStyle = async () => {
       return fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/save-line-advanced?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-line-advanced?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -311,7 +311,7 @@ const StyleContent = () => {
 
     const saveAdvancedPolygonStyle = async () => {
       return fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/layers/save-polygon-advanced?layerUid=${selectedLayer.layerUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/layers/save-polygon-advanced?layerUid=${selectedLayer.layerUid}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

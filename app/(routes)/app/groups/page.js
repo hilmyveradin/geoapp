@@ -23,7 +23,7 @@ const GruopsDashboard = () => {
   useEffect(() => {
     async function getGroupInfo(groupUid) {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/get-group-info?groupUid=${groupUid}`,
+        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/get-group-info?groupUid=${groupUid}`,
         {
           method: "GET",
           headers: {
@@ -39,7 +39,7 @@ const GruopsDashboard = () => {
     async function getGroupLists() {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/groups/get-groups`,
+          `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/get-groups`,
           {
             method: "GET",
           }
