@@ -74,14 +74,17 @@ const InviteMembersDialog = ({ groupUid, onDialogClose, children }) => {
   }, [openDialog, groupUid]);
 
   useEffect(() => {
+    // Assuming groupMembers is an array of objects with userUid property
     const availableUsers = allUsers.filter(
-      (user) => !groupMembers.includes(user.userUid)
+      (user) => !groupMembers.some((member) => member.userUid === user.userUid)
     );
+
     const filtered = availableUsers.filter(
       (user) =>
         user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.loginName.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     setFilteredUsers(filtered);
   }, [searchTerm, allUsers, groupMembers]);
 

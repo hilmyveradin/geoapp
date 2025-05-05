@@ -21,20 +21,6 @@ const GruopsDashboard = () => {
   }, [setSearchedGroupTitle]);
 
   useEffect(() => {
-    async function getGroupInfo(groupUid) {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/get-group-info?groupUid=${groupUid}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const responseeData = await response.json();
-
-      return responseeData.data;
-    }
     // Define function to get layers API
     async function getGroupLists() {
       try {
@@ -53,21 +39,6 @@ const GruopsDashboard = () => {
         const data = responseData.data;
 
         setGroupsData(data);
-
-        // // Create an array of promises
-        // const groupDataPromises = data.map((groupAttributes) =>
-        //   getGroupInfo(groupAttributes.groupUid)
-        // );
-
-        // // Wait for all promises to resolve
-        // const resolvedGroupData = await Promise.all(groupDataPromises);
-
-        // // Flatten the array of arrays (if necessary) and set the state
-        // const groupData = resolvedGroupData.flat(); // Use .flat() if each promise resolves to an array
-
-        // console.log("GROUP DATA: ", groupData);
-
-        // setGroupsData(groupData);
       } catch (error) {
         console.error("Error during fetch:", error.message);
       } finally {

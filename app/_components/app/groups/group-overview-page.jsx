@@ -168,7 +168,7 @@ const GroupOverviewPage = ({ groupUid }) => {
             <TableBody>
               {groupData.users.map((user, index) => (
                 <TableRow key={index} className="hover:bg-gray-50">
-                  <TableCell className="font-medium">{user}</TableCell>
+                  <TableCell className="font-medium">{user.userName}</TableCell>
                   <TableCell className="p-2">
                     <div className="flex flex-wrap gap-2">
                       {user.roles.map((role) => (
@@ -184,14 +184,14 @@ const GroupOverviewPage = ({ groupUid }) => {
                   <TableCell>
                     {index !== 0 && (
                       <>
-                        <Button variant="ghost" size="sm" className="mr-2">
+                        {/* <Button variant="ghost" size="sm" className="mr-2">
                           <UserCog className="h-4 w-4" />
-                        </Button>
+                        </Button> */}
                         <DestructiveDialog
                           title="Are you sure you want to remove this user from Group?"
                           description="This action cannot be undone"
                           actionText="Yes, I'm sure"
-                          action={() => deleteUser(user)}
+                          action={() => deleteUser(user.userUid)}
                         >
                           <Button
                             variant="ghost"
