@@ -1,16 +1,17 @@
 "use client";
 
-import AppHeader from "@/app/_components/app/shared/header";
 import MapHeader from "@/app/_components/app/map-view/map-header";
 import MapMain from "@/app/_components/app/map-view/map-main";
 import MapSidebar from "@/app/_components/app/map-view/map-sidebar";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import useMapViewStore from "@/helpers/hooks/useMapViewStore";
 
 const MapView = ({ params }) => {
-  const [layerData, setLayerData] = useState(null);
   const layerUid = params.slug;
   const router = useRouter();
+
+  const { mapData, setMapData, setLayersData } = useMapViewStore();
 
   useEffect(() => {
     async function loadLayerData() {
@@ -26,7 +27,13 @@ const MapView = ({ params }) => {
             }
           );
           const data = await response.json();
-          setLayerData(data.data[0]);
+
+          const mapData = {
+            title: data.data[0].layerTitle,
+          };
+
+          setMapData(mapData);
+          setLayersData(data.data);
         } catch (error) {
           console.log(error);
         }
@@ -34,17 +41,17 @@ const MapView = ({ params }) => {
     }
 
     loadLayerData();
-  }, [layerUid]);
+  }, [layerUid, setLayersData, setMapData]);
 
-  if (!layerData) return <div>Loading...</div>;
+  if (!mapData) return <div>Loading...</div>;
 
   return (
     <div className="flex flex-col">
-      <MapHeader data={layerData} />
+      <MapHeader />
       <div className="flex items-center justify-center">
-        <MapSidebar data={layerData} />
+        <MapSidebar />
         <div className="w-screen h-[calc(100vh-112px)]">
-          <MapMain data={layerData} />
+          <MapMain />
         </div>
       </div>
     </div>

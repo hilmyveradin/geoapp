@@ -4,9 +4,10 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LegendContent from "./map-sidebar/legend-content";
+import LayersContent from "./map-sidebar/layers-content";
 
-const MapSidebar = (props) => {
-  const { data } = props;
+const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   return (
     <div
@@ -38,10 +39,8 @@ const MapSidebar = (props) => {
             Legend
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="layers">
-          Make changes to your account here.
-        </TabsContent>
-        <TabsContent value="legend">Change your password here.</TabsContent>
+        <LayersContent />
+        <LegendContent />
       </Tabs>
     </div>
   );

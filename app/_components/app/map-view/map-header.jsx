@@ -33,15 +33,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import useMapViewStore from "@/helpers/hooks/useMapViewStore";
 
-const MapHeader = (props) => {
-  const { data } = props;
+const MapHeader = () => {
+  const { mapData } = useMapViewStore();
   return (
     <div>
       <div className="flex w-full h-10 justify-between items-center bg-[#D9D9D93D]">
         <div className="flex flex-row justify-between pl-2 space-x-8">
           <div className="flex flex-row justify-between px-4">
-            <Input placeholder={`${data.layerTitle}`} />
+            <Input placeholder={`${mapData.title}`} />
           </div>
         </div>
         <div className="flex flex-row justify-between pr-6">

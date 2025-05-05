@@ -3,11 +3,13 @@
 import React, { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css"; // Import MapLibre GL CSS
+import useMapViewStore from "@/helpers/hooks/useMapViewStore";
 
-const MapMain = (props) => {
-  const { data } = props;
+const MapMain = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
+
+  const { layersData } = useMapViewStore();
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
