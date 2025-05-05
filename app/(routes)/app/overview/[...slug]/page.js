@@ -117,16 +117,16 @@ const MapOverview = ({ params }) => {
     <div className="flex flex-col w-full h-full gap-2">
       {generateOverviewName()}
       <div className="flex gap-16 p-10">
-        <div className="w-[1700px]">
+        <div className="w-full">
           <AspectRatio ratio={450 / 200}>
             <img
               src={overviewData.imageUrl}
               alt="map image"
-              className="w-[1700px]"
+              className="w-full"
             />
           </AspectRatio>
         </div>
-        <div className="flex flex-col gap-12 !w-1/4">
+        <div className="flex flex-col gap-12 min-w-[288px]">
           <div className="flex flex-col gap-6">
             {BUTTON_CONSTANTS.map((item) => (
               <Button

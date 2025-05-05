@@ -46,6 +46,15 @@ const MapMain = () => {
     mapRef.current.addControl(new maplibregl.NavigationControl());
     mapRef.current.on("load", () => {
       setMapLoaded(true);
+      mapRef.current.getCanvas().style.cursor = "crosshair"; // Set the cursor to crosshair
+    });
+
+    mapRef.current.on("mouseenter", () => {
+      mapRef.current.getCanvas().style.cursor = "crosshair"; // Change cursor on mouse enter
+    });
+
+    mapRef.current.on("mouseleave", () => {
+      mapRef.current.getCanvas().style.cursor = ""; // Reset cursor on mouse leave
     });
 
     return () => {

@@ -88,6 +88,7 @@ const MapView = ({ params }) => {
             legendUrl: `http://dev3.webgis.co.id/be/cms/layer/${data.layerUid}/legend`,
             mapType: mapType,
             mapUid: mapUid,
+            isShown: true,
           };
         });
         // setSelectedLayers(modifiedDatas.reverse());
