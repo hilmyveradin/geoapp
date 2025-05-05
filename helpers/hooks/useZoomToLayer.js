@@ -11,7 +11,7 @@ const useZoomToLayer = () => {
         map.fitBounds(zoomedLayerBbox, {
           animate: false,
           padding: 40,
-          maxZoom: 12,
+          maxZoom: 16,
         }); // Adjust padding as needed
         setZoomedLayerBbox(null);
       }
