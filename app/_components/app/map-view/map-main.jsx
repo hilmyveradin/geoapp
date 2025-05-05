@@ -11,13 +11,7 @@ const MapMain = () => {
 
   useLayerManager();
 
-  const { setMap, setMapLoaded } = useMapViewStore(
-    useShallow((state) => ({
-      selectedLayers: state.selectedLayers,
-      setMap: state.setMap,
-      setMapLoaded: state.setMapLoaded,
-    }))
-  );
+  const { setMap, setMapLoaded } = useMapViewStore();
 
   useEffect(() => {
     mapRef.current = new maplibregl.Map({
@@ -41,8 +35,8 @@ const MapMain = () => {
         ],
       },
       // Indonesian center latitude and longitude
-      center: [118.0148634, -2.548926], // This will be updated below
-      zoom: 4, // This might be adjusted based on the BBoxes
+      center: [118.0148634, -2.548926],
+      zoom: 4,
     });
 
     setMap(mapRef.current);
@@ -52,10 +46,8 @@ const MapMain = () => {
     });
 
     return () => {
-      if (mapRef.current && mapRef.current.remove()) {
-        setMapLoaded(false);
-        setMap(null);
-      }
+      setMapLoaded(false);
+      setMap(null);
     };
   }, [setMap, setMapLoaded]);
 
