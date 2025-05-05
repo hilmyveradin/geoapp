@@ -103,7 +103,7 @@ const CreateGroupDialog = (props) => {
         .sort((a, b) => a.fullName.localeCompare(b.fullName));
       setUsers(filteredAndSorted);
     }
-  }, [selectedUsers, searchInput]);
+  }, [selectedUsers, searchInput, users]);
 
   const removeSelectedUser = (data) => {
     setSelectedUsers(

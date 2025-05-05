@@ -32,10 +32,46 @@ const InviteMembersDialog = ({ groupUid, onDialogClose, children }) => {
 
   useEffect(() => {
     if (openDialog) {
+      const fetchUsers = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/users/list`
+          );
+          if (!response.ok) throw new Error("Failed to fetch users");
+          const data = await response.json();
+          setAllUsers(data.data);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+          toast({
+            title: "Error",
+            description: "Failed to fetch users",
+            variant: "destructive",
+          });
+        }
+      };
+
+      const fetchGroupMembers = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/get-group-info?groupUid=${groupUid}`
+          );
+          if (!response.ok) throw new Error("Failed to fetch group members");
+          const data = await response.json();
+          setGroupMembers(data.data.users || []);
+        } catch (error) {
+          console.error("Error fetching group members:", error);
+          toast({
+            title: "Error",
+            description: "Failed to fetch group members",
+            variant: "destructive",
+          });
+        }
+      };
+
       fetchUsers();
       fetchGroupMembers();
     }
-  }, [openDialog]);
+  }, [openDialog, groupUid]);
 
   useEffect(() => {
     const availableUsers = allUsers.filter(
@@ -48,42 +84,6 @@ const InviteMembersDialog = ({ groupUid, onDialogClose, children }) => {
     );
     setFilteredUsers(filtered);
   }, [searchTerm, allUsers, groupMembers]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/users/list`
-      );
-      if (!response.ok) throw new Error("Failed to fetch users");
-      const data = await response.json();
-      setAllUsers(data.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch users",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const fetchGroupMembers = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_GEOPORTAL_PATH}/api/groups/get-group-info?groupUid=${groupUid}`
-      );
-      if (!response.ok) throw new Error("Failed to fetch group members");
-      const data = await response.json();
-      setGroupMembers(data.data.users || []);
-    } catch (error) {
-      console.error("Error fetching group members:", error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch group members",
-        variant: "destructive",
-      });
-    }
-  };
 
   const handleSelectUser = (userUid) => {
     setSelectedUsers((prev) =>

@@ -132,7 +132,7 @@ const AddLayersContent = () => {
       postVectorData(formData);
       setFiles([]);
     }
-  }, [files, toast]);
+  }, [files, refetchLayers, toast]);
 
   const handleFileChange = (newState) => {
     setFiles(newState);

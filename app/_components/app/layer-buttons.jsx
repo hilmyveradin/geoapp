@@ -93,7 +93,7 @@ const LayersButtons = () => {
       postVectorData(formData);
       setFiles([]);
     }
-  }, [files, toast]);
+  }, [files, toast, toggleRefetchLayers]);
 
   return (
     <div className="flex items-center justify-between w-full">

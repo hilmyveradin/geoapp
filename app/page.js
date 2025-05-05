@@ -1,12 +1,9 @@
-"use client";
-
-import Header from "@/app/_components/home/header";
-import Footer from "./_components/home/footer";
+// app/page.js
 import { getServerSession } from "next-auth";
 import authOptions from "./api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 
-const Home = async () => {
+export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -15,13 +12,7 @@ const Home = async () => {
     redirect(`/app/layers`);
   }
 
-  return (
-    <main className="flex flex-col items-center justify-between min-h-screen">
-      <Header />
-      <div className="px-2 ">Dashboard content</div>
-      <Footer />
-    </main>
-  );
-};
-
-export default Home;
+  // This return statement will never be reached due to the redirects above,
+  // but we'll keep it for completeness
+  // return <HomeContent />;
+}

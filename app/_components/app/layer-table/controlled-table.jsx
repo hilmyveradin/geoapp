@@ -185,6 +185,7 @@ const ControlledTable = ({
     }
   }, [loadingBlocks, pageNumber, pageSize, needsLoading]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSelectionChanged = useCallback(() => {
     var selectedRows = gridApi.getSelectedRows();
     // var response;
