@@ -17,13 +17,13 @@ const MapView = () => {
 
   return (
     <div className="flex flex-col">
-      <AppHeader />
       <MapHeader />
-      <div className="flex items-center justify-center w-screen h-screen">
+      <div className="flex items-center justify-center">
         <MapSidebar />
-        <MapMain />
+        <div className="w-screen h-screen">
+          <MapMain />
+        </div>
       </div>
-      w
     </div>
   );
 };

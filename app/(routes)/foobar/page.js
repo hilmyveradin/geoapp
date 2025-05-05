@@ -91,7 +91,7 @@ const MapComponent = () => {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-blue-300">
-      <div ref={mapContainerRef} className="w-1/2 h-1/2" />
+      <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );
 };

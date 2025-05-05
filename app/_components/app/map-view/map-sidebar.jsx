@@ -10,7 +10,7 @@ const MapSidebar = () => {
   return (
     <div
       className={cn(
-        "fixed relatvie top-[136px] h-[calc(100vh-128px)] left-0 bottom-10 z-10 bg-white w-[360px] transition-all rounded-r-lg px-1",
+        "fixed top-[200px] h-[calc(100vh-128px)] left-0 bottom-10 z-10 bg-white w-[360px] transition-all rounded-r-lg px-1",
         {
           "left-[-340px]": !showSidebar,
         }
