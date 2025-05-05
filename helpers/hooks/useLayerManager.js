@@ -101,7 +101,11 @@ const useLayerManager = () => {
       }
 
       if (firstRender && mapData.mapBbox) {
-        map.fitBounds(mapData.mapBbox, { padding: 40, maxZoom: 12 });
+        map.fitBounds(mapData.mapBbox, {
+          animate: false,
+          padding: 40,
+          maxZoom: 12,
+        });
         setFirstRender(false);
       }
     }
