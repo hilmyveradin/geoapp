@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LegendContent from "./map-sidebar/legend-content";
+import LegendContent from "./map-sidebar/legends-content";
 import LayersContent from "./map-sidebar/layers-content";
 
 const MapSidebar = () => {
