@@ -11,6 +11,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { handleErrorMessage } from "@/helpers/string-helpers";
@@ -20,8 +22,6 @@ import useUserStore from "@/helpers/hooks/store/use-user-store";
 const NAVIGATION_ITEMS = [
   { name: "Maps", path: "/app/maps", icon: <Map className="w-6 h-6" /> },
   { name: "Layers", path: "/app/layers", icon: <Layers className="w-6 h-6" /> },
-  { name: "Groups", path: "/app/groups", icon: <Users2 className="w-6 h-6" /> },
-  { name: "Users", path: "/app/users", icon: <Users2 className="w-6 h-6" /> },
 ];
 
 const AppHeader = () => {
@@ -53,6 +53,14 @@ const AppHeader = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathName]);
+
+  const handleGroupView = () => {
+    router.push("/app/groups");
+  };
+
+  const handleUserView = () => {
+    router.push("/app/users");
+  };
 
   const handleSignOut = async () => {
     try {
@@ -167,7 +175,30 @@ const AppHeader = () => {
                 className="w-8 h-8 text-xs cursor-pointer"
               />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end" className="p-2">
+              <DropdownMenuLabel>{session?.user?.fullName}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className={cn(
+                  pathName.includes("/app/users")
+                    ? "text-nileBlue-700 font-bold"
+                    : "text-gray-700"
+                )}
+                onClick={handleUserView}
+              >
+                User
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className={cn(
+                  pathName.includes("/app/groups")
+                    ? "text-nileBlue-700 font-bold"
+                    : "text-gray-700"
+                )}
+                onClick={handleGroupView}
+              >
+                Group
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-red-500 font-semibold hover:text-red-400"
                 onClick={handleSignOut}
