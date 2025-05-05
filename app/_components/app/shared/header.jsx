@@ -35,7 +35,7 @@ const AppHeader = () => {
   const router = useRouter();
 
   const { data: session, status } = useSession();
-  const { setIsEditor, setIsAdmin } = useUserStore();
+  const { setIsEditor, setIsAdmin, isAdmin, isEditor } = useUserStore();
 
   useEffect(() => {
     if (session && session.user) {
@@ -200,16 +200,18 @@ const AppHeader = () => {
             <DropdownMenuContent align="end" className="p-2">
               <DropdownMenuLabel>{session?.user?.fullName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className={cn(
-                  pathName.includes("/app/users")
-                    ? "text-nileBlue-700 font-bold"
-                    : "text-gray-700"
-                )}
-                onClick={handleUserView}
-              >
-                User
-              </DropdownMenuItem>
+              {isAdmin && (
+                <DropdownMenuItem
+                  className={cn(
+                    pathName.includes("/app/users")
+                      ? "text-nileBlue-700 font-bold"
+                      : "text-gray-700"
+                  )}
+                  onClick={handleUserView}
+                >
+                  User
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 className={cn(
                   pathName.includes("/app/groups")

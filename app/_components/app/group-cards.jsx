@@ -50,7 +50,7 @@ const GroupCards = (props) => {
             <div className="flex flex-wrap gap-2 text-sm">
               <span className="font-medium">Owner:</span>
               <span className="text-nileBlue-700">
-                {group.creator.userName}
+                {group.creator.creatorName}
               </span>
             </div>
             <div className="flex flex-wrap gap-2 text-sm">
@@ -64,7 +64,7 @@ const GroupCards = (props) => {
           </div>
         </button>
         <div className="mt-4 sm:mt-0 sm:ml-4 flex justify-center sm:justify-end">
-          {group?.creator.userUid === session.user.userUid ? (
+          {group?.creator.creatorUid === session.user.userUid ? (
             <DestructiveDialog
               title="Are you sure you want to delete this group?"
               actionText="Yes, I'm sure"
@@ -72,10 +72,12 @@ const GroupCards = (props) => {
             >
               <Button className="w-full sm:w-auto">Delete Group</Button>
             </DestructiveDialog>
-          ) : group.users?.userUid.includes(session.user.userUid) ? (
-            <Button variant="secondary" className="w-full sm:w-auto">
-              Leave Group
-            </Button>
+          ) : group.user &&
+            group.user.some((u) => u.userUid === session.user.userUid) ? (
+            // <Button variant="secondary" className="w-full sm:w-auto">
+            //   Leave Group
+            // </Button>
+            <></>
           ) : null}
         </div>
       </div>

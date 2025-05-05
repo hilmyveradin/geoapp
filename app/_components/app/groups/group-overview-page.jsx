@@ -22,12 +22,16 @@ import {
 import DestructiveDialog from "../../shared/destructive-dialog";
 import { toast } from "@/components/ui/use-toast";
 import InviteMembersDialog from "./invite-member-dialog";
+import useUserStore from "@/helpers/hooks/store/use-user-store";
+import { useSession } from "next-auth/react";
 
 const GroupOverviewPage = ({ groupUid }) => {
   const [loading, setLoading] = useState(true);
   const [groupData, setGroupData] = useState(null);
   const [error, setError] = useState(null);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
+  const { isAdmin } = useUserStore();
+  const { data: session } = useSession();
 
   const fetchGroupInfo = useCallback(async () => {
     try {
@@ -41,7 +45,7 @@ const GroupOverviewPage = ({ groupUid }) => {
       );
       if (!response.ok) throw new Error("Failed to fetch group info");
       const responseData = await response.json();
-      setGroupData(responseData.data);
+      setGroupData(responseData.data[0]);
     } catch (err) {
       console.error("Error during fetch:", err);
       setError(err.message);
@@ -80,6 +84,8 @@ const GroupOverviewPage = ({ groupUid }) => {
     setRefetchTrigger((prev) => prev + 1);
   }, []);
 
+  let isCreator = groupData?.creator?.creatorUid == session?.user.userUid;
+
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   if (!groupData) return <ErrorMessage message="No group data available" />;
@@ -105,7 +111,7 @@ const GroupOverviewPage = ({ groupUid }) => {
               </li>
               <li className="flex items-center">
                 <User className="mr-2 h-4 w-4" />
-                Owner: {groupData.creator}
+                Owner: {groupData.creator.cratorName}
               </li>
               <li className="flex items-center">
                 <MapPin className="mr-2 h-4 w-4" />
@@ -146,15 +152,17 @@ const GroupOverviewPage = ({ groupUid }) => {
       <Card className="shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Group Members</CardTitle>
-          <InviteMembersDialog
-            groupUid={groupUid}
-            onDialogClose={handleInviteDialogClose}
-          >
-            <Button>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Invite Member
-            </Button>
-          </InviteMembersDialog>
+          {(isCreator || isAdmin) && (
+            <InviteMembersDialog
+              groupUid={groupUid}
+              onDialogClose={handleInviteDialogClose}
+            >
+              <Button>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Invite Member
+              </Button>
+            </InviteMembersDialog>
+          )}
         </CardHeader>
         <CardContent>
           <Table>
@@ -162,7 +170,7 @@ const GroupOverviewPage = ({ groupUid }) => {
               <TableRow>
                 <TableHead className="w-[250px]">Name</TableHead>
                 <TableHead>Role</TableHead>
-                <TableHead>Actions</TableHead>
+                {(isCreator || isAdmin) && <TableHead>Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -182,7 +190,7 @@ const GroupOverviewPage = ({ groupUid }) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {index !== 0 && (
+                    {(isCreator || isAdmin) && (
                       <>
                         {/* <Button variant="ghost" size="sm" className="mr-2">
                           <UserCog className="h-4 w-4" />
