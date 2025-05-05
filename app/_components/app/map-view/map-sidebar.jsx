@@ -23,6 +23,7 @@ import ShareContent from "./map-sidebar/share-content";
 import { Separator } from "@/components/ui/separator";
 import { DataTableDemo } from '../layer-table/layer-table';
 import { ButtonSidebar } from '@/components/ui/button-sidebar';
+import { GridExample } from '@/app/_components/app/layer-table/ag-grid-react';
 const MapSidebar = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [showButtonSidebar, setShowButtonSidebar] = useState(true);
@@ -112,6 +113,7 @@ const MapSidebar = () => {
 
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName === selectedButton ? null : buttonName);
+    setShowButtonSidebar((prev) => !prev);
   };
 
   return (
@@ -165,7 +167,7 @@ const MapSidebar = () => {
       )}
       <div
         className = {cn(
-          "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2 overflow-x-auto",
+          "fixed rounded-md border bottom-6 z-10 bg-white top-[60vh] h-[calc(100vh-60vh-24px)] pt-1 px-2",
           {
             "left-[300px] w-[calc(100vw-300px-60px)]": !showButtonSidebar && showSidebar,
             "left-[172px] w-[calc(100vw-172px-60px)]": showButtonSidebar && !showSidebar,
@@ -174,7 +176,7 @@ const MapSidebar = () => {
             "left-[60px] w-[calc(100vw-60px-192px)]": showButtonSidebar && showSidebar && !showSidebarRight,
           }
         )}>
-          <DataTableDemo></DataTableDemo>
+          <GridExample></GridExample>
       </div>
       <div
         className={cn(
