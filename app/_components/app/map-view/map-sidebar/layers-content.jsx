@@ -26,12 +26,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
+import { Trash2 } from "lucide-react";
+import { X } from "lucide-react";
 
 const LayersContent = () => {
-  const { layersData, setLayersData } = useMapViewStore();
+  const {
+    layersData,
+    setLayersData,
+    multiSelectedLayers,
+    setMultiSelectedLayers,
+  } = useMapViewStore();
 
   const [enabled, setEnabled] = useState(false);
+  const [isCtrlPressed, setIsCtrlPressed] = useState(false);
 
+  // This code manages loading animation that will affect drag and drop behaviours
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
 
@@ -40,6 +50,35 @@ const LayersContent = () => {
       setEnabled(false);
     };
   }, []);
+
+  const resetCtrlPressed = () => {
+    setIsCtrlPressed(false);
+    setMultiSelectedLayers([]);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        setIsCtrlPressed(true);
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === "Control" || e.key === "Meta") {
+        if (multiSelectedLayers.length === 0) {
+          setIsCtrlPressed(false);
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [setIsCtrlPressed, setMultiSelectedLayers, multiSelectedLayers]);
 
   if (!enabled) {
     return null;
@@ -67,6 +106,9 @@ const LayersContent = () => {
         <Droppable droppableId="droppableId">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
+              {isCtrlPressed && multiSelectedLayers?.length > 0 && (
+                <MultiLayerSelection resetCtrlPressed={resetCtrlPressed} />
+              )}
               {layersData.map((item, index) => (
                 <Draggable
                   key={`${item.layerUid}`}
@@ -78,9 +120,9 @@ const LayersContent = () => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="px-2 mb-4"
+                      className="px-2 mt-1 mb-4"
                     >
-                      <LayersCard data={item} />
+                      <LayersCard data={item} isCtrlPressed={isCtrlPressed} />
                     </div>
                   )}
                 </Draggable>
@@ -95,12 +137,162 @@ const LayersContent = () => {
 
 export default LayersContent;
 
-const LayersCard = ({ data }) => {
+const MultiLayerSelection = ({ resetCtrlPressed }) => {
+  const { toast } = useToast();
+  const {
+    selectedLayers,
+    multiSelectedLayers,
+    setSelectedLayers,
+    setMultiSelectedLayers,
+    layersData,
+    setLayersData,
+    mapData,
+  } = useMapViewStore();
+  const [isShowLayerElements, setIsShowLayerElements] = useState(false);
+
+  // Check
+  useEffect(() => {
+    const latest = multiSelectedLayers[multiSelectedLayers.length - 1];
+    if (latest?.isChecked) {
+      setIsShowLayerElements(true);
+    } else {
+      setIsShowLayerElements(false);
+    }
+  }, [multiSelectedLayers]);
+
+  const deleteLayers = async () => {
+    const layerUids = multiSelectedLayers.map((data) => ({
+      layer_uid: data.layerUid,
+    }));
+
+    try {
+      const body = {
+        layers: layerUids,
+        mapUid: mapData.mapUid,
+      };
+
+      const response = await fetch("/api/remove-layer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast({ title: "Success deleting layers", variant: "success" });
+      debugger;
+      const filteredLayers = selectedLayers.filter(
+        (data) =>
+          !multiSelectedLayers.some((item) => item.layerUid === data.layerUid)
+      );
+      const filteredLayersData = layersData.filter(
+        (data) =>
+          !multiSelectedLayers.some((item) => item.layerUid === data.layerUid)
+      );
+      console.log(filteredLayers);
+      console.log(filteredLayersData);
+      debugger;
+      setSelectedLayers(filteredLayers);
+      setLayersData(filteredLayersData);
+      resetCtrlPressed();
+    } catch (error) {
+      console.error("Error during fetch:", error.message);
+    }
+  };
+
+  const hideShowAction = () => {
+    if (isShowLayerElements) {
+      // Exclude layers from selectedLayers that are checked in multiSelectedLayers
+      const filteredLayers = selectedLayers.filter(
+        (data) =>
+          !multiSelectedLayers.some((item) => item.layerUid === data.layerUid)
+      );
+      console.log(filteredLayers);
+      debugger;
+      setSelectedLayers(filteredLayers);
+
+      // Corrected mapping for tempMultiSelectedLayers
+      const tempMultiSelectedLayers = multiSelectedLayers.map((data) => ({
+        ...data,
+        isChecked: false,
+      }));
+      setMultiSelectedLayers(tempMultiSelectedLayers);
+    } else {
+      const additionalLayers = multiSelectedLayers
+        .filter(
+          (item) =>
+            !selectedLayers
+              .map((layer) => layer.layerUid)
+              .includes(item.layerUid)
+        )
+        .map((item) =>
+          layersData.find((layer) => layer.layerUid === item.layerUid)
+        )
+        .filter((layer) => layer !== undefined); // Ensure that we're not adding undefined to the selectedLayers
+
+      const newSelectedLayers = [...selectedLayers, ...additionalLayers];
+      console.log(newSelectedLayers);
+      setSelectedLayers(newSelectedLayers);
+
+      // Corrected mapping for tempMultiSelectedLayers
+      const tempMultiSelectedLayers = multiSelectedLayers.map((data) => ({
+        ...data,
+        isChecked: true,
+      }));
+      setMultiSelectedLayers(tempMultiSelectedLayers);
+    }
+  };
+
+  return (
+    <div className="flex items-center w-full gap-3 px-2 h-9 ">
+      <X
+        className="w-4 h-4 cursor-pointer"
+        onClick={() => setMultiSelectedLayers([])}
+      />{" "}
+      <div className="flex items-center gap-2">
+        <p>{multiSelectedLayers.length}</p>
+        <p> selected </p>
+      </div>
+      <DestructiveDialog
+        title="Are you sure you want to delete these layers?"
+        description="This action cannot be undone"
+        actionText="Yes, I'm sure"
+        action={() => deleteLayers()}
+      >
+        <Trash2 className="w-3 h-3 cursor-pointer" />
+      </DestructiveDialog>
+      <button
+        onClick={(e) => {
+          hideShowAction();
+          e.stopPropagation();
+        }}
+      >
+        {isShowLayerElements ? (
+          <Eye className="w-3 h-3" />
+        ) : (
+          <EyeOff className="w-3 h-3" />
+        )}
+      </button>
+    </div>
+  );
+};
+
+const LayersCard = ({ data, isCtrlPressed }) => {
   const [collapsibleContent, setCollapsibleContent] = useState("layer");
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [multipleSelectedLayerChecked, setMultipleSelectedLayerChecked] =
+    useState(false);
 
-  const { selectedLayers, removeSelectedLayers, addSelectedLayers } =
-    useMapViewStore();
+  const {
+    selectedLayers,
+    removeSelectedLayers,
+    addSelectedLayers,
+    removeMultiSelectedLayers,
+    addMultiSelectedLayers,
+    multiSelectedLayers,
+  } = useMapViewStore();
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -109,6 +301,16 @@ const LayersCard = ({ data }) => {
       setIsChecked(selectedLayers.some((layer) => layer === data));
     }
   }, [selectedLayers, data]);
+
+  useEffect(() => {
+    if (multiSelectedLayers) {
+      setMultipleSelectedLayerChecked(
+        multiSelectedLayers.find(
+          (layerData) => layerData.layerUid === data.layerUid
+        )
+      );
+    }
+  }, [data.layerUid, multiSelectedLayers]);
 
   const handleHideShowChange = () => {
     if (isChecked) {
@@ -127,13 +329,38 @@ const LayersCard = ({ data }) => {
     <div>
       <TooltipText content={data.layerTitle} side="top" align="start">
         <div
-          className="relative flex items-center h-10 gap-2 px-2 bg-white border rounded-md shadow-md cursor-pointer w-54"
-          onClick={() => {
-            if (collapsibleContent === "layer") {
-              setCollapsibleContent(null);
-              setImageLoaded(false);
+          className={cn(
+            "relative flex items-center h-10 gap-2 px-2 bg-white border rounded-md shadow-md cursor-pointer w-54",
+            {
+              "outline outline-nileBlue-700": multipleSelectedLayerChecked,
+            }
+          )}
+          onClick={(e) => {
+            // Handle action if Ctrl is Pressed
+            if (isCtrlPressed) {
+              e.stopPropagation();
+              if (
+                multiSelectedLayers.find(
+                  (layerData) => layerData.layerUid === data.layerUid
+                )
+              ) {
+                removeMultiSelectedLayers({
+                  layerUid: data.layerUid,
+                  isChecked: isChecked,
+                });
+              } else {
+                addMultiSelectedLayers({
+                  layerUid: data.layerUid,
+                  isChecked: isChecked,
+                });
+              }
             } else {
-              setCollapsibleContent("layer");
+              if (collapsibleContent === "layer") {
+                setCollapsibleContent(null);
+                setImageLoaded(false);
+              } else {
+                setCollapsibleContent("layer");
+              }
             }
           }}
         >
