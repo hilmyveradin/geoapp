@@ -26,6 +26,8 @@ import {
 import DestructiveDialog from "@/app/_components/shared/DestructiveDialog";
 import { Trash2 } from "lucide-react";
 import { X } from "lucide-react";
+import { PencilIcon } from "lucide-react";
+import ChangePropDialog from "../../shared/change-prop-dialog";
 
 const LayersContent = () => {
   const {
@@ -421,17 +423,12 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
     },
     {
       icon: <Table className="w-3 h-3 stroke-2" />,
-      name: "Show Table",
+      name: "Show table",
       onClick: (e) => {
         handleTableButtonClick(e.currentTarget.name);
         resetCollapsibleContent();
       },
     },
-    // { // TODO: Fix this rename if the functionality exists
-    //   icon: <PencilIcon className="w-3 h-3 stroke-2" />,
-    //   name: "Rename",
-    //   onClick: null,
-    // },
   ];
 
   const handleTableButtonClick = (key) => {
@@ -459,6 +456,18 @@ const OptionsSection = ({ layer, resetCollapsibleContent }) => {
           {item.name}
         </button>
       ))}
+      <ChangePropDialog
+        changePropType="layer"
+        objectUid={layer.layerUid}
+        initialTitle={layer.layerTitle}
+        initialDescription={layer.layerDescription}
+        initialTags={layer.layerTags}
+      >
+        <button name={id} className="flex items-center justify-start gap-2 p-1">
+          <PencilIcon className="w-3 h-3 stroke-2" />
+          Change properties
+        </button>
+      </ChangePropDialog>
 
       {mapData.mapType === "map" && mapLayers.length > 0 && (
         <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>

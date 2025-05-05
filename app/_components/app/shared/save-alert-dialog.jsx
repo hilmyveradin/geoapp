@@ -31,7 +31,7 @@ const SaveAlertDialog = ({ children }) => {
   const [alertOpen, setAlertOpen] = useState(false);
 
   const addMapLayers = async () => {
-    if (addedLayerUids.length === 0) {
+    if (addedLayerUids?.length === 0) {
       return;
     }
 
@@ -66,7 +66,7 @@ const SaveAlertDialog = ({ children }) => {
   };
 
   const deleteMapLayers = async () => {
-    if (deletedLayerUids.length === 0) {
+    if (deletedLayerUids?.length === 0) {
       return;
     }
 
@@ -111,8 +111,6 @@ const SaveAlertDialog = ({ children }) => {
       const reorderedLayerUids = mapLayers.map((layer) => {
         return layer.layerUid;
       });
-
-      debugger;
 
       const body = {
         reorderedLayerUids,

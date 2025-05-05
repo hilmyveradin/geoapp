@@ -47,10 +47,9 @@ const MenuCard = (props) => {
         >
           <img src={cardData.thumbnailUrl} alt="Thumbnail" />
         </AspectRatio>
-        {/* TODO: Uncomment this if rename, delete, and share features already work*/}
-        {/* <MenuCardDropdown>
-            <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
-          </MenuCardDropdown> */}
+        <MenuCardDropdown cardData={cardData}>
+          <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
+        </MenuCardDropdown>
       </CardContent>
       <CardHeader className="flex p-0 mt-2">
         <h3 className={cn("font-semibold truncate")}>{cardData.cardTitle}</h3>

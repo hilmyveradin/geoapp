@@ -42,6 +42,17 @@ const useMapViewStore = create((set) => ({
       mapLayers: [data, ...(state.mapLayers || [])],
     })),
 
+  replaceMapLayersLayerProp: (newData) =>
+    set((state) => ({
+      mapLayers: state.mapLayers
+        ? state.mapLayers.map((layer) =>
+            layer.layerUid === newData.layerUid
+              ? { ...layer, ...newData }
+              : layer
+          )
+        : [newData],
+    })),
+
   removeMapLayers: (data) =>
     set((state) => ({
       mapLayers: state.mapLayers.filter((layer) => layer !== data),
@@ -98,8 +109,8 @@ const useMapViewStore = create((set) => ({
     set(() => ({
       objectInfoData: data,
     })),
-    
-    setMultiSelectedLayers: (data) =>
+
+  setMultiSelectedLayers: (data) =>
     set(() => ({
       multiSelectedLayers: data,
     })),

@@ -51,11 +51,12 @@ const MapView = ({ params }) => {
         const responseData = await response.json();
         const data = { ...responseData.data, mapType: mapType };
         // Create an array of promises
-        const mapLayerPromomises = data.mapLayerUid.map((layerUid) =>
+
+        const mapLayerPromises = data.mapLayerUids.map((layerUid) =>
           getLayerUid(layerUid)
         );
         // Wait for all promises to resolve
-        const resolvedMapLayers = await Promise.all(mapLayerPromomises);
+        const resolvedMapLayers = await Promise.all(mapLayerPromises);
 
         // Flatten the array of arrays (if necessary) and set the state
         const layerDatas = resolvedMapLayers.flat(); // Use .flat() if each promise resolves to an array
