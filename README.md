@@ -1,41 +1,49 @@
-# GeoApp Web App Repository
+# Repositori Aplikasi Web GeoApp
 
-## Getting Started
+## Prasyarat
 
-First, install all the dependency using pnpm
+Sebelum memulai, pastikan Anda telah menginstal:
+
+- [Git](https://git-scm.com/downloads)
+- [Node.js dan npm](https://nodejs.org/en/download/)
+- [pnpm](https://pnpm.io/installation)
+
+## Memulai
+
+Pertama, instal semua dependensi menggunakan pnpm
 
 ```bash
 pnpm install
 ```
 
-Second, request for .env.local file to Administator
+Kedua, minta file .env.local kepada Administrator
 
-Then, run the development server:
+Kemudian, jalankan server pengembangan:
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000) dengan browser Anda untuk melihat hasilnya.
 
-## Before creating a pull request
+## Sebelum membuat pull request
 
-1. Run the build script first so that Next.js will perform an optimized production build using pnpm
+1. Jalankan script build terlebih dahulu agar Next.js melakukan build produksi yang dioptimalkan menggunakan pnpm
 
 ```bash
 pnpm build
 ```
 
-2. Create a pull request in Github. Make sure the comments are clear to avoid miscommunication
+2. Buat pull request di Github. Pastikan komentarnya jelas untuk menghindari kesalahpahaman
 
-3. Alert the dev team, ideally ask one of them to review the changes
+3. Beri tahu tim pengembang, idealnya minta salah satu dari mereka untuk meninjau perubahan
 
-4. Once done, merge the branch
+4. Setelah selesai, gabungkan (merge) branch tersebut
 
-5. [OPTIONAL] If you think the task is done, just delete the branch
+5. [OPSIONAL] Jika Anda merasa tugas sudah selesai, hapus saja branch tersebut
 
-## Tech Stack (Updated accordingly)
+## Tech Stack (Diperbarui secara berkala)
 
-- Main Framework: Next.js 13
-- UI Framework: Shadcn UI
-- State management: Zustand
+- Framework Utama: Next.js 13
+- Framework UI: Shadcn UI
+- Manajemen state: Zustand

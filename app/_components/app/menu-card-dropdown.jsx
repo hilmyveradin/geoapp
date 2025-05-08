@@ -124,8 +124,8 @@ const MenuCardDropdown = ({ children, cardData }) => {
             <p>View item details</p>
           </button>
         </DropdownMenuItem>
-        {/* <DropdownMenuSeparator /> */}
-        {/* <DropdownMenuItem asChild onClick={handleDropdownClick}>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild onClick={handleDropdownClick}>
           <ChangePropDialog
             changePropType={cardData.cardType}
             objectUid={cardData.cardUid}
@@ -139,7 +139,7 @@ const MenuCardDropdown = ({ children, cardData }) => {
               <p>Change properties</p>
             </button>
           </ChangePropDialog>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
         {/* <DropdownMenuItem asChild onClick={handleDropdownClick}>
           <button className="flex w-full">
             <img
