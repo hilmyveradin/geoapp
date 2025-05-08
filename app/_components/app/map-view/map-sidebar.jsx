@@ -14,18 +14,13 @@ import { useState, useEffect } from "react";
 import LayersContent from "./map-sidebar/layers-content";
 import { Button } from "@/components/ui/button";
 import AddLayersContent from "./map-sidebar/add-layer-content";
-import { Separator } from "@/components/ui/separator";
 import PaginationLayerTable from "../layer-table/pagination-layer-table";
 import { Textarea } from "@/components/ui/textarea";
 import TooltipText from "@/app/_components/shared/tooltip-text";
-import SaveAlertDialog from "../shared/save-alert-dialog";
 import { X } from "lucide-react";
-import ShareDialog from "../shared/share-dialog";
 import useMapViewStore from "@/helpers/hooks/store/use-map-view-store";
 import useTableQueryStore from "@/helpers/hooks/store/use-table-query-store";
 import useMapSidebarStore from "@/helpers/hooks/store/use-map-sidebar-store";
-import BaseMapContent from "./map-sidebar/basemap-content";
-import { Earth } from "lucide-react";
 import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const MapSidebar = () => {

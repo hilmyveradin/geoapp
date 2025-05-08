@@ -20,13 +20,7 @@ import { toast } from "@/components/ui/use-toast";
 import useUserStore from "@/helpers/hooks/store/use-user-store";
 
 const NAVIGATION_ITEMS = [
-  { name: "Maps", path: "/app/maps", icon: <Map className="w-6 h-6" /> },
   { name: "Layers", path: "/app/layers", icon: <Layers className="w-6 h-6" /> },
-];
-
-const MOBILE_NAV_ITEMS = [
-  { name: "Groups", path: "/app/groups", icon: <Users2 className="w-6 h-6" /> },
-  { name: "Users", path: "/app/users", icon: <Users2 className="w-6 h-6" /> },
 ];
 
 const AppHeader = () => {

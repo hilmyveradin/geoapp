@@ -38,7 +38,7 @@ const Login = () => {
           description: "Please try again",
         });
       } else if (signInResult?.ok) {
-        router.push("/app/maps");
+        router.push("/app/layers");
       }
     } catch (error) {
       console.error("Login error:", error);
