@@ -89,9 +89,9 @@ const MenuCard = ({ cardData }) => {
             objectFit="cover"
           />
         </AspectRatio>
-        <MenuCardDropdown cardData={cardData}>
+        {/* <MenuCardDropdown cardData={cardData}>
           <MoreVertical className="absolute w-5 h-5 cursor-pointer right-0 top-0.5" />
-        </MenuCardDropdown>
+        </MenuCardDropdown> */}
       </CardContent>
       <CardHeader className="flex flex-col p-0 mt-2">
         <h3 className="font-semibold truncate">{cardData.cardTitle}</h3>
