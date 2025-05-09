@@ -137,9 +137,9 @@ const MapView = ({ params }) => {
     <div className="flex flex-col">
       <MapHeader />
       <div className="flex items-center justify-center">
-        <MapSidebar />
+        {/* <MapSidebar /> */}
         {/* adjust this paddign if there's a style sidebar*/}
-        <div className="pl-12 w-screen h-[calc(100vh-56px)]">
+        <div className="w-screen h-[calc(100vh-56px)]">
           <MapMain />
         </div>
         {/* {(isAdmin || isEditor) && <MapRightSidebar />} */}

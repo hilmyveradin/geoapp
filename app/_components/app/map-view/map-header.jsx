@@ -44,7 +44,7 @@ const MapHeader = () => {
         </Label>
         <div className="flex items-center">
           <div className="hidden md:flex">
-            <NavLink href="/app/maps">Maps</NavLink>
+            {/* <NavLink href="/app/maps">Maps</NavLink> */}
             <NavLink href="/app/layers">Layers</NavLink>
           </div>
           <div className="pl-2 md:pl-4">
